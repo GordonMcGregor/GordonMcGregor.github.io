@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8">
+        <title>Five Computers - CPU  DAC  EDA  ESL  software  verification</title>
+        <link rel="stylesheet" href="/theme/css/main.css">
+                
+        <!--[if IE]>
+            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">Five Computers </a></h1>
+                <nav><ul>
+                                                    <li><a href="/pages/about.html">About</a></li>
+                                                                    <li ><a href="/category/blogging.html">blogging</a></li>
+                                    <li ><a href="/category/converted.html">converted</a></li>
+                                    <li ><a href="/category/python-eda.html">python, eda</a></li>
+                                                </ul></nav>
+        </header><!-- /#banner -->
+                
+            
+
+                            <aside id="featured" class="body">
+                <article>
+                    <h1 class="entry-title"><a href="/a-somewhat-crazy-notion.html">a somewhat crazy notion</a></h1> 
+                    <footer class="post-info">
+        <abbr class="published" title="2008-06-20T00:00:00">
+                Fri 20 June 2008
+        </abbr>
+
+                <address class="vcard author">
+                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
+        </address>
+        <p>In <a href="/category/converted.html">converted</a>. </p>
+<p>tags: <a href="/tag/cpu-dac-eda-esl-software-verification.html">CPU  DAC  EDA  ESL  software  verification</a></p>
+</footer><!-- /.post-info --><p><a title="Death Valley, after the storm by Gordon McGregor, on Flickr" href="http://www.flickr.com/photos/mcgregorphoto/358741765/"><img height="333" width="500" alt="Death Valley, after the storm" src="http://farm1.static.flickr.com/146/358741765_9ab4eeb321.jpg" /></a>
+
+</p>
+
+<p>Many ideas have been whirling around in my head since being at DAC. I've been inspired to learn some new things, starting with the <a href="http://www.ovmworld.org/">Open Verification Methodology</a> but also revisiting some of the Electronic System Level tools and flows that I've worked with in the past. I'm interested in exploring visualization techniques and tools and how they might be applied to verification and design. I'd also like to learn more about a few of the more interesting formal verification tools, like <a href="http://www.onespin-solutions.com">OneSpin 360 MV</a> and maybe explore what is possible with ESL tools like <a href="http://www.bluespec.com/products/index.htm">Bluespec's SystemVerilog</a> flow or the various other similar tools that are out there.</p>
+
+<p>I have a difficult time learning things just for the sake of it, tending to be more driven by necessity rather than idle curiosity. I've been doing some work based around a small CPU core and started getting frustrated with the way the CPU was architected. This led me to start considering designing my own CPU, just for fun. Partly as a motivation to crack open a Hennessy &amp; Patterson book that I've been meaning to read for a few years, partly to see if I can do it, partly as a vehicle to hang all those other ideas upon.</p>
+
+<p>I've been looking around the web, browsing on <a href="http://opencores.org/">OpenCores</a> and finding humbling projects, such as <a href="http://homebrewcpu.org/">HomebrewCPU,</a> which is a Minix-compatible CPU entirely constructed from discrete gates. You can even browse the web pages that it is serving or telnet in to it! To my way of thinking, that is slightly nuts - impressive, but nuts all the same - five wire-wrapped boards to debug. My <a href="http://www.informatik.uni-trier.de/~ley/db/indices/a-tree/m/McGregor:Gordon.html">background is in FPGAs</a> and that seems the perfect technology for this sort of exploration - I'm also thinking along the way that I might be able to play with synthesisable verification or FPGA enhanced verification/ emulation as well as possibly using this as a platform for a reconfigurable architecture. Lots of ideas, potential and possibilities. It will also give me a chance to re-engage with FPGA technologies and learn about more about the state of those tools. The various tools are getting to a fairly mature point and a simple pipelined CPU shouldn't require too much work but still be complex enough to do interesting things with.</p>
+
+<p>I've been looking at <a href="http://www.xilinx.com">Xilinx</a> and <a href="http://www.altera.com">Altera </a>to get an understanding of their current tool flows and trying to work out language support and maturity - which would be the best option for systemVerilog, where the best simulation options are and that kind of thing. No real conclusions yet, but both have trial versions of what appears to be a complete tool chain, so I will probably drive a small example through both flows as a pipe cleaner.</p>
+
+<p>Then of course there are the more fundamental religious issues - CISC or RISC, what ISA to use. Roll my own, pick up an already defined but open architecture, or something in between? I'm looking for suggestions in this respect - I know ARM are quite litigious when it comes to cloning their ISA, so I'll be avoiding that, but <a href="http://www.opensparc.net/">OpenSPARC</a> might well be a good option. Any other suggestions? I'm not sure if the early MIPS ISAs are cloneable without problems? Maybe I could go really back to my roots and implement a <a href="http://en.wikipedia.org/wiki/Zx81">Z80 architecture</a>. The advantage of picking on an existing ISA is that the tools come mostly for free. While porting gas and gcc to my own ISA could also be an interesting experiment and learning experience, it would probably be more of a distraction than I want.</p>
+
+<p>I am a fan of the Python language and tend to write most of my <a href="http://gordonmcgregor.blogspot.com/2008/03/flickr-set-parser-for-gpsvisualizer.html">personal projects</a> in it. As a result, I'm intrigued by the potential for writing the core in Python, using some of the available extensions and libraries. Two packages seem to already exist, <a href="http://myhdl.jandecaluwe.com/doku.php">MyHDL</a> and <a href="http://pyhvl.sourceforge.net/">PyHVL</a>. MyHDL is Python extension to let you express parallel behaviour that can then be automatically translated to verilog or VHDL. PyHVL provides the other piece of the Python puzzle, enabling high-level verification in Python. So potentially I could do the design and verification in Python then drive through into an FPGA flow for implementation. <a href="http://www.coolverification.com/2008/06/ovm-world-summi.html">JL</a> jokingly mentioned the potential for an OVM port to Python but maybe it isn't such a crazy notion. The thing that Python is fantastic for is expressing complex ideas quickly and without a lot of fuss or housekeeping. From the verification perspective it seems to be a perfect match as I can focus more on the testing, and less on the language. I'm a bit more skeptical about using it on the design side but I think it might be worth a look.</p>
+
+<p>To kick things off, I found the description for a <a href="http://www.csie.ntu.edu.tw/~b92029/data/EXP/mcpu-doc.pdf">minimal CPU</a> on opencores. This is a really basic 8-bit processor, 4 op codes, couple of registers and a very simple, small architecture, yet it can still do some useful function. This evening I wrote a Python ISS for it, just to prove out some ideas. Took about an hour to get a working cycle-based ISS together for the architecture. Of course, immediately the next thing you need is an assembler and that was fairly easy to put together in Python too. Nothing particularly complex, but a two pass assembler that supports labels and constants and generates code that runs on the core. I'm able to assemble and run the example greatest common divisor (Dijkstra's algorithm) described in the paper and it has given me a good indication of the direction to go. So far, my couple of hour project can assemble and execute the following code:</p>
+
+<blockquote><p><span style="font-size: 0.8em;">start:<br />&nbsp; &nbsp; NOR allone&nbsp; &nbsp;&nbsp; &nbsp;; akku == 0<br />&nbsp; &nbsp; NOR b<br />&nbsp; &nbsp; ADD one&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;; akku = -b<br /><br />&nbsp; &nbsp; ADD a&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; ; akku = a - b<br />&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; ; Carry set when akku &gt;= 0<br />&nbsp; &nbsp; JCC neg<br /><br />&nbsp; &nbsp; STA a<br /><br />&nbsp; &nbsp; ADD allone&nbsp; &nbsp;&nbsp; &nbsp;<br />&nbsp; &nbsp; JCC end&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;; A=0 ? -&gt; end, result in b<br /><br />&nbsp; &nbsp; JCC start<br /><br />neg:<br />&nbsp; &nbsp; NOR zero<br />&nbsp; &nbsp; ADD one&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;; Akku = -Akku<br /><br />&nbsp; &nbsp; STA b<br />&nbsp; &nbsp; JCC start&nbsp; &nbsp;&nbsp; &nbsp; ; carry not altered<br /><br />end:<br />&nbsp; &nbsp; JCC end<br /><br />a: 10&nbsp; ; a &amp; b are the two values to consider<br />b: 30<br /><br />allone: 0xff&nbsp; ; various constants<br />zero:&nbsp; &nbsp;0<br />one:&nbsp; &nbsp; 1</span></p></blockquote>
+
+<p>Next step is to describe this trivial core in a synthesisable form and see how I get on running it through one or two FPGA flows. A few tests and some verification could be useful too! For FPGAs I'm much more used to the general <em>suck it and see </em>style of testing that is the norm. Synthesize, place and route and see if it works. In the last several years I've been working on much larger ASICs so have certainly seen the value of more robust verification and I think FPGA technology has probably spent too much time as the wild frontier of design robustness and testing. As this project progresses I want to explore what the best balance is for testing and how the test environments can use the FPGA to accelerate testing along the way.</p>
+
+<p>So plenty of things up in the air but I think this could be fun.</p>
+
+<p><br /></p>                </article>
+                                    <p class="paginator">
+        Page 1 / 1
+    </p>
+                            </aside><!-- /#featured -->
+                                                </ol><!-- /#posts-list -->
+                        </section><!-- /#content -->
+                    <section id="extras" class="body">
+                        <div class="blogroll">
+                        <h2>blogroll</h2>
+                        <ul>
+                                                    <li><a href="http://getpelican.com/">Pelican</a></li>
+                                                    <li><a href="http://python.org/">Python.org</a></li>
+                                                    <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
+                                                    <li><a href="#">You can modify those links in your config file</a></li>
+                                                </ul>
+                </div><!-- /.blogroll -->
+                                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/None" type="application/atom+xml" rel="alternate">atom feed</a></li>
+                            
+                                                    <li><a href="#">You can add links in your config file</a></li>
+                                                    <li><a href="#">Another social link</a></li>
+                                                </ul>
+                </div><!-- /.social -->
+                </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

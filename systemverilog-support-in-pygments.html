@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8">
+        <title>SystemVerilog support in Pygments</title>
+        <link rel="stylesheet" href="/theme/css/main.css">
+                
+        <!--[if IE]>
+            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">Five Computers </a></h1>
+                <nav><ul>
+                                                    <li><a href="/pages/about.html">About</a></li>
+                                                                    <li ><a href="/category/blogging.html">blogging</a></li>
+                                    <li class="active"><a href="/category/converted.html">converted</a></li>
+                                    <li ><a href="/category/python-eda.html">python, eda</a></li>
+                                                </ul></nav>
+        </header><!-- /#banner -->
+        <section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/systemverilog-support-in-pygments.html" rel="bookmark"
+           title="Permalink to SystemVerilog support in Pygments">SystemVerilog support in Pygments</a></h1>
+          </header>
+
+    <div class="entry-content">
+      <footer class="post-info">
+        <abbr class="published" title="2012-04-19T00:00:00">
+                Thu 19 April 2012
+        </abbr>
+
+                <address class="vcard author">
+                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
+        </address>
+        <p>In <a href="/category/converted.html">converted</a>. </p>
+<p>tags: <a href="/tag/.html"></a></p>
+</footer><!-- /.post-info -->      <p><a href="http://www.flickr.com/photos/mcgregorphoto/6949231074/" title="svforpygments by Gordon McGregor, on Flickr"><img alt="svforpygments" src="http://farm6.staticflickr.com/5454/6949231074_4dd2096121_c.jpg" width="720" /></a></p>
+
+<p>I&#39;ve used <a href="http://pygments.org/">Pygments</a> in the past to do syntax highlighting of Python and C code to drop into documentation. I&#39;ve wanted SystemVerilog support for a while, but the tool didn&#39;t <a href="http://pygments.org/languages/">support the language</a>. I eventually got frustrated enough by this to go and add it myself. The motivation was so that I could set up an internal <a href="http://paste.pocoo.org/about/">LodgeIt! pastebin</a> to allow colleagues to discuss snippets of code, without having to paste it into emails, or Yammer discussions, both of which always scramble formatting and make discussions harder than they should be. The pastebin that I decided to use, used Pygments as the backend, so I decided to add SystemVerilog support to that project.</p>
+
+<p>The main task was adding the <a href="https://twitter.com/#!/GordonMcGregor/status/104282867168845825">more than 220 keywords</a> in SystemVerilog into the format required for Pygments. I ended up cutting and pasting the keywords from the specification into a text file, then using a quick script to generate the <a href="https://bitbucket.org/birkenfeld/pygments-main/src/96e8b9cb83ef/pygments/lexers/hdl.py">appropriate structures</a> for Pygments. I found that generating it automatically was about the only way to avoid typos and saved quite a bit of time and typing.</p>
+
+<p>If you&#39;d like to try it out, installation is straightforward:</p>
+
+<div class="highlight">
+<pre><span class="n">hg</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">bitbucket</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">birkenfeld</span><span class="o">/</span><span class="n">pygments</span><span class="o">-</span><span class="n">main</span> <span class="n">pygments</span>
+<span class="n">cd</span> <span class="n">pygments</span>
+<span class="n">sudo</span> <span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
+</pre>
+</div>
+
+<p>After that, you just run the &#39;pygmentize&#39; command to see formatted source code.</p>
+
+<pre>pygmentize hello_world.sv
+</pre>
+
+<p>This sample below comes from the UVM source code &#39;hello_world.sv&#39; example.</p>
+
+<p><span style="font-family: monospace; white-space: pre;"><span style="color: #008000; font-weight: bold;">module</span> hello_world;</span></p>
+
+<div class="highlight">
+<pre>  <span style="color: #008000; font-weight: bold;">import</span> <span style="color: #0000ff; font-weight: bold;">uvm_pkg::*</span>;
+  <span style="color: #880000;">`include</span> <span style="color: #ba2121;">&quot;uvm_macros.svh&quot;</span>
+
+  <span style="color: #880000;">`include</span> <span style="color: #ba2121;">&quot;packet.sv&quot;</span>
+  <span style="color: #880000;">`include</span> <span style="color: #ba2121;">&quot;producer.sv&quot;</span>
+  <span style="color: #880000;">`include</span> <span style="color: #ba2121;">&quot;consumer.sv&quot;</span>
+  <span style="color: #880000;">`include</span> <span style="color: #ba2121;">&quot;top.sv&quot;</span>
+
+  top mytop;
+
+  <span style="color: #008000; font-weight: bold;">initial</span> <span style="color: #008000; font-weight: bold;">begin</span>
+    <span>$</span>timeformat(<span style="color: #666666;">-9</span>,<span style="color: #666666;">0</span>,<span style="color: #ba2121;">&quot; ns&quot;</span>,<span style="color: #666666;">5</span>);
+    uvm_default_table_printer.knobs.name_width<span style="color: #666666;">=20</span>;
+    uvm_default_table_printer.knobs.type_width<span style="color: #666666;">=50</span>;
+    uvm_default_table_printer.knobs.size_width<span style="color: #666666;">=10</span>;
+    uvm_default_table_printer.knobs.value_width<span style="color: #666666;">=14</span>;
+    set_config_int(<span style="color: #ba2121;">&quot;top.producer1&quot;</span>,<span style="color: #ba2121;">&quot;num_packets&quot;</span>,<span style="color: #666666;">2</span>);
+    set_config_int(<span style="color: #ba2121;">&quot;top.producer2&quot;</span>,<span style="color: #ba2121;">&quot;num_packets&quot;</span>,<span style="color: #666666;">4</span>);
+    set_config_int(<span style="color: #ba2121;">&quot;*&quot;</span>,<span style="color: #ba2121;">&quot;recording_detail&quot;</span>,<span style="color: #880000;">UVM_LOW</span>);
+    <span style="color: #408080; font-style: italic;">//uvm_default_printer = uvm_default_tree_printer;</span>
+    uvm_default_printer.knobs.reference<span style="color: #666666;">=0</span>;
+    mytop <span style="color: #666666;">=</span> <span style="color: #008000; font-weight: bold;">new</span>(<span style="color: #ba2121;">&quot;top&quot;</span>); 
+    uvm_default_table_printer.knobs.type_width<span style="color: #666666;">=20</span>;
+    run_test();
+  <span style="color: #008000; font-weight: bold;">end</span>
+<span style="color: #008000; font-weight: bold;">endmodule</span>
+</pre>
+</div>
+
+<p>A further challenge is working out how to embed this sort of code snippet into a TypePad blog post. In general, Pygments generates html code with CSS styles and classes. This doesn&#39;t play well with TypePad which seems to consume or remove the CSS styles. You can however get Pygments to generate inline styles, which can then be pasted into TypePad. The syntax for this is:</p>
+
+<pre>pygmentize -f html -Ofull,noclasses hello_world.sv
+</pre>
+
+<p>And then the output html can be pasted straight into an HTML editor.</p>
+    </div><!-- /.entry-content -->
+    
+  </article>
+</section>
+        <section id="extras" class="body">
+                        <div class="blogroll">
+                        <h2>blogroll</h2>
+                        <ul>
+                                                    <li><a href="http://getpelican.com/">Pelican</a></li>
+                                                    <li><a href="http://python.org/">Python.org</a></li>
+                                                    <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
+                                                    <li><a href="#">You can modify those links in your config file</a></li>
+                                                </ul>
+                </div><!-- /.blogroll -->
+                                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/None" type="application/atom+xml" rel="alternate">atom feed</a></li>
+                            
+                                                    <li><a href="#">You can add links in your config file</a></li>
+                                                    <li><a href="#">Another social link</a></li>
+                                                </ul>
+                </div><!-- /.social -->
+                </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

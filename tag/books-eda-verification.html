@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8">
+        <title>Five Computers - Books  EDA  verification</title>
+        <link rel="stylesheet" href="/theme/css/main.css">
+                
+        <!--[if IE]>
+            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">Five Computers </a></h1>
+                <nav><ul>
+                                                    <li><a href="/pages/about.html">About</a></li>
+                                                                    <li ><a href="/category/blogging.html">blogging</a></li>
+                                    <li ><a href="/category/converted.html">converted</a></li>
+                                    <li ><a href="/category/python-eda.html">python, eda</a></li>
+                                                </ul></nav>
+        </header><!-- /#banner -->
+                
+            
+
+                            <aside id="featured" class="body">
+                <article>
+                    <h1 class="entry-title"><a href="/a-simple-turtle-graphics-domain-specific-language-dsl-parser.html">A simple turtle graphics Domain Specific Language (DSL) parser</a></h1> 
+                    <footer class="post-info">
+        <abbr class="published" title="2012-12-21T00:00:00">
+                Fri 21 December 2012
+        </abbr>
+
+                <address class="vcard author">
+                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
+        </address>
+        <p>In <a href="/category/converted.html">converted</a>. </p>
+<p>tags: <a href="/tag/books-eda-verification.html">Books  EDA  verification</a></p>
+</footer><!-- /.post-info --><p>I&#39;ve been working through some of the exercises in &#39;<a href="http://pragprog.com/the-pragmatic-programmer" target="_self">The Pragmatic Programmer</a>&#39; while using it to mentor a colleague. &#0160;In particular, I spent a bit of time working on the Domain Specific Language section and considering creating little DSLs to provide flexible control. I&#39;ve painfully implemented DSLs in SystemVerilog/ UVM sequences in the past and thought about how I typically do this: build a parser, create tokens, then dispatch various execution functions to implement the commands. &#0160;Often, the pain of building all these pieces in a language like C or SV is enough of a barrier that I wouldn&#39;t even start. &#0160;</p>
+
+<p>The example in the book is a simple Logo/ Turtle control language. &#0160;Pen up, Pen down, draw, turn, etc. It tries to simplify things by using single letter command codes and only one optional argument.</p>
+
+<p><span style="font-family: &#39;courier new&#39;, courier;">P 2</span>
+</p>
+
+<p><span style="font-family: &#39;courier new&#39;, courier;">D</span></p>
+
+<p><span style="font-family: &#39;courier new&#39;, courier;">W 2</span></p>
+
+<p><span style="font-family: &#39;courier new&#39;, courier;">N 1</span></p>
+
+<p><span style="font-family: &#39;courier new&#39;, courier;">E 1&#0160;</span></p>
+
+<p><span style="font-family: &#39;courier new&#39;, courier;">S 1</span></p>
+
+<p><span style="font-family: &#39;courier new&#39;, courier;">U</span></p>
+
+<p>I know Python has a <a href="http://docs.python.org/2/library/turtle.html" target="_self">Logo/ Turtle engine built in</a>&#0160;so I decided to try to write a command parser/ dispatcher that would work with that, and let me write commands in a text file and have them execute Python Turtle commands.</p>
+
+<p>Here&#39;s an example script (you can see the results of this at the end of this post):</p>
+
+<pre><span style="font-family: &#39;courier new&#39;, courier;">color &quot;green&quot;</span><br /><span style="font-family: &#39;courier new&#39;, courier;">up</span><br /><span style="font-family: &#39;courier new&#39;, courier;">goto 0 -50 # comments are allowed</span><br /><span style="font-family: &#39;courier new&#39;, courier;">down</span><br /><span style="font-family: &#39;courier new&#39;, courier;">circle 50</span><br /><span style="font-family: &#39;courier new&#39;, courier;">up</span><br /><span style="font-family: &#39;courier new&#39;, courier;">color &quot;red&quot;</span><br /><span style="font-family: &#39;courier new&#39;, courier;">write &quot;Done!&quot;</span><br /><span style="font-family: &#39;courier new&#39;, courier;">sleep 2</span><br /><span style="font-family: &#39;courier new&#39;, courier;">exit</span></pre>
+
+<p>I thought initially about having to parse out all the commands and arguments, then writing a large switch/ case statement (<a href="http://bytebaker.com/2008/11/03/switch-case-statement-in-python/" target="_self">or the Python equivalent with a dictionary</a>). &#0160;After thinking about it a little longer I realised I didn&#39;t have to do that at all. &#0160;I could use the Introspection in Python to look up available methods and if they exist, call them. In fact, as not finding the method will just cause an exception, I can just try executing any command and if it fails, catch it and move on.</p>
+
+<p>So after parsing the input text stream (throw away comments, break up tokens using whitespace) then I just try to execute the command in the global namespace. &#0160;I&#39;ve pulled all the turtle functions into that namespace, so any turtle function is a valid command in my little parser. &#0160;The <span style="font-family: &#39;courier new&#39;, courier;">globals()[command[0]]</span> in the code below looks up the function in the global namespace and then calls it, using the other parts of the command (<span style="font-family: &#39;courier new&#39;, courier;">command[1:]</span>), after they&#39;ve each been processed through the Python <span style="font-family: &#39;courier new&#39;, courier;">eval</span> function to convert them from strings to whatever format they happen to be (numbers or strings mainly). &#0160;The final trick in this is using the * operator to take take a list and pass it as one argument after another to the function:</p>
+
+<pre>globals()[command[0]](*(map(eval, command[1:])))</pre>
+
+<p>
+<br />
+And that&#39;s all that&#39;s needed to implement a full Logo language parser and execution engine. The command syntax is fault tolerant and reports errors, with line numbers. &#0160;New commands can be added easily, by defining new functions. &#0160;They&#39;ll be automatically supported as they are added to the namespace. </p>
+
+<p>Being able to pull something like this together quickly means that writing little Domain Specific Languages is possible and quite a low bar. &#0160;Doing something similar in C is often more daunting and even worse in a language like SystemVerilog, with such a poor string and file handling library. &#0160;There&#39;s a real value in being able to program at such a high level, that can greatly enhance what&#39;s possible or likely to be attempted in a verification environment. You <em>could</em> do this in SystemVerilog, but how often would you even think to attempt it, without rejecting it as too much work?</p>
+
+<p>&#0160;</p>
+
+<div class="highlight" style="background: #f8f8f8;">
+<pre style="line-height: 125%;"><span style="color: #408080; font-style: italic;"># pull all the turtle commands into the global namespace, so they are valid commands</span>
+<span style="color: #008000; font-weight: bold;">from</span> <span style="color: #0000ff; font-weight: bold;">turtle</span> <span style="color: #008000; font-weight: bold;">import</span> <span style="color: #666666;">*</span>
+
+<span style="color: #408080; font-style: italic;"># Use these 3 lines to make &#39;sleep&#39; and &#39;exit&#39; useable commands</span>
+<span style="color: #008000; font-weight: bold;">from</span> <span style="color: #0000ff; font-weight: bold;">time</span> <span style="color: #008000; font-weight: bold;">import</span> sleep
+<span style="color: #008000; font-weight: bold;">from</span> <span style="color: #0000ff; font-weight: bold;">sys</span> <span style="color: #008000; font-weight: bold;">import</span> <span style="color: #008000;">exit</span>, argv
+
+<span style="color: #408080; font-style: italic;"># Given a handle to a series of strings of commands, do them</span>
+<span style="color: #008000; font-weight: bold;">def</span> <span style="color: #0000ff;">parse_and_draw</span>(commands):
+    <span style="color: #008000; font-weight: bold;">for</span> (line_number, line) <span style="color: #aa22ff; font-weight: bold;">in</span> <span style="color: #008000;">enumerate</span>(commands):
+        line <span style="color: #666666;">=</span> line<span style="color: #666666;">.</span>split(<span style="color: #ba2121;">&#39;#&#39;</span>)[<span style="color: #666666;">0</span>]  <span style="color: #408080; font-style: italic;"># throw away comments</span>
+
+        <span style="color: #008000; font-weight: bold;">if</span> line:  <span style="color: #408080; font-style: italic;"># if there is anything left after getting rid of comments</span>
+
+            command <span style="color: #666666;">=</span> line<span style="color: #666666;">.</span>strip()<span style="color: #666666;">.</span>split(<span style="color: #ba2121;">&#39; &#39;</span>)  <span style="color: #408080; font-style: italic;"># parse using spaces to delimit tokens  </span>
+                                               <span style="color: #408080; font-style: italic;"># a big limitation of this, we can&#39;t have strings with spaces</span>
+                                               <span style="color: #408080; font-style: italic;"># e.g.,  &quot;hello world&quot; won&#39;t work as it&#39;ll get split up</span>
+                                               <span style="color: #408080; font-style: italic;"># into [&#39;&quot;hello&#39;, &#39;world&quot;&#39;] neither of which bits are valid when eval&#39;ed</span>
+
+            <span style="color: #008000; font-weight: bold;">if</span> command[<span style="color: #666666;">0</span>]:  <span style="color: #408080; font-style: italic;"># if we have any command left </span>
+                            <span style="color: #408080; font-style: italic;"># (e.g., an indented comment would dissappear)</span>
+
+                <span style="color: #008000; font-weight: bold;">try</span>:
+                    <span style="color: #408080; font-style: italic;"># The meat of the dispatcher is the next line</span>
+                    <span style="color: #408080; font-style: italic;"># using a try/ except means we can always try to run any command</span>
+                    <span style="color: #408080; font-style: italic;"># and assume that it is valid and catch if it isn&#39;t.</span>
+                    <span style="color: #408080; font-style: italic;"># globals() returns a dictionary of every function defined in the global namespace</span>
+                    <span style="color: #408080; font-style: italic;"># including all the turtle commands because of the from turtle import *</span>
+                    <span style="color: #408080; font-style: italic;"># command[0] is used as a key to look up the function name</span>
+                    <span style="color: #408080; font-style: italic;"># we then pass all of the other tokens (command[1:]) through eval (using map)</span>
+                    <span style="color: #408080; font-style: italic;"># and pass them as arguments to the function we looked up</span>
+
+                    <span style="color: #008000;">globals</span>()[command[<span style="color: #666666;">0</span>]](<span style="color: #666666;">*</span>(<span style="color: #008000;">map</span>(<span style="color: #008000;">eval</span>, command[<span style="color: #666666;">1</span>:])))
+
+                    <span style="color: #408080; font-style: italic;"># a key error occurs if we don&#39;t find command[0] in the global namespace</span>
+                <span style="color: #008000; font-weight: bold;">except</span> <span style="color: #d2413a; font-weight: bold;">KeyError</span>:
+                    <span style="color: #008000; font-weight: bold;">print</span> <span style="color: #ba2121;">&#39;Unknown command&#39;</span>, command[<span style="color: #666666;">0</span>], <span style="color: #ba2121;">&#39;on line &#39;</span>, line_number
+
+                    <span style="color: #408080; font-style: italic;"># Some other error occurred (e.g., the called function raised an Exception)</span>
+                    <span style="color: #408080; font-style: italic;"># report it here and continue on (if we didn&#39;t catch it, the program would end)</span>
+                <span style="color: #008000; font-weight: bold;">except</span> <span style="color: #d2413a; font-weight: bold;">Exception</span> <span style="color: #008000; font-weight: bold;">as</span> e:
+                    <span style="color: #008000; font-weight: bold;">print</span> <span style="color: #ba2121;">&#39;Invalid command&#39;</span>, command[<span style="color: #666666;">0</span>], <span style="color: #ba2121;">&#39;on line &#39;</span>, line_number,  e
+
+
+<span style="color: #008000; font-weight: bold;">if</span> __name__ <span style="color: #666666;">==</span> <span style="color: #ba2121;">&#39;__main__&#39;</span>:
+    <span style="color: #408080; font-style: italic;"># open the first file on the command line, get commands from that and run them</span>
+    commands <span style="color: #666666;">=</span> <span style="color: #008000;">open</span>(argv[<span style="color: #666666;">1</span>])<span style="color: #666666;">.</span>xreadlines()
+
+    <span style="color: #408080; font-style: italic;"># note that the parse and draw routine works on a list of commands, it doesn&#39;t know about files</span>
+    <span style="color: #408080; font-style: italic;"># or anything else.  This seperation is is useful, as we can get commands from anywhere</span>
+    parse_and_draw(commands)
+</pre>
+</div>
+
+<p>&#0160;</p>
+
+<p>
+<a class="asset-img-link" href="http://fivecomputers.typepad.com/.a/6a00e54efca38e8834017c34da956e970b-pi" style="display: inline;"><img alt="12:21:12 10:37 AM" border="0" class="asset  asset-image at-xid-6a00e54efca38e8834017c34da956e970b image-full" src="http://fivecomputers.typepad.com/.a/6a00e54efca38e8834017c34da956e970b-800wi" title="12:21:12 10:37 AM" /></a><br /><br /></p>                </article>
+                                    <p class="paginator">
+        Page 1 / 1
+    </p>
+                            </aside><!-- /#featured -->
+                                                </ol><!-- /#posts-list -->
+                        </section><!-- /#content -->
+                    <section id="extras" class="body">
+                        <div class="blogroll">
+                        <h2>blogroll</h2>
+                        <ul>
+                                                    <li><a href="http://getpelican.com/">Pelican</a></li>
+                                                    <li><a href="http://python.org/">Python.org</a></li>
+                                                    <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
+                                                    <li><a href="#">You can modify those links in your config file</a></li>
+                                                </ul>
+                </div><!-- /.blogroll -->
+                                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/None" type="application/atom+xml" rel="alternate">atom feed</a></li>
+                            
+                                                    <li><a href="#">You can add links in your config file</a></li>
+                                                    <li><a href="#">Another social link</a></li>
+                                                </ul>
+                </div><!-- /.social -->
+                </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

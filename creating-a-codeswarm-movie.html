@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8">
+        <title>creating a codeswarm movie</title>
+        <link rel="stylesheet" href="/theme/css/main.css">
+                
+        <!--[if IE]>
+            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">Five Computers </a></h1>
+                <nav><ul>
+                                                    <li><a href="/pages/about.html">About</a></li>
+                                                                    <li ><a href="/category/blogging.html">blogging</a></li>
+                                    <li class="active"><a href="/category/converted.html">converted</a></li>
+                                    <li ><a href="/category/python-eda.html">python, eda</a></li>
+                                                </ul></nav>
+        </header><!-- /#banner -->
+        <section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/creating-a-codeswarm-movie.html" rel="bookmark"
+           title="Permalink to creating a codeswarm movie">creating a codeswarm movie</a></h1>
+          </header>
+
+    <div class="entry-content">
+      <footer class="post-info">
+        <abbr class="published" title="2009-08-04T00:00:00">
+                Tue 04 August 2009
+        </abbr>
+
+                <address class="vcard author">
+                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
+        </address>
+        <p>In <a href="/category/converted.html">converted</a>. </p>
+<p>tags: <a href="/tag/software-verification.html">software  verification</a></p>
+</footer><!-- /.post-info -->      <p style="text-align: center;"><a href="http://www.flickr.com/photos/52043707@N00/3423187687/"><img src="http://farm4.static.flickr.com/3631/3423187687_4a8a94a5bd.jpg" height="375" width="500" alt="code swarm frame" /></a></p>
+
+<p style="text-align: center;"><a href="http://www.mcgregorphoto.com/pub/svipcodeswarm.mpg">Download video (3Mb)</a></p>
+
+<p>A codeswarm is a visualization of the activity within a source code repository. The image and linked video above shows the lifetime of one of <a href="http://www.verilab.com" title="Verilab, Inc.">Verilab's</a> source repositories. You can see code being created, the check-ins as they happen and an indication of which users are doing the work at any given time. It is an example of an <em>'</em><a href="http://www.benfry.com"><em>organic information visualization</em></a>' and is created using the <a href="http://processing.org/">Processing</a> toolkit. The original visualization tools were developed by <a href="http://vis.cs.ucdavis.edu/~ogawa/codeswarm/">Michael Ogawa</a> and the <a href="http://code.google.com/p/codeswarm/">source code is available on Google code</a>.</p>
+
+<p>In this particular case I created the animation on OS X 10.5, using a combination of codeswarm, ffmpeg and LAME. If you are interested in doing something like this yourself:</p>
+
+<p>First you'll need to make sure you have a recent version of the Java Development Kit installed (JDK 1.5 or later). You'll also need a recent version of Ant installed. (I have version 1.7.0, which ships with OS X as default). Download the code_swarm source and install it. Then execute '<em>ant run</em>'. If all is well, you should get a dialog box prompting you for the source repository, user name and password.</p>
+
+<p>At this point, I put in the svn+ssh URL for the Verilab repository that I wanted to visualize. Everything fell over, with a Java error (NoClassDefFoundError within com/trilead/ssh2). From this I realised I needed to install the SSH libraries for <a href="http://www.trilead.com/Products/Trilead_SSH_for_Java/">Java, from Trilead</a>. I downloaded those, unpacked them and added the <em>jar</em> file to my CLASSPATH. Along the way I found out the default OS X CLASSPATH definition is in <em>/System/Library/Java/JavaConfig.plist</em> which may be useful as a starting point.</p>
+
+<p>With that fixed, I again ran '<em>ant run</em>' and put in the relevant information. A bit of time passes as the checkin information is extracted from the repository, then the visualisation runs. You'll find that repository information that was extracted is saved, under the ./data directory (look for the latest realtime_sample.*.xml file) . This is useful for the next stages, as you don't have to fetch the information again. If you want to create a video of the visualisation, there are a few more hoops to jump through.</p>
+
+<p>You will need to configure codeswarm to save the frames for each stage of the visualisation. You do this by editing the <em>./data/sample.config</em> file. First off, copy it to a new version for your particular project. Then edit these values:</p>
+
+<ul>
+  <li>InputFile= [Point it at the new realtime_sample&lt;number&gt;.xml file in the data directory, that contains the checkin information for your project]</li>
+
+  <li>TakeSnapshots=true</li>
+</ul>
+
+<p>That's all you really need to change. You can also change the other values, to alter the visualisation. The ColorAssignX= statements use regexp values to differentiate different types of checkin and colour code them accordingly. Play around with the other values, with TakeSnapshots set to false and re-run the visualisation until you get something you are satisfied with. Then run one more time with TakeSnapshots=true to save off the frame images. You can run with the new configuration by running '<em>ant run data/your_project.config'</em><br /></p>
+
+<p>After running with TakeSnapshots enabled, you'll have a set of images in the ./frames directory, (controlled by the SnapshotLocation option in the config file). The final step is to assemble those into a movie. The easiest way I found to do this is to use the command-line utility, ffmpeg. There are a variety of ways to install ffmpeg, but the simplest way seems to be to install <a href="http://homepage.mac.com/major4/">ffmpegX</a> and <a href="http://www.macosxhints.com/article.php?story=20061220082125312">then extract the binary</a> from the application bundle. You can also get it using <a href="http://www.finkproject.org/">Fink</a> or <a href="http://www.macports.org/">MacPorts</a>. If you want to use an audio track with your visualisation, you will also probably require <a href="http://lame.sourceforge.net">LAME</a>. With ffmpeg working, it is simple to point it towards the image files from codeswarm and produce the final movie. The finishing touch was adding some music from an mp3 file, then limiting the duration via the -t switch, to end when the video frames ran out, rather than playing all of the music.</p>
+
+<p>ffmpeg -i frames/code_swarm-%05d.png -i 6_sym.mp3 -qmax 15 -t 100 -f image2 -r 24 &lt;output_filename&gt;.mpg</p>
+
+<p>You can run 'ffmpeg' without any switches to get help on the options. If all goes well, you should end up with an MPEG format video in the file &lt;output_filename&gt;.mpg.</p>
+
+<div class="posttagsblock"><a href="http://technorati.com/tag/OSX" rel="tag">OSX</a>, <a href="http://technorati.com/tag/visualisation" rel="tag">visualisation</a></div>
+    </div><!-- /.entry-content -->
+    
+  </article>
+</section>
+        <section id="extras" class="body">
+                        <div class="blogroll">
+                        <h2>blogroll</h2>
+                        <ul>
+                                                    <li><a href="http://getpelican.com/">Pelican</a></li>
+                                                    <li><a href="http://python.org/">Python.org</a></li>
+                                                    <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
+                                                    <li><a href="#">You can modify those links in your config file</a></li>
+                                                </ul>
+                </div><!-- /.blogroll -->
+                                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/None" type="application/atom+xml" rel="alternate">atom feed</a></li>
+                            
+                                                    <li><a href="#">You can add links in your config file</a></li>
+                                                    <li><a href="#">Another social link</a></li>
+                                                </ul>
+                </div><!-- /.social -->
+                </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

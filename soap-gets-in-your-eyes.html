@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8">
+        <title>SOAP gets in your eyes</title>
+        <link rel="stylesheet" href="/theme/css/main.css">
+                
+        <!--[if IE]>
+            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">Five Computers </a></h1>
+                <nav><ul>
+                                                    <li><a href="/pages/about.html">About</a></li>
+                                                                    <li ><a href="/category/blogging.html">blogging</a></li>
+                                    <li class="active"><a href="/category/converted.html">converted</a></li>
+                                    <li ><a href="/category/python-eda.html">python, eda</a></li>
+                                                </ul></nav>
+        </header><!-- /#banner -->
+        <section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/soap-gets-in-your-eyes.html" rel="bookmark"
+           title="Permalink to SOAP gets in your eyes">SOAP gets in your eyes</a></h1>
+          </header>
+
+    <div class="entry-content">
+      <footer class="post-info">
+        <abbr class="published" title="2008-07-15T00:00:00">
+                Tue 15 July 2008
+        </abbr>
+
+                <address class="vcard author">
+                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
+        </address>
+        <p>In <a href="/category/converted.html">converted</a>. </p>
+<p>tags: <a href="/tag/software.html">software</a></p>
+</footer><!-- /.post-info -->      <div style="text-align: center;">
+  <a href="http://www.flickr.com/photos/52043707@N00/1511995758/"><img width="500" height="334" src="http://farm3.static.flickr.com/2141/1511995758_bca60a43b4.jpg" alt="lava" /></a>
+</div>
+
+<p>I have a few days between a recently finished contract and before I start the next one. I've decided to use that time to learn a bit of <a href="http://www.ruby-lang.org/en/">Ruby</a> and the <a href="http://www.rubyonrails.org/">Rails</a> framework for a small project. I'm putting something together to do time tracking and communicate with the <a href="http://www.projectorpsa.com/">Professional Services Automation software</a> that we use in <a href="http://www.verilab.com" title="Verilab, Inc.">Verilab</a>. As ever this sort of learning only really happens on an '<em>as-needed</em>' basis so I think that a small driver project will move things along.</p>
+
+<p>One of the first things I've been working on is the underlying communications with the web services interface that Projector provides into their database. They use a <a href="http://en.wikipedia.org/wiki/SOAP">SOAP</a> interface, with a <a href="http://www.w3.org/TR/wsdl">Web Services Description Language (WSDL)</a> representation of the API. This WSDL file is a machine-readable, XML description of all of the API calls and expected types for those calls. You can interact with the SOAP interface directly, constructing the XML to place the request and then parsing the responses manually. However, that becomes painful very quickly, as the calls are very verbose and unwieldy. The solution is to use one of the various SOAP frameworks available, that interrogate the WSDL and then generate objects and methods to encapsulate the interface.<br /></p>
+
+<p>This all seemed mostly reasonable and I got a copy of <a href="http://dev.ctor.org/soap4r"><em>soap4r</em></a> which is the default Ruby SOAP interface. The latest version supports two interfaces, dynamically parsing the WSDL and generating object factories, or a script that statically parses the WSDL and generates a variety of helper classes that can be used to build the SOAP calls.<br /></p>
+
+<p>At this point, the almost total lack of documentation for <em>soap4r</em> started to bite me. There is plenty of sample code, assuming you only ever want to pass a string (like a stock ticker) and only ever really expect a single integer or float to come back (such as a stock price). Very few examples go much further than that, but the Projector SOAP API uses a variety of heavily nested complexTypes and it wasn't very clear at all how to access or manipulate them. I made the initial mistake of trying to use the dynamic WSDL parsing, but after a while switched to using the statically generated classes which helped somewhat. At least then I could read the source and see what the member variables were in the classes and also what the class names were. Part of the problem seems to be that the Ruby world prefers the <a href="http://en.wikipedia.org/wiki/Representational_State_Transfer">RESTful</a> approach to web services, so SOAP is something of an ugly step-child. But SOAP is what I have to work with to get the information I need.<br />
+<br />
+At one point, I abandoned the Ruby version and tried to build an equivalent set of queries in Python. I'm more familiar with that language and thought it might remove one of the levels of complexity from the problem. In the Python world, I tried using the <a href="https://fedorahosted.org/suds">SUDS</a> framework to manage the WSDL. In this case, SUDS only supports dynamic parsing of the WSDL file and this parsing is quite a computationally expensive task. It doesn't make for fast, iterative exploration when it takes about 30 seconds to start up the script each time. I wasn't able to pickle the results to cache the driver either. Again, the SUDS framework has a real dearth of documentation - in fact it is even more sparse than <em>soap4r</em>. However, poking around at the classes using the introspection features of Python helped me get a bit further along and also cast the Ruby experience in a different light. I was able to take what I'd learned in Python and apply it to the Ruby scripts and made quite a bit more progress.<br /></p>
+
+<p>I've been learning bits and pieces of Ruby along the way, too. Ruby is also a dynamic language with introspection, so I was able to start poking around in the objects, printing out methods and instance_variables to see what was going on. The interactive command line in Python is fantastic for doing this sort of exploration. I haven't yet found an equivalently powerful command line/ interactive way of doing this sort of playing around in Ruby (feel free to let me know how!). By some trial and error and dumping objects along the way I was able to get the data I wanted.<br /></p>
+
+<p>So a day and a half later, I now have a simple Ruby script that can talk to the ProjectorPSA SOAP API and query the list of active projects, then print out and count that list. Painful to get up the learning curve, but now at least I know how to work with the SOAP framework and make the method calls that I need. The equivalent Python script is almost there, but with a missing namespace in the generated XML that I haven't quite worked out how to control from the other side of the SUDS framework.<br /></p>
+
+<p style="text-align: left;">Overall, SOAP still seems very verbose and complex, for what it does - layers of objects, lots of XML, just to do very simple queries. A simple method invocation such as:</p>
+
+<pre>
+<code>&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;env:Envelope xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:env="http://schemas.xmlsoap.org/soap/envelope/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
+  &lt;env:Header&gt;
+        &lt;n1:OpsAuthenticationHeader 
+            xmlns:n1="http://www.opsplanning.com/webservices/public/data"
+            env:mustUnderstand="0"&gt;
+          &lt;n1:EmailAddress&gt;REMOVED&lt;/n1:EmailAddress&gt;
+          &lt;n1:Password&gt;REMOVED&lt;/n1:Password&gt;
+          &lt;n1:AccountName&gt;verilab&lt;/n1:AccountName&gt;
+        &lt;/n1:OpsAuthenticationHeader&gt;
+  &lt;/env:Header&gt;
+  &lt;env:Body&gt;
+    &lt;n2:ExportProjectList 
+       xmlns:n2="http://www.opsplanning.com/webservices/public/data"&gt;
+      &lt;n2:request xsi:type="n2:ExportProjectListRq"&gt;
+        &lt;n2:Parameters&gt;
+          &lt;n2:LimitToOpenForTimeOnly&gt;true&lt;/n2:LimitToOpenForTimeOnly&gt;
+          &lt;n2:LimitToOpenForCostOnly&gt;true&lt;/n2:LimitToOpenForCostOnly&gt;
+          &lt;n2:MaxRowsToReturn&gt;200&lt;/n2:MaxRowsToReturn&gt;
+          &lt;n2:OnlyCountRows&gt;false&lt;/n2:OnlyCountRows&gt;
+        &lt;/n2:Parameters&gt;
+      &lt;/n2:request&gt;
+    &lt;/n2:ExportProjectList&gt;
+  &lt;/env:Body&gt;
+&lt;/env:Envelope&gt;
+
+</code>
+</pre>
+
+<p>The Ruby code to generate this one remote procedure call is equally verbose, even with all the auto generated code within the <em>soap4r</em> framework:
+<pre>
+require 'rubygems'
+gem 'soap4r'
+require 'soap/wsdlDriver'
+require 'soap/header/simplehandler'
+require 'defaultDriver'</p>
+<h1>new authentication class to construct proper SOAP Authentication header for</h1>
+<h1>each access to the server</h1>
+<h1>this is idiomatic for the soap4r framework - it is what it is</h1>
+<p>class ClientAuthHeaderHandler &lt; SOAP::Header::SimpleHandler
+  def initialize(userid, passwd)
+    super(XSD::QName.new("http://www.opsplanning.com/webservices/public/data", 
+                         "OpsAuthenticationHeader"))
+    @sessionid = nil
+    @userid = userid
+    @passwd = passwd
+  end</p>
+<p>def on_simple_outbound
+    if @sessionid
+      { "sessionid" =&gt; @sessionid }
+    else
+      { "AccountName" =&gt; "verilab", "EmailAddress" =&gt; @userid, 
+        "Password" =&gt; @passwd }
+    end
+  end</p>
+<p>def on_simple_inbound(my_header, mustunderstand)
+    @sessionid = my_header["sessionid"]
+  end
+end</p>
+<h1>make sure everything is unicode-friendly, just in case</h1>
+<p>XSD::Charset.encoding = 'UTF8'</p>
+<h1>create the SOAP driver object to handle the requests</h1>
+<p>endpoint_url = ARGV.shift
+driver = OpsProjectorSvcSoap.new(endpoint_url)</p>
+<h1>enable debug output (showing SOAP XML) if you run this script with ruby -d</h1>
+<p>driver.wiredump_dev = STDOUT if $DEBUG</p>
+<h1>set up authentication object</h1>
+<p>user = "account name here"</p>
+<h1>uncomment to prompt for the password each time the script runs</h1>
+<p>passwd = ask("Password:") { |q| q.echo = false } </p>
+<h1>create the authentication token and stuff it into the driver's</h1>
+<h1>header for every SOAP request that gets generated</h1>
+<p>auth = ClientAuthHeaderHandler.new user, passwd
+driver.headerhandler &lt;&lt; auth</p>
+<h1>Wrap the request in a Rq object, inside an ExportProjectList object</h1>
+<h1>means it all unrolls to be the correct SOAP/XML. There may be a more direct</h1>
+<h1>way to do this from just the ExportProjectList and property setting?</h1>
+<h1>:LimitToOpenForTimeOnly =&gt; true ???</h1>
+<p>req = ExportProjectList.new(
+        ExportProjectListRq.new(
+            ExportProjectListRequest.new(true, true, nil, 2000000, nil, false) ) )</p>
+<h1>make the SOAP call, and extract the exportProjectListResult object</h1>
+<p>result = driver.exportProjectList(req).exportProjectListResult</p>
+<h1>display project list. The hierarchy can be intuited from the various bits of ruby</h1>
+<h1>generated by the wsdl2ruby.rb script (defaultMappingRegistry.rb, default.rb et al)</h1>
+<p>result.data.projectList.project.each { |project| print_project(project) }</p>
+<p></pre>The analogous Python code is similarly wordy. As our very bright admin, Will, says about SOAP '<em>run away, run away</em>'</p>
+    </div><!-- /.entry-content -->
+    
+  </article>
+</section>
+        <section id="extras" class="body">
+                        <div class="blogroll">
+                        <h2>blogroll</h2>
+                        <ul>
+                                                    <li><a href="http://getpelican.com/">Pelican</a></li>
+                                                    <li><a href="http://python.org/">Python.org</a></li>
+                                                    <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
+                                                    <li><a href="#">You can modify those links in your config file</a></li>
+                                                </ul>
+                </div><!-- /.blogroll -->
+                                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/None" type="application/atom+xml" rel="alternate">atom feed</a></li>
+                            
+                                                    <li><a href="#">You can add links in your config file</a></li>
+                                                    <li><a href="#">Another social link</a></li>
+                                                </ul>
+                </div><!-- /.social -->
+                </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8">
+        <title>Five Computers - Current Affairs  software</title>
+        <link rel="stylesheet" href="/theme/css/main.css">
+                
+        <!--[if IE]>
+            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">Five Computers </a></h1>
+                <nav><ul>
+                                                    <li><a href="/pages/about.html">About</a></li>
+                                                                    <li ><a href="/category/blogging.html">blogging</a></li>
+                                    <li ><a href="/category/converted.html">converted</a></li>
+                                    <li ><a href="/category/python-eda.html">python, eda</a></li>
+                                                </ul></nav>
+        </header><!-- /#banner -->
+                
+            
+
+                            <aside id="featured" class="body">
+                <article>
+                    <h1 class="entry-title"><a href="/what-did-you-say.html">what did you say?</a></h1> 
+                    <footer class="post-info">
+        <abbr class="published" title="2009-04-30T00:00:00">
+                Thu 30 April 2009
+        </abbr>
+
+                <address class="vcard author">
+                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
+        </address>
+        <p>In <a href="/category/converted.html">converted</a>. </p>
+<p>tags: <a href="/tag/current-affairs-software.html">Current Affairs  software</a></p>
+</footer><!-- /.post-info --><div style="text-align: center;">
+  <a href="http://www.wordle.net/gallery/wrdl/799366/Gordon%27s_tweets" title="Wordle: Gordon's tweets"><img src="http://fivecomputers.typepad.com/.a/6a00e54efca38e883401156f6c5ebd970c-pi" width="700" height="319" alt="Wordle - Gordon_s tweets-1.jpg" /></a><br />
+</div>
+
+<p>I've been poking around at the <a href="http://apiwiki.twitter.com/Twitter-API-Documentation">Twitter API</a>, in part just out of curiosity about what features are exposed. I have an interest in writing some visualisation widgets based upon it. The iPhone development course is also using a Twitter client as something of a 'hello world' app, too. Today, Tim O'Reilly pointed to a <a href="http://radar.oreilly.com/2009/04/wordle-visualization-timoreilly-tweetstream.html">wordle visualisation</a> of all the things that he's tweeted and <a href="http://code.activestate.com/recipes/576594/">gave a link</a> to some code that could be used to download everything you'd tweeted. I had a look at it and decided to write something similar, using the Twitter API directly, rather than scraping the Twitter site.</p>
+
+<p>The Twitter API I've been using is the excellent, minimalist <a href="http://mike.verdone.ca/twitter/">python twitter tools</a> by Mike Verdone. The main advantage over other python Twitter APIs is that ptt doesn't redefine any of the API calls. It does exactly what it says in the published <a href="http://apiwiki.twitter.com/Twitter-API-Documentation">Twitter API</a>. As a result, it is incredibly easy to use. The 100 or so lines it is implemented in are also a very instructive read, to <a href="http://github.com/sixohsix/twitter/blob/ea668dec2e122000b0025a8cfc02c860388f621d/twitter/api.py">see how it is put together</a>. I think it is a great example of how the attributes in Python can be used.</p>
+
+<p>The code I wrote is <a href="http://www.mcgregorphoto.com/pub/what_did_you_say.py.txt">available for download</a>. It respects the rate limiting imposed by Twitter and will output all of the tweets for a particular user, to a file called &lt;username&gt;.tweet in the file it is run from. You can change which users are fetched in the main() ftn. The resulting text file can be opened up and then copy/ pasted over into the <a href="http://www.wordle.net/create">wordle creator.</a></p>
+
+<p><br /></p>
+<div class="posttagsblock"><a href="http://technorati.com/tag/geekery" rel="tag">geekery</a>, <a href="http://technorati.com/tag/Twitter" rel="tag">Twitter</a>, <a href="http://technorati.com/tag/visualisation" rel="tag">visualisation</a></div>                </article>
+                                    <p class="paginator">
+        Page 1 / 1
+    </p>
+                            </aside><!-- /#featured -->
+                                                </ol><!-- /#posts-list -->
+                        </section><!-- /#content -->
+                    <section id="extras" class="body">
+                        <div class="blogroll">
+                        <h2>blogroll</h2>
+                        <ul>
+                                                    <li><a href="http://getpelican.com/">Pelican</a></li>
+                                                    <li><a href="http://python.org/">Python.org</a></li>
+                                                    <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
+                                                    <li><a href="#">You can modify those links in your config file</a></li>
+                                                </ul>
+                </div><!-- /.blogroll -->
+                                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/None" type="application/atom+xml" rel="alternate">atom feed</a></li>
+                            
+                                                    <li><a href="#">You can add links in your config file</a></li>
+                                                    <li><a href="#">Another social link</a></li>
+                                                </ul>
+                </div><!-- /.social -->
+                </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

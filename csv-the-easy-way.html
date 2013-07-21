@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8">
+        <title>csv the easy way</title>
+        <link rel="stylesheet" href="/theme/css/main.css">
+                
+        <!--[if IE]>
+            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">Five Computers </a></h1>
+                <nav><ul>
+                                                    <li><a href="/pages/about.html">About</a></li>
+                                                                    <li ><a href="/category/blogging.html">blogging</a></li>
+                                    <li class="active"><a href="/category/converted.html">converted</a></li>
+                                    <li ><a href="/category/python-eda.html">python, eda</a></li>
+                                                </ul></nav>
+        </header><!-- /#banner -->
+        <section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/csv-the-easy-way.html" rel="bookmark"
+           title="Permalink to csv the easy way">csv the easy way</a></h1>
+          </header>
+
+    <div class="entry-content">
+      <footer class="post-info">
+        <abbr class="published" title="2011-01-23T00:00:00">
+                Sun 23 January 2011
+        </abbr>
+
+                <address class="vcard author">
+                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
+        </address>
+        <p>In <a href="/category/converted.html">converted</a>. </p>
+<p>tags: <a href="/tag/software.html">software</a></p>
+</footer><!-- /.post-info -->      <p>I've recently started using <a href="http://fogcreek.com/">FogCreek's</a> <a href="http://www.fogcreek.com/FogBugz/">FogBugz</a> project hosting for a small personal project. It has a built-in Mercurial source repository, with some enhancements, called Kiln, and good task/ project tracking features. Quite similar to those you find in <a href="http://trac.edgewall.org/">Trac</a>. Rather than putting together the various servers to track my own project, I figured I might as well use what they give away for free, for small project teams. I had a list of tasks that I wanted to import into the FogBugz task list, from a CSV file. In fact, this was a CSV file I'd exported from a different FogBugz site, but it could well have been any list of comma seperated values holding task information. The trick was how to get that information from my computer onto the FogBugz site. They didn't have any obvious CSV import option, but they do publish an XML API. Luckily enough, there is also a set of <a href="https://our.fogbugz.com/default.asp?W1048">python bindings around the API</a>. Amazingly enough, I was able to open and read the CSV file, parse it, login in to my FogBugz account and upload the new tasks to the server with just this little snippet of code.</p>
+
+<p><br />
+<div class="highlight">
+  <pre>
+<span class="kn">from</span> <span class="nn">fogbugz</span> <span class="kn">import</span> <span class="n">FogBugz</span>
+<span class="kn">import</span> <span class="nn">csv</span>
+<span class="n">fb</span> <span class="o">=</span> <span class="n">FogBugz</span><span class="p">(</span><span class="s">'http://my_site.fogbugz.com/'</span><span class="p">)</span> <span class="c"># URL is to your FogBugz install</span>
+<span class="n">fb</span><span class="o">.</span><span class="n">logon</span><span class="p">(</span><span class="s">'my_login@my.site.com'</span><span class="p">,</span> <span class="s">'password'</span><span class="p">)</span></p>
+<p><span class="n">cases</span><span class="o">=</span><span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s">'Filter.csv'</span><span class="p">,</span><span class="s">'r'</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">case</span> <span class="ow">in</span> <span class="n">cases</span><span class="p">:</span>
+    <span class="k">print</span> <span class="n">case</span>
+    <span class="n">fb</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">sCategory</span><span class="o">=</span><span class="n">case</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sTitle</span><span class="o">=</span><span class="n">case</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">sPriority</span><span class="o">=</span><span class="n">case</span><span class="p">[</span><span class="mi">7</span><span class="p">])</span> </p>
+<p><span class="n">fb</span><span class="o">.</span><span class="n">logoff</span><span class="p">()</span>
+</pre>
+</div>Pretty cool if you ask me! Quick and dirty, throwaway code, but so powerful for so few lines.<br />
+<br /></p>
+    </div><!-- /.entry-content -->
+    
+  </article>
+</section>
+        <section id="extras" class="body">
+                        <div class="blogroll">
+                        <h2>blogroll</h2>
+                        <ul>
+                                                    <li><a href="http://getpelican.com/">Pelican</a></li>
+                                                    <li><a href="http://python.org/">Python.org</a></li>
+                                                    <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
+                                                    <li><a href="#">You can modify those links in your config file</a></li>
+                                                </ul>
+                </div><!-- /.blogroll -->
+                                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/None" type="application/atom+xml" rel="alternate">atom feed</a></li>
+                            
+                                                    <li><a href="#">You can add links in your config file</a></li>
+                                                    <li><a href="#">Another social link</a></li>
+                                                </ul>
+                </div><!-- /.social -->
+                </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8">
+        <title>Git - version control done right</title>
+        <link rel="stylesheet" href="/theme/css/main.css">
+                
+        <!--[if IE]>
+            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">Five Computers </a></h1>
+                <nav><ul>
+                                                    <li><a href="/pages/about.html">About</a></li>
+                                                                    <li ><a href="/category/blogging.html">blogging</a></li>
+                                    <li class="active"><a href="/category/converted.html">converted</a></li>
+                                    <li ><a href="/category/python-eda.html">python, eda</a></li>
+                                                </ul></nav>
+        </header><!-- /#banner -->
+        <section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/git-version-control-done-right.html" rel="bookmark"
+           title="Permalink to Git - version control done right">Git - version control done right</a></h1>
+          </header>
+
+    <div class="entry-content">
+      <footer class="post-info">
+        <abbr class="published" title="2008-06-26T00:00:00">
+                Thu 26 June 2008
+        </abbr>
+
+                <address class="vcard author">
+                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
+        </address>
+        <p>In <a href="/category/converted.html">converted</a>. </p>
+<p>tags: <a href="/tag/eda-software-verification.html">EDA  software  verification</a></p>
+</footer><!-- /.post-info -->      <p><img width="500" height="334" src="http://farm3.static.flickr.com/2012/2573207802_7f55cbaab2.jpg" alt="concert hall" /></p>
+
+<p>As I've started working on this small CPU project, one of the first decisions I've been considering has been which version control system to use. I've been a user of subversion for most of my personal projects for several years now and am currently using it at a client. As a result I'm quite familiar with the ins and outs of using it on a variety of sizes of projects. I've become more aware of distributed systems, such as <a href="http://git.or.cz/">Git</a> and <a href="http://www.selenic.com/mercurial/wiki/">Mercurial</a> over the last year, but haven't really been able to get my head around the advantages of them. In particular, the quote below from Linus Torvalds has been in the back of my mind.</p>
+
+<p style="text-align: center;"><span style="font-size: 1.4em;"><em>"The slogan of Subversion for a while was 'CVS done right</em><em>', or something like that, and if you start with that kind of slogan, there's nowhere you can go. There is no way to do CVS right."</em></span></p>
+
+<p style="text-align: right; font-size: 10px;">- Linus Torvalds</p>
+
+<p>One of the main source control issues I've seen on several of the projects I've worked on has been the aversion to branches that most users have. Typically there is a big central source repository that everyone will check out from. You then develop in your own little world. When the particular piece of work is complete, you check it back in. Usually, there is a fairly high barrier or cost to those commits, with sets of test suites that you must pass before you can commit your code back to the central repository. The checks take hours to run and you can not check back in until your code passes all the tests. Otherwise everyone else is at risk. But I always found that if I was working on something non-trivial, I'd really like to make some progress and check point that half way, committing it in to just a local branch, then working on further. That would give me the confidence to make larger changes, safe in the knowledge I can revert back to a midway working point. That's what a branch would be for, after all, but not if they are hard to make and not if the commit cost is so high. So we never did that, working for days or weeks before committing any changes.</p>
+
+<p>The second common frustration I've seen with a centralized repository occurs when two people are working closely together on a piece of the system. This happens to characterise almost every verification endeavor, for example. By common definition, the verification and design work should be done by two different people, just to get extra eyes on the spec. This avoids duplicating erroneous assumptions about the design and is fundamental to the whole process. As a consequence, we are almost always faced with the situation where changes need to be made by two or more people, in distinct parts of the code (e.g., testbench and rtl) but cannot be checked in because of mutual dependencies. The changes depend on each other and all the commit checks will fail for either change on its own. Various ways around this exist, disabling affected checks in the commit scripts, copying files into each others workspaces and other hacks. All because fundamentally the centralised server approach, with costly branches and high commit costs, doesn't really let this sort of work proceed in an effective way.</p>
+
+<p>The third frustration is the general speed of the repository. Time to check things out, time to do merges, how long it takes to do a diff or an update. These operations can usually mean a break for coffee or a walk around while the tool fetches the changes, compares them and attempts to merge it all together. Compound that by working in remote sites or across multiple geographic locations.</p>
+
+<p>Git claims to solve these problems and be a whole lot faster at the same time.</p>
+
+<p>The key is in breaking away from a centralised server. The database is distributed to every developer. As a result, everyone works on their own branch by default. Making further branches is trivial, because they don't get sent to every other developer. Fewer issues with namespace collisions when naming a branch, no real concern about checking code in and someone else getting your partially finished work. Earlier today I'd listened to <a href="http://www.joelonsoftware.com/">Joel Spolsky</a> and <a href="http://www.codinghorror.com/">Jeff Atwood</a> <a href="http://itc.conversationsnetwork.org/shows/detail3710.html">talking</a> about the fact that Git makes branching trivial, but I didn't really understand why until I <a href="ttp://www.youtube.com/watch?v=4XpnKHJAok8">watched a really interesting presentation</a> from Linus Torvalds on the subject. It is supposed to be a talk about Git, but really he focuses almost exclusively on the advantages of a distributed repository. I'd initially thought the real advantage was the '<em>always available</em>' nature of a distributed repository, so that you could work on a plane or generally away from a network and still be able to check in, look at histories and all the things you normally need the central server access for. That's certainly part of the reason why it is interesting, but the branching and merging cost reduction that Git claims to offer is a much bigger deal.</p>
+
+<p><object width="425" height="344">
+  <param name="movie" value="http://www.youtube.com/v/4XpnKHJAok8&amp;hl=en" />
+  <embed width="425" height="344" src="http://www.youtube.com/v/4XpnKHJAok8&amp;hl=en" type="application/x-shockwave-flash" />
+</object></p>
+<p>For my second source of frustration above, Git also provides a solution. As there is no central repository, everyone can pull and push data to each other. The verification engineer and designer can exchange files more easily, through a tracked, version controlled system, rather than the usual sideband exchanges or hacks to the check-in scripts. Git also addresses that third issue, because all of the files are local and it has been designed for performance. Network overhead isn't an issue for a <em>diff</em> or history request as you have all the data locally. Merges are similarly less painful. The claimed performance is impressive and part of the reason why I want to try Git out.</p>
+<p>Now, the most glaring problem with all this is that it sounds like anarchy. There is no central organisation, check-ins can happen any time, so where did all the quality assurance go? Linus talks about the network of trust relationships in his presentation. But, you can still have acceptance tests on when you actually pull data from a particular user or set of users. You can require them to run a battery of tests before they are allowed to share their work with the rest of the project. The usual checks and balances can be put back in place for when the whole database gets reassembled, but the individual developers or groups of designers can work more efficiently in a sub-repository. Git also supports hierarchical projects that combine various blocks of code, in fact that seems to be the preferred use model. Each sub-system on a design would be a unique Git repository. It could be even broken down further and have each IP block in their own repository. The general approach that has been used in the past, with quality checks, can still be used with some changes, as a gate to when larger mergers take place. This probably requires some trusted people in the organisation to act as gatekeepers or guardians for each level, but the basic methodology shouldn't be too difficult to layer on top.</p>
+<p>You can read a lot more about Git on the <a href="http://git.or.cz/">homepage,</a> including conversion documents from other common source control systems and details on the actual commands to use. Looking through the <a href="http://git.or.cz/course/svn.html">SVN conversion document</a>, the git command syntax appears a bit cleaner and generally more intuitive to me. I also played around with the <em>merge</em> and <em>diff</em> tools and they seem powerful. It was very easy to create and populate a repository, for example. I plan on using it for the next few projects I work on to get a feel for how really useful it is and where the issues are hidden.</p>
+<p>Edit to add: I found this <a href="http://git.or.cz/gitwiki/GitSvnComparsion">draft version of the differences</a> between Git and Subversion quite useful.</p>
+    </div><!-- /.entry-content -->
+    
+  </article>
+</section>
+        <section id="extras" class="body">
+                        <div class="blogroll">
+                        <h2>blogroll</h2>
+                        <ul>
+                                                    <li><a href="http://getpelican.com/">Pelican</a></li>
+                                                    <li><a href="http://python.org/">Python.org</a></li>
+                                                    <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
+                                                    <li><a href="#">You can modify those links in your config file</a></li>
+                                                </ul>
+                </div><!-- /.blogroll -->
+                                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/None" type="application/atom+xml" rel="alternate">atom feed</a></li>
+                            
+                                                    <li><a href="#">You can add links in your config file</a></li>
+                                                    <li><a href="#">Another social link</a></li>
+                                                </ul>
+                </div><!-- /.social -->
+                </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

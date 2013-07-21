@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8">
+        <title>A UVM layer for PyHVL</title>
+        <link rel="stylesheet" href="/theme/css/main.css">
+                
+        <!--[if IE]>
+            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">Five Computers </a></h1>
+                <nav><ul>
+                                                    <li><a href="/pages/about.html">About</a></li>
+                                                                    <li ><a href="/category/blogging.html">blogging</a></li>
+                                    <li class="active"><a href="/category/converted.html">converted</a></li>
+                                    <li ><a href="/category/python-eda.html">python, eda</a></li>
+                                                </ul></nav>
+        </header><!-- /#banner -->
+        <section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/a-uvm-layer-for-pyhvl.html" rel="bookmark"
+           title="Permalink to A UVM layer for PyHVL">A UVM layer for PyHVL</a></h1>
+          </header>
+
+    <div class="entry-content">
+      <footer class="post-info">
+        <abbr class="published" title="2012-09-05T00:00:00">
+                Wed 05 September 2012
+        </abbr>
+
+                <address class="vcard author">
+                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
+        </address>
+        <p>In <a href="/category/converted.html">converted</a>. </p>
+<p>tags: <a href="/tag/.html"></a></p>
+</footer><!-- /.post-info -->      <p>Over the past few years I've been building verification environments in Python, hooked up to SystemVerilog and Verilog simulators. The glue is <a href="http://sourceforge.net/projects/pyhvl/">PyHVL</a>. But PyHVL is just the glue. It does open up the possibility of dynamic languages and scripting to talk to your test bench, but it isn't enough to implement a complete verification environment, quickly.</p>
+
+<p>To that end, I've started building analogues for most of the <a href="http://www.uvmworld.org/">UVM</a> classes, in Python/ PyHVL. Monitors, drivers, checkers, interfaces, scoreboards, all the standard sorts of pieces that you'd expect from a modern verification environment. With no compiling between iterations, and a command-line REPL to drop to for debug and interactive exploration. All backed with the batteries-included philosophy of Python. The sweet spot for this is probably somewhere within a fully fleshed out SystemVerilog testbench, leveraging the best features of SV (RTL/design, randomization with constraints, coverage, assertions) with the best features of Python for the higher level pieces of the testbench. At the same time, there is the potential to write the entire testbench in Python and the whole design in Verilog and use a free simulator such as <a href="http://iverilog.icarus.com/">Icarus</a> or <a href="http://sourceforge.net/projects/gplcver/">CVer</a>. Python brings a variety of useful features for testbench development; dynamic language, rapid development, rich set of libraries, fast iteration and a high level programming abstraction.</p>
+
+<p>I've been able to write models of processors that actually execute instructions and check the RTL, where the initial development time for a working CPU model was about 4 hours. There is effectively no recompile time cost - just re-run and the Python verification environment is re-interpreted as the simulation starts up.</p>
+
+<p>The main advantage of using Python for a testbench is writing less code. Less code means fewer bugs. The higher level language features of Python let you write more efficient code. As a quick example, here is the entire class definition for a PyHVL/ UVM interface, ready to hook up to RTL and monitor/drive signals in a DUT.</p>
+
+<div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%">
+<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">pluvm.uvm_package</span> <span style="color: #008000; font-weight: bold">import</span> <span style="color: #666666">*</span>
+
+HOST_BUS_SIGNALS<span style="color: #666666">=</span>(<span style="color: #BA2121">'reset'</span>, <span style="color: #BA2121">'clock'</span>, <span style="color: #BA2121">'cycle_count'</span>, <span style="color: #BA2121">'host_rdata'</span>, <span style="color: #BA2121">'host_ack'</span>,
+                  <span style="color: #BA2121">'host_err'</span>, <span style="color: #BA2121">'host_address'</span>, <span style="color: #BA2121">'host_valid'</span>, <span style="color: #BA2121">'host_wdata'</span>, 
+                  <span style="color: #BA2121">'host_strobe'</span>, <span style="color: #BA2121">'host_rwb'</span>)
+
+<span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">host_interface</span>(uvm_interface):
+
+        <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__init__</span>(<span style="color: #008000">self</span>, name, hierarchy):
+                uvm_interface<span style="color: #666666">.</span>__init__(<span style="color: #008000">self</span>, name, hierarchy)
+
+                <span style="color: #008000; font-weight: bold">for</span> signal <span style="color: #AA22FF; font-weight: bold">in</span> HOST_BUS_SIGNALS:
+                        <span style="color: #008000">self</span><span style="color: #666666">.</span>add_signal(signal)
+
+</pre>
+</div>
+
+<p>These classes can of course leverage the standard pyunit test frameworks and have unit tests in every class.</p>
+    </div><!-- /.entry-content -->
+    
+  </article>
+</section>
+        <section id="extras" class="body">
+                        <div class="blogroll">
+                        <h2>blogroll</h2>
+                        <ul>
+                                                    <li><a href="http://getpelican.com/">Pelican</a></li>
+                                                    <li><a href="http://python.org/">Python.org</a></li>
+                                                    <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
+                                                    <li><a href="#">You can modify those links in your config file</a></li>
+                                                </ul>
+                </div><!-- /.blogroll -->
+                                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/None" type="application/atom+xml" rel="alternate">atom feed</a></li>
+                            
+                                                    <li><a href="#">You can add links in your config file</a></li>
+                                                    <li><a href="#">Another social link</a></li>
+                                                </ul>
+                </div><!-- /.social -->
+                </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

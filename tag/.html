@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8">
+        <title>Five Computers - </title>
+        <link rel="stylesheet" href="/theme/css/main.css">
+                
+        <!--[if IE]>
+            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">Five Computers </a></h1>
+                <nav><ul>
+                                                    <li><a href="/pages/about.html">About</a></li>
+                                                                    <li ><a href="/category/blogging.html">blogging</a></li>
+                                    <li ><a href="/category/converted.html">converted</a></li>
+                                    <li ><a href="/category/python-eda.html">python, eda</a></li>
+                                                </ul></nav>
+        </header><!-- /#banner -->
+                
+            
+
+                            <aside id="featured" class="body">
+                <article>
+                    <h1 class="entry-title"><a href="/a-uvm-layer-for-pyhvl.html">A UVM layer for PyHVL</a></h1> 
+                    <footer class="post-info">
+        <abbr class="published" title="2012-09-05T00:00:00">
+                Wed 05 September 2012
+        </abbr>
+
+                <address class="vcard author">
+                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
+        </address>
+        <p>In <a href="/category/converted.html">converted</a>. </p>
+<p>tags: <a href="/tag/.html"></a></p>
+</footer><!-- /.post-info --><p>Over the past few years I've been building verification environments in Python, hooked up to SystemVerilog and Verilog simulators. The glue is <a href="http://sourceforge.net/projects/pyhvl/">PyHVL</a>. But PyHVL is just the glue. It does open up the possibility of dynamic languages and scripting to talk to your test bench, but it isn't enough to implement a complete verification environment, quickly.</p>
+
+<p>To that end, I've started building analogues for most of the <a href="http://www.uvmworld.org/">UVM</a> classes, in Python/ PyHVL. Monitors, drivers, checkers, interfaces, scoreboards, all the standard sorts of pieces that you'd expect from a modern verification environment. With no compiling between iterations, and a command-line REPL to drop to for debug and interactive exploration. All backed with the batteries-included philosophy of Python. The sweet spot for this is probably somewhere within a fully fleshed out SystemVerilog testbench, leveraging the best features of SV (RTL/design, randomization with constraints, coverage, assertions) with the best features of Python for the higher level pieces of the testbench. At the same time, there is the potential to write the entire testbench in Python and the whole design in Verilog and use a free simulator such as <a href="http://iverilog.icarus.com/">Icarus</a> or <a href="http://sourceforge.net/projects/gplcver/">CVer</a>. Python brings a variety of useful features for testbench development; dynamic language, rapid development, rich set of libraries, fast iteration and a high level programming abstraction.</p>
+
+<p>I've been able to write models of processors that actually execute instructions and check the RTL, where the initial development time for a working CPU model was about 4 hours. There is effectively no recompile time cost - just re-run and the Python verification environment is re-interpreted as the simulation starts up.</p>
+
+<p>The main advantage of using Python for a testbench is writing less code. Less code means fewer bugs. The higher level language features of Python let you write more efficient code. As a quick example, here is the entire class definition for a PyHVL/ UVM interface, ready to hook up to RTL and monitor/drive signals in a DUT.</p>
+
+<div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%">
+<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">pluvm.uvm_package</span> <span style="color: #008000; font-weight: bold">import</span> <span style="color: #666666">*</span>
+
+HOST_BUS_SIGNALS<span style="color: #666666">=</span>(<span style="color: #BA2121">'reset'</span>, <span style="color: #BA2121">'clock'</span>, <span style="color: #BA2121">'cycle_count'</span>, <span style="color: #BA2121">'host_rdata'</span>, <span style="color: #BA2121">'host_ack'</span>,
+                  <span style="color: #BA2121">'host_err'</span>, <span style="color: #BA2121">'host_address'</span>, <span style="color: #BA2121">'host_valid'</span>, <span style="color: #BA2121">'host_wdata'</span>, 
+                  <span style="color: #BA2121">'host_strobe'</span>, <span style="color: #BA2121">'host_rwb'</span>)
+
+<span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">host_interface</span>(uvm_interface):
+
+        <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__init__</span>(<span style="color: #008000">self</span>, name, hierarchy):
+                uvm_interface<span style="color: #666666">.</span>__init__(<span style="color: #008000">self</span>, name, hierarchy)
+
+                <span style="color: #008000; font-weight: bold">for</span> signal <span style="color: #AA22FF; font-weight: bold">in</span> HOST_BUS_SIGNALS:
+                        <span style="color: #008000">self</span><span style="color: #666666">.</span>add_signal(signal)
+
+</pre>
+</div>
+
+<p>These classes can of course leverage the standard pyunit test frameworks and have unit tests in every class.</p>                </article>
+                            </aside><!-- /#featured -->
+                            <section id="content" class="body">
+                    <h1>Other articles</h1>
+                    <hr />
+                    <ol id="posts-list" class="hfeed">
+                                                
+
+                 
+                        <li><article class="hentry">    
+                <header>
+                    <h1><a href="/sshfs-for-os-x-lion.html" rel="bookmark"
+                           title="Permalink to sshfs for OS X Lion">sshfs for OS X Lion</a></h1>
+                </header>
+                
+                <div class="entry-content">
+                <footer class="post-info">
+        <abbr class="published" title="2012-04-26T00:00:00">
+                Thu 26 April 2012
+        </abbr>
+
+                <address class="vcard author">
+                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
+        </address>
+        <p>In <a href="/category/converted.html">converted</a>. </p>
+<p>tags: <a href="/tag/.html"></a></p>
+</footer><!-- /.post-info -->                <p>Installed the latest version of fuse and sshfs, using <a href="http://mxcl.github.com/homebrew/">Homebrew</a>. I had been using FUSE for a while with previous versions of OS X, but haven't had much luck under Lion. Tried again today, using <a href="http://fuse4x.org/">Fuse4x</a>, rather than libFUSE and everything worked very transparently:</p>
+
+<pre>
+brew install fuse4x sshfs
+</pre>
+
+<p><strike>and ...</strike></p>
+                <a class="readmore" href="/sshfs-for-os-x-lion.html">read more</a>
+                                </div><!-- /.entry-content -->
+            </article></li>
+                            
+
+                 
+                        <li><article class="hentry">    
+                <header>
+                    <h1><a href="/systemverilog-support-in-pygments.html" rel="bookmark"
+                           title="Permalink to SystemVerilog support in Pygments">SystemVerilog support in Pygments</a></h1>
+                </header>
+                
+                <div class="entry-content">
+                <footer class="post-info">
+        <abbr class="published" title="2012-04-19T00:00:00">
+                Thu 19 April 2012
+        </abbr>
+
+                <address class="vcard author">
+                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
+        </address>
+        <p>In <a href="/category/converted.html">converted</a>. </p>
+<p>tags: <a href="/tag/.html"></a></p>
+</footer><!-- /.post-info -->                <p><a href="http://www.flickr.com/photos/mcgregorphoto/6949231074/" title="svforpygments by Gordon McGregor, on Flickr"><img alt="svforpygments" src="http://farm6.staticflickr.com/5454/6949231074_4dd2096121_c.jpg" width="720" /></a></p>
+
+<p>I&#39;ve used <a href="http://pygments.org/">Pygments</a> in the past to do syntax highlighting of Python and C code to drop into documentation. I&#39;ve wanted SystemVerilog support for a while, but the tool didn&#39;t <a href="http://pygments.org/languages/">support the language</a>. I eventually got frustrated enough by this to go and add it myself. The ...</p>
+                <a class="readmore" href="/systemverilog-support-in-pygments.html">read more</a>
+                                </div><!-- /.entry-content -->
+            </article></li>
+                            
+
+                 
+                        <li><article class="hentry">    
+                <header>
+                    <h1><a href="/improving-sshfs-connections.html" rel="bookmark"
+                           title="Permalink to Improving sshfs connections">Improving sshfs connections</a></h1>
+                </header>
+                
+                <div class="entry-content">
+                <footer class="post-info">
+        <abbr class="published" title="2012-02-05T00:00:00">
+                Sun 05 February 2012
+        </abbr>
+
+                <address class="vcard author">
+                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
+        </address>
+        <p>In <a href="/category/converted.html">converted</a>. </p>
+<p>tags: <a href="/tag/.html"></a></p>
+</footer><!-- /.post-info -->                <p>I'm finding <a href="http://www.fivecomputers.com/2012/04/sshfs-for-os-x-lion.html">sshfs</a> to be excellent for remotely accessing drives over ssh. There's a couple of tweaks to the ssh config file that can make things even better. If you haven't used an ssh config file, it can be used to store general and connection specific information ...</p>
+                <a class="readmore" href="/improving-sshfs-connections.html">read more</a>
+                                </div><!-- /.entry-content -->
+            </article></li>
+                            
+
+                 
+                        <li><article class="hentry">    
+                <header>
+                    <h1><a href="/pygmentize-files-and-paste-them-into-microsoft-word-in-os-x.html" rel="bookmark"
+                           title="Permalink to Pygmentize files and paste them into Microsoft Word in OS X">Pygmentize files and paste them into Microsoft Word in OS X</a></h1>
+                </header>
+                
+                <div class="entry-content">
+                <footer class="post-info">
+        <abbr class="published" title="2012-01-05T00:00:00">
+                Thu 05 January 2012
+        </abbr>
+
+                <address class="vcard author">
+                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
+        </address>
+        <p>In <a href="/category/converted.html">converted</a>. </p>
+<p>tags: <a href="/tag/.html"></a></p>
+</footer><!-- /.post-info -->                <p>Writing some documents using Microsoft Word and I wanted to be able to drop in syntax highlighted versions of the source code. Pygmentize will generate RTF format, which is great for pasting in to Word, but you have to get it there. The best way I've found is using ...</p>
+                <a class="readmore" href="/pygmentize-files-and-paste-them-into-microsoft-word-in-os-x.html">read more</a>
+                                </div><!-- /.entry-content -->
+            </article></li>
+                            
+
+                 
+                        <li><article class="hentry">    
+                <header>
+                    <h1><a href="/a-real-working-time-machine.html" rel="bookmark"
+                           title="Permalink to a real, working time machine">a real, working time machine</a></h1>
+                </header>
+                
+                <div class="entry-content">
+                <footer class="post-info">
+        <abbr class="published" title="2009-05-08T00:00:00">
+                Fri 08 May 2009
+        </abbr>
+
+                <address class="vcard author">
+                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
+        </address>
+        <p>In <a href="/category/converted.html">converted</a>. </p>
+<p>tags: <a href="/tag/.html"></a></p>
+</footer><!-- /.post-info -->                <p>Was working on some files on my mac last night, editing photographs from a recent trip. It was getting late and I accidentally deleted a directory of images. Now my images are always backed up anyway, on a separate attached storage device, so this wasn't too big of a ...</p>
+                <a class="readmore" href="/a-real-working-time-machine.html">read more</a>
+                                </div><!-- /.entry-content -->
+            </article></li>
+                            
+
+                 
+                        <li><article class="hentry">    
+                <header>
+                    <h1><a href="/flock-together.html" rel="bookmark"
+                           title="Permalink to flock together">flock together</a></h1>
+                </header>
+                
+                <div class="entry-content">
+                <footer class="post-info">
+        <abbr class="published" title="2008-12-06T00:00:00">
+                Sat 06 December 2008
+        </abbr>
+
+                <address class="vcard author">
+                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
+        </address>
+        <p>In <a href="/category/converted.html">converted</a>. </p>
+<p>tags: <a href="/tag/.html"></a></p>
+</footer><!-- /.post-info -->                <p><a title="flamingos by Gordon McGregor, on Flickr" href="http://www.flickr.com/photos/mcgregorphoto/1219954136/"><img alt="flamingos" src="http://farm2.static.flickr.com/1405/1219954136_fc45212560.jpg" /></a>
+
+</p>
+
+<p>Attended the <a href="http://www.coolverification.com/2008/03/blogging-birds.html">blogging Birds of Feather</a> session at DAC, last evening. I was quite amazed at the number of people who showed up. I had expected there to be half a dozen people and not much interest. Instead, more chairs had to be brought in and in the end about ...</p>
+                <a class="readmore" href="/flock-together.html">read more</a>
+                                </div><!-- /.entry-content -->
+            </article></li>
+                            
+
+                 
+                        <li><article class="hentry">    
+                <header>
+                    <h1><a href="/conways-law.html" rel="bookmark"
+                           title="Permalink to Conway's law">Conway's law</a></h1>
+                </header>
+                
+                <div class="entry-content">
+                <footer class="post-info">
+        <abbr class="published" title="2008-06-14T00:00:00">
+                Sat 14 June 2008
+        </abbr>
+
+                <address class="vcard author">
+                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
+        </address>
+        <p>In <a href="/category/converted.html">converted</a>. </p>
+<p>tags: <a href="/tag/.html"></a></p>
+</footer><!-- /.post-info -->                <p>http://www.melconway.com/research/committees.html</p>
+                <a class="readmore" href="/conways-law.html">read more</a>
+                                </div><!-- /.entry-content -->
+            </article></li>
+                            
+
+                 
+                        <li><article class="hentry">    
+                <header>
+                    <h1><a href="/its-not-about-the-tools-example-of-photography-with-jl.html" rel="bookmark"
+                           title="Permalink to Its not about the tools. Example of photography with JL">Its not about the tools. Example of photography with JL</a></h1>
+                </header>
+                
+                <div class="entry-content">
+                <footer class="post-info">
+        <abbr class="published" title="2008-06-14T00:00:00">
+                Sat 14 June 2008
+        </abbr>
+
+                <address class="vcard author">
+                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
+        </address>
+        <p>In <a href="/category/converted.html">converted</a>. </p>
+<p>tags: <a href="/tag/.html"></a></p>
+</footer><!-- /.post-info -->                <p>
+Its not about the tools. Example of photography with JL<br />
+--</p>
+                <a class="readmore" href="/its-not-about-the-tools-example-of-photography-with-jl.html">read more</a>
+                                </div><!-- /.entry-content -->
+            </article></li>
+                            
+
+                 
+                        <li><article class="hentry">    
+                <header>
+                    <h1><a href="/powerpoint-and-presentations-of-information.html" rel="bookmark"
+                           title="Permalink to powerpoint and presentations of information">powerpoint and presentations of information</a></h1>
+                </header>
+                
+                <div class="entry-content">
+                <footer class="post-info">
+        <abbr class="published" title="2008-06-14T00:00:00">
+                Sat 14 June 2008
+        </abbr>
+
+                <address class="vcard author">
+                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
+        </address>
+        <p>In <a href="/category/converted.html">converted</a>. </p>
+<p>tags: <a href="/tag/.html"></a></p>
+</footer><!-- /.post-info -->                <p>http://www.wired.com/wired/archive/11.09/ppt1.html</p>
+
+<p>http://www.aaronsw.com/weblog/000931</p>
+
+<p>http://www.edwardtufte.com/tufte/books_pp</p>
+
+<p><br /></p>
+<p>http://www.wired.com/wired/archive/11.09/ppt2.html</p>
+
+<p>http://www.som.tulane.edu/departments/scb/ZoomImage_web/ZoomImage-f.html</p>
+
+<p>http://contactsheet.org/articles/2003/08/28/the_cognitive_style_of_powerpoint ...</p>
+                <a class="readmore" href="/powerpoint-and-presentations-of-information.html">read more</a>
+                                </div><!-- /.entry-content -->
+            </article></li>
+                            </ol><!-- /#posts-list -->
+                            <p class="paginator">
+        Page 1 / 2
+            <a href="/tag/2.html">&raquo;</a>
+    </p>
+                        </section><!-- /#content -->
+                    <section id="extras" class="body">
+                        <div class="blogroll">
+                        <h2>blogroll</h2>
+                        <ul>
+                                                    <li><a href="http://getpelican.com/">Pelican</a></li>
+                                                    <li><a href="http://python.org/">Python.org</a></li>
+                                                    <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
+                                                    <li><a href="#">You can modify those links in your config file</a></li>
+                                                </ul>
+                </div><!-- /.blogroll -->
+                                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/None" type="application/atom+xml" rel="alternate">atom feed</a></li>
+                            
+                                                    <li><a href="#">You can add links in your config file</a></li>
+                                                    <li><a href="#">Another social link</a></li>
+                                                </ul>
+                </div><!-- /.social -->
+                </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

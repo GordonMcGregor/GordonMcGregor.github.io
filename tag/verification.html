@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8">
+        <title>Five Computers - verification</title>
+        <link rel="stylesheet" href="/theme/css/main.css">
+                
+        <!--[if IE]>
+            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">Five Computers </a></h1>
+                <nav><ul>
+                                                    <li><a href="/pages/about.html">About</a></li>
+                                                                    <li ><a href="/category/blogging.html">blogging</a></li>
+                                    <li ><a href="/category/converted.html">converted</a></li>
+                                    <li ><a href="/category/python-eda.html">python, eda</a></li>
+                                                </ul></nav>
+        </header><!-- /#banner -->
+                
+            
+
+                            <aside id="featured" class="body">
+                <article>
+                    <h1 class="entry-title"><a href="/hobgoblins.html">Hobgoblins</a></h1> 
+                    <footer class="post-info">
+        <abbr class="published" title="2012-02-05T00:00:00">
+                Sun 05 February 2012
+        </abbr>
+
+                <address class="vcard author">
+                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
+        </address>
+        <p>In <a href="/category/converted.html">converted</a>. </p>
+<p>tags: <a href="/tag/verification.html">verification</a></p>
+</footer><!-- /.post-info --><p><center>
+  <p><span class="st"><i>A foolish consistency is the hobgoblin of little minds, adored by little statesmen and philosophers and divines</i></span></p></p>
+<p><p style="text-align: right;"><i>-</i> R. W. Emerson</p>
+</center>
+<p>Looking over the VPI iterator sample code I posted last night from PyHVL, I noticed something. I've defined the API as follows:</p>
+<div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%">
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">vpi_iterator</span>(handle, type<span style="color: #666666">=</span>vpiNet):
+</pre>
+</div>With the <i>handle</i> first and an optional <i>type</i> parameter second, taking the default value of <i>vpiNet</i>. Looking again at the C implementation, I see that the method signature is the reverse:<br />
+<div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%">
+itr <span style="color: #666666">=</span> vpi_iterate(vpiNet, mod);
+</pre>
+</div>Now, I'm faced with a decision. I could make the Python <i>vpi_iterator()</i> call consistent with the similar C API, and reverse the parameters, or I can keep it the same way. Keeping it the same way allows the use of the default argument for <i>vpiNet</i>. Optional arguments must follow required arguments, so I couldn't reverse it and keep the <i>type</i>=<i>vpiNet</i> as an option, it would have to become <i>(type, handle).</i> In this case, I don't think the default type is particularly intuitive from the name, so I would tend to think there is more value in reversing the arguments, so that it is consistent with the C API's similar function signature.<br />
+<div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%">
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">vpi_iterator</span>(type, handle):
+</pre>
+</div>Some people might think this is a totally arbitrary consideration. I believe this sort of detail is important. My favorite languages are internally consistent, so that when you start using a new library or part of the language, the structures and idioms are so familiar you can often code things correctly without having fully read the documentation. Most of the Python standard library is like that, you can pick up a new library and be productive, quickly, because there aren't jarring inconstancies. If I want people to use this <i>vpi_iterator</i> method, coming from C, it will help if it matches the general argument patterns used there. Less friction to getting code working first time.<br />
+Each of these is just a small thing that you have to remember, but each time it catches you out it is annoying and maybe knocks you off your train of thought to fix it. The details and consistency are important to people being productive in a language.<br />
+<br />
+I wish SystemVerilog had more of that consistency - semicolons to mark the end of a function definition, then a <i>begin/end</i> syntax for blocks, or <i>{}</i> for some parts of the language to define blocks. <i>end, endfunction, endtask</i>. Just extra details that get in the way of writing clean code the first time.<br />
+<br /></p>                </article>
+                            </aside><!-- /#featured -->
+                            <section id="content" class="body">
+                    <h1>Other articles</h1>
+                    <hr />
+                    <ol id="posts-list" class="hfeed">
+                                                
+
+                 
+                        <li><article class="hentry">    
+                <header>
+                    <h1><a href="/a-few-good-men.html" rel="bookmark"
+                           title="Permalink to a few good men">a few good men</a></h1>
+                </header>
+                
+                <div class="entry-content">
+                <footer class="post-info">
+        <abbr class="published" title="2008-08-13T00:00:00">
+                Wed 13 August 2008
+        </abbr>
+
+                <address class="vcard author">
+                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
+        </address>
+        <p>In <a href="/category/converted.html">converted</a>. </p>
+<p>tags: <a href="/tag/verification.html">verification</a></p>
+</footer><!-- /.post-info -->                <p><a href="http://www.flickr.com/photos/52043707@N00/1511132571/"><img src="http://farm3.static.flickr.com/2161/1511132571_ebe7649da0.jpg" height="334" width="500" alt="jackson pollock" /></a><br /></p>
+
+<p><a href="http://www.43folders.com/2008/08/13/estimating-time">Interesting pos</a>t over on 43Folders on planning and task estimation. I've certainly experienced theses problems in the past but hadn't heard them described as the <a href="http://en.wikipedia.org/wiki/Planning_fallacy">planning fallacy</a> or <a href="http://en.wikipedia.org/wiki/Optimism_bias">optimism bias</a>. The suggested ~44% buffer to add is quite depressing but probably close to true based on my ...</p>
+                <a class="readmore" href="/a-few-good-men.html">read more</a>
+                                </div><!-- /.entry-content -->
+            </article></li>
+                            
+
+                 
+                        <li><article class="hentry">    
+                <header>
+                    <h1><a href="/sessions-at-dac-2008.html" rel="bookmark"
+                           title="Permalink to sessions at DAC 2008">sessions at DAC 2008</a></h1>
+                </header>
+                
+                <div class="entry-content">
+                <footer class="post-info">
+        <abbr class="published" title="2008-05-29T00:00:00">
+                Thu 29 May 2008
+        </abbr>
+
+                <address class="vcard author">
+                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
+        </address>
+        <p>In <a href="/category/converted.html">converted</a>. </p>
+<p>tags: <a href="/tag/verification.html">verification</a></p>
+</footer><!-- /.post-info -->                <p>I haven't been to the <a href="http://dac.com">Design Automation Conference</a> (DAC) for several years. Last time I was there, SystemC was the hot new language on the block, ready to revolutionise the design and verification world. In the intervening years, the hype has died down a bit and SystemC has settled ...</p>
+                <a class="readmore" href="/sessions-at-dac-2008.html">read more</a>
+                                </div><!-- /.entry-content -->
+            </article></li>
+                            </ol><!-- /#posts-list -->
+                            <p class="paginator">
+        Page 1 / 1
+    </p>
+                        </section><!-- /#content -->
+                    <section id="extras" class="body">
+                        <div class="blogroll">
+                        <h2>blogroll</h2>
+                        <ul>
+                                                    <li><a href="http://getpelican.com/">Pelican</a></li>
+                                                    <li><a href="http://python.org/">Python.org</a></li>
+                                                    <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
+                                                    <li><a href="#">You can modify those links in your config file</a></li>
+                                                </ul>
+                </div><!-- /.blogroll -->
+                                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/None" type="application/atom+xml" rel="alternate">atom feed</a></li>
+                            
+                                                    <li><a href="#">You can add links in your config file</a></li>
+                                                    <li><a href="#">Another social link</a></li>
+                                                </ul>
+                </div><!-- /.social -->
+                </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

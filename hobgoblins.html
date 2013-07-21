@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8">
+        <title>Hobgoblins</title>
+        <link rel="stylesheet" href="/theme/css/main.css">
+                
+        <!--[if IE]>
+            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">Five Computers </a></h1>
+                <nav><ul>
+                                                    <li><a href="/pages/about.html">About</a></li>
+                                                                    <li ><a href="/category/blogging.html">blogging</a></li>
+                                    <li class="active"><a href="/category/converted.html">converted</a></li>
+                                    <li ><a href="/category/python-eda.html">python, eda</a></li>
+                                                </ul></nav>
+        </header><!-- /#banner -->
+        <section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/hobgoblins.html" rel="bookmark"
+           title="Permalink to Hobgoblins">Hobgoblins</a></h1>
+          </header>
+
+    <div class="entry-content">
+      <footer class="post-info">
+        <abbr class="published" title="2012-02-05T00:00:00">
+                Sun 05 February 2012
+        </abbr>
+
+                <address class="vcard author">
+                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
+        </address>
+        <p>In <a href="/category/converted.html">converted</a>. </p>
+<p>tags: <a href="/tag/verification.html">verification</a></p>
+</footer><!-- /.post-info -->      <p><center>
+  <p><span class="st"><i>A foolish consistency is the hobgoblin of little minds, adored by little statesmen and philosophers and divines</i></span></p></p>
+<p><p style="text-align: right;"><i>-</i> R. W. Emerson</p>
+</center>
+<p>Looking over the VPI iterator sample code I posted last night from PyHVL, I noticed something. I've defined the API as follows:</p>
+<div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%">
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">vpi_iterator</span>(handle, type<span style="color: #666666">=</span>vpiNet):
+</pre>
+</div>With the <i>handle</i> first and an optional <i>type</i> parameter second, taking the default value of <i>vpiNet</i>. Looking again at the C implementation, I see that the method signature is the reverse:<br />
+<div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%">
+itr <span style="color: #666666">=</span> vpi_iterate(vpiNet, mod);
+</pre>
+</div>Now, I'm faced with a decision. I could make the Python <i>vpi_iterator()</i> call consistent with the similar C API, and reverse the parameters, or I can keep it the same way. Keeping it the same way allows the use of the default argument for <i>vpiNet</i>. Optional arguments must follow required arguments, so I couldn't reverse it and keep the <i>type</i>=<i>vpiNet</i> as an option, it would have to become <i>(type, handle).</i> In this case, I don't think the default type is particularly intuitive from the name, so I would tend to think there is more value in reversing the arguments, so that it is consistent with the C API's similar function signature.<br />
+<div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%">
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">vpi_iterator</span>(type, handle):
+</pre>
+</div>Some people might think this is a totally arbitrary consideration. I believe this sort of detail is important. My favorite languages are internally consistent, so that when you start using a new library or part of the language, the structures and idioms are so familiar you can often code things correctly without having fully read the documentation. Most of the Python standard library is like that, you can pick up a new library and be productive, quickly, because there aren't jarring inconstancies. If I want people to use this <i>vpi_iterator</i> method, coming from C, it will help if it matches the general argument patterns used there. Less friction to getting code working first time.<br />
+Each of these is just a small thing that you have to remember, but each time it catches you out it is annoying and maybe knocks you off your train of thought to fix it. The details and consistency are important to people being productive in a language.<br />
+<br />
+I wish SystemVerilog had more of that consistency - semicolons to mark the end of a function definition, then a <i>begin/end</i> syntax for blocks, or <i>{}</i> for some parts of the language to define blocks. <i>end, endfunction, endtask</i>. Just extra details that get in the way of writing clean code the first time.<br />
+<br /></p>
+    </div><!-- /.entry-content -->
+    
+  </article>
+</section>
+        <section id="extras" class="body">
+                        <div class="blogroll">
+                        <h2>blogroll</h2>
+                        <ul>
+                                                    <li><a href="http://getpelican.com/">Pelican</a></li>
+                                                    <li><a href="http://python.org/">Python.org</a></li>
+                                                    <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
+                                                    <li><a href="#">You can modify those links in your config file</a></li>
+                                                </ul>
+                </div><!-- /.blogroll -->
+                                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/None" type="application/atom+xml" rel="alternate">atom feed</a></li>
+                            
+                                                    <li><a href="#">You can add links in your config file</a></li>
+                                                    <li><a href="#">Another social link</a></li>
+                                                </ul>
+                </div><!-- /.social -->
+                </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

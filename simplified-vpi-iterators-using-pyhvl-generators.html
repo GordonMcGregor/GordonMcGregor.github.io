@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8">
+        <title>Simplified VPI iterators using PyHVL generators</title>
+        <link rel="stylesheet" href="/theme/css/main.css">
+                
+        <!--[if IE]>
+            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">Five Computers </a></h1>
+                <nav><ul>
+                                                    <li><a href="/pages/about.html">About</a></li>
+                                                                    <li ><a href="/category/blogging.html">blogging</a></li>
+                                    <li class="active"><a href="/category/converted.html">converted</a></li>
+                                    <li ><a href="/category/python-eda.html">python, eda</a></li>
+                                                </ul></nav>
+        </header><!-- /#banner -->
+        <section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/simplified-vpi-iterators-using-pyhvl-generators.html" rel="bookmark"
+           title="Permalink to Simplified VPI iterators using PyHVL generators">Simplified VPI iterators using PyHVL generators</a></h1>
+          </header>
+
+    <div class="entry-content">
+      <footer class="post-info">
+        <abbr class="published" title="2012-01-05T00:00:00">
+                Thu 05 January 2012
+        </abbr>
+
+                <address class="vcard author">
+                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
+        </address>
+        <p>In <a href="/category/converted.html">converted</a>. </p>
+<p>tags: <a href="/tag/software-verification.html">software  verification</a></p>
+</footer><!-- /.post-info -->      <p>I've been using <a href="http://pyhvl.sourceforge.net/">PyHVL</a> for a variety of verification tasks in the past few years. PyHVL is an open source Python integration for Verilog and SystemVerilog simulators. To give a quick taste of what it can do for you, consider the following SystemVerilog VPI C code.</p>
+
+<div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%">
+<span style="color: #B00040">void</span> display_nets(mod)
+    vpiHandle mod;
+    {
+       vpiHandle net;
+       vpiHandle itr;
+       vpi_printf(<span style="color: #BA2121">"Nets declared in module %s</span><span style="color: #BB6622; font-weight: bold">\n</span><span style="color: #BA2121">"</span>,
+       vpi_get_str(vpiFullName, mod));
+</pre>
+  <pre style="line-height: 125%">
+       itr <span style="color: #666666">=</span> vpi_iterate(vpiNet, mod);
+</pre>
+  <pre style="line-height: 125%">
+
+       <span style="color: #008000; font-weight: bold">while</span> (net <span style="color: #666666">=</span> vpi_scan(itr))
+          {
+          vpi_printf(<span style="color: #BA2121">"</span><span style="color: #BB6622; font-weight: bold">\t</span><span style="color: #BA2121">%s"</span>, vpi_get_str(vpiName, net));
+          <span style="color: #008000; font-weight: bold">if</span> (vpi_get(vpiVector, net))
+          {
+             vpi_printf(<span style="color: #BA2121">" of size %d</span><span style="color: #BB6622; font-weight: bold">\n</span><span style="color: #BA2121">"</span>, vpi_get(vpiSize, net));
+          }
+          <span style="color: #008000; font-weight: bold">else</span> vpi_printf(<span style="color: #BA2121">"</span><span style="color: #BB6622; font-weight: bold">\n</span><span style="color: #BA2121">"</span>);
+       }
+    }
+</pre>
+</div>
+
+<p>Here is the equivalent VPI code, this time written in Python, using PyHVL.</p>
+
+<div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%">
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">display_nets</span>(module):
+</pre>
+  <pre style="line-height: 125%">
+    <span style="color: #008000; font-weight: bold">print</span> <span style="color: #BA2121">'Nets declared in module'</span>, get_str(vpiFullName, module) 
+</pre>
+  <pre style="line-height: 125%">
+    <span style="color: #008000; font-weight: bold">for</span> net <span style="color: #AA22FF; font-weight: bold">in</span> vpi_iterator(module, vpiNet):
+        <span style="color: #008000; font-weight: bold">print</span> <span style="color: #BA2121">'</span><span style="color: #BB6622; font-weight: bold">\t</span><span style="color: #BB6688; font-weight: bold">%s</span><span style="color: #BA2121"> </span><span style="color: #BB6688; font-weight: bold">%s</span><span style="color: #BA2121">'</span> <span style="color: #666666">%</span> ( get_str(vpiName, net), 
+                get(vpiVector, net) <span style="color: #AA22FF; font-weight: bold">and</span> <span style="color: #BA2121">'of size </span><span style="color: #BB6688; font-weight: bold">%d</span><span style="color: #BA2121">'</span> <span style="color: #666666">%</span> get(vpiSize, net) <span style="color: #AA22FF; font-weight: bold">or</span> <span style="color: #BA2121">''</span>)
+</pre>
+</div>
+
+<p>The magic happens in the implementation of the <i>vpi_iterator()</i> method, which uses a Python <i>yield</i> instruction to turn the method into a generator. <a href="http://wiki.python.org/moin/Generators">Generators</a> are much like functions, except they maintain a frozen stack frame, at the point where the <i>yield</i> occurs. All existing variables within the method maintain their state and execution picks up where it left off, just after the <i>yield</i>. The example also uses lazy evaluation of the result of <i>get(vpiVector, net)</i> to either call <i>get(vpiSize, net)</i> or not print the <i>'of size</i>' additional string.</p>
+
+<div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%">
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">vpi_iterator</span>(handle, <span style="color: #008000">type</span><span style="color: #666666">=</span>vpiNet):
+    iterator <span style="color: #666666">=</span> iterate(<span style="color: #008000">type</span>, handle)
+    <span style="color: #008000; font-weight: bold">if</span> iterator:
+        handle <span style="color: #666666">=</span> scan(iterator)
+        <span style="color: #008000; font-weight: bold">while</span> handle:
+            <span style="color: #008000; font-weight: bold">yield</span> handle
+            handle <span style="color: #666666">=</span> scan(iterator)
+
+</pre>
+</div>
+
+<p>This lets you write loops <i>inside out</i> as one of my colleagues aptly put it. The outcome is you can simplify the management of loops and indices and focus on the point of the loop. You write less code, you introduce fewer bugs. The code is easier to read and maintain as a result. This is just a very small example of some of the power of using a modern scripting language like Python, as an adjunct to a SystemVerilog simulator.</p>
+
+<p>If you spend much time writing VPI code, you should take a look at PyHVL. It could make your life much simpler, or get in touch and I can help you with it.</p>
+    </div><!-- /.entry-content -->
+    
+  </article>
+</section>
+        <section id="extras" class="body">
+                        <div class="blogroll">
+                        <h2>blogroll</h2>
+                        <ul>
+                                                    <li><a href="http://getpelican.com/">Pelican</a></li>
+                                                    <li><a href="http://python.org/">Python.org</a></li>
+                                                    <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
+                                                    <li><a href="#">You can modify those links in your config file</a></li>
+                                                </ul>
+                </div><!-- /.blogroll -->
+                                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/None" type="application/atom+xml" rel="alternate">atom feed</a></li>
+                            
+                                                    <li><a href="#">You can add links in your config file</a></li>
+                                                    <li><a href="#">Another social link</a></li>
+                                                </ul>
+                </div><!-- /.social -->
+                </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>
