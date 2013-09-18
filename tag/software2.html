@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+        <title>Five Computers &middot; articles tagged "software"</title>
+        <link rel="shortcut icon" href="http://fivecomputers.com/favicon.ico" />
+        <link href="http://fivecomputers.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Five Computers Atom Feed" />
+                
+        <link rel="stylesheet" href="http://fivecomputers.com/theme/css/screen.css" type="text/css" />
+        <link rel="stylesheet" href="http://fivecomputers.com/theme/css/pygments.css" type="text/css" />
+
+
+    </head>
+    <body>
+        <div id="header">
+            <ul id="nav">
+                <li class="ephemeral selected"><a href="http://fivecomputers.com/tag/software.html">software</a></li>
+                <li><a href="http://fivecomputers.com">Home</a></li>
+                <li><a href="http://fivecomputers.com/pages/about-gordon.html">About Gordon</a></li>
+                <li><a href="http://fivecomputers.com/archives.html">Archives</a></li>
+            </ul>
+            <div class="header_box">
+                <h1><a href="http://fivecomputers.com">Five Computers</a></h1>
+            </div>
+        </div>
+        <div id="wrapper">
+            <div id="content">
+                <h4 class="date">Aug 28,  2008</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/zerstreutheit-and-the-hardware-design-flow.html" rel="bookmark" title="Permanent Link to &quot;Zerstreutheit and the hardware design flow&quot;">Zerstreutheit and the hardware design flow</a>
+                    </h2>
+                    
+                    <div style="text-align: center;">
+  <a href="http://xkcd.com/303/"><img src="http://imgs.xkcd.com/comics/compiling.png" width="413" height="360" /></a><br />
+</div>
+
+<p>Recently I've been <a href="http://www-128.ibm.com/developerworks/java/library/j-ap09056/index.html">reading</a> about the various open-source Continuous Integration servers that are available. <a href="http://confluence.public.thoughtworks.org/display/CC/CI+Feature+Matrix">This chart</a> gives a good feature comparision of many of the systems that are out there. <a href="http://www.verilab.com" title="Verilab, Inc.">We've</a> been evaluating <a href="http://cruisecontrol.sourceforge.net/">Cruise Control</a> on some internal projects and generally trying to understand what the issues are with deploying a CI server on a hardware design project. One of the things I've been struggling with is the real, meaningful difference between continuous integration and the more typical <a href="http://www.joelonsoftware.com/articles/fog0000000023.html">daily build</a> and check-in smoke tests. Scheduled builds are often described as an <a href="http://www.ibm.com/developerworks/java/library/j-ap03048/index.html?S_TACT=105AGX02&amp;S_CMP=EDU">anti-pattern</a> when considering CI, but as far as I can tell the only practical difference is in the frequency of the builds. Certainly, you have the potential to find out about a broken build more quickly with CI, hence it has less chance to impact other users. Also, you are always doing <em>useful</em> work, rather than maybe re-running a version because no check-in has happened since the previous build. However, these distinctions of implementing CI are maybe more significant in the software world than for the typically longer build times found in hardware design projects. This then is the key point - build time is the significant factor in CI. The real benefit of using CI successfully is that you need to refine your processes to keep the build as quick as possible, striving for close to a <a href="http://www.martinfowler.com/articles/continuousIntegration.html">10 minute turnaround time</a>, to stop things getting backed up. The consequence of this is that the entire Checkout-Build-Test loop keeps being optimised and refined. This doesn't just help with automated processes but can significantly improve productivity for the developers who do these steps manually every day. That's great for the software world, but is it really practical for hardware design with the current compilers and the speed of typical RTL simulation? If not, is it worth even bothering with?</p>
+
+<p>The source control tools you choose can have a big impact on the first phase of the Checkout-Build-Test loop. When an update can take quarter an hour or longer, the source control system can become a significant productivity drain and stymie any chance of a quick turnaround. If merging changes, updating source and checking in a new revision takes hours, then there are real problems with the process and you certainly won't be doing multiple checkins per day (another fundamental CI process axiom is at minimum daily checkins for all developers, even more frequent is preferable). In <a href="http://www.fivecomputers.com/2008/06/git---version-c.html">Linus' talk about Git</a>, he describes being able to do a diff and merge on an entire kernel source tree (22k source files) in <a href="http://git.or.cz/gitwiki/LinusTalk200705Transcript">less than a second</a>. I've used other SCM environments with similar amounts of code, where an update might take 30 minutes. These sorts of differences can significantly change how you work. It isn't just a matter of the time that the particular automated task takes, but what the developer does while they are waiting, reading email, writing documentation, switching context to other distractions.</p>
+
+<p>Similarly, if the build takes half an hour or longer before it fails with a trivial syntax error, you'll have switched to something else and then have to try to mentally context switch back again to work on the problem. Each of these switches have an associated, measurable attention and productivity hit. Improving the build step can have a big impact on how you <a href="http://www.43folders.com/2008/06/13/zerstreutheit-and-attention-management-cure">manage your attention</a> and keep engaged with the development process. A faster turnaround can stave off the onset of <em><a href="http://www.43folders.com/comment/337830/literal-translation-Zerstreutheit">Zerstreutheit</a></em>.</p>
+
+<p>The final Test step is significantly slower for hardware design. Often this is used as a justification not to bother optimising the Checkout and Build phases, because they are comparatively much shorter. A multi-day or week long regression might fool you into thinking that an hour long build is relatively good. However, simulation &amp; testing is the one step where the developer can be more out of the loop, with less impact. Typically, the user is not so tightly coupled into the testing loop, once the initial bugs are ironed out. Automation can certainly help here too, re-running failing tests with waveform dumping enabled or increased logging, to present a useful working environment for debug when the developer does come back to look at the fails.</p>
+
+<p>The point really is that there is still a significant advantage to be had in spending effort to optimize the SCM and compile stages in a development flow, to maximise designer productivity and attention, even if the simulation time is large. Also a <a href="http://www.ibm.com/developerworks/java/library/j-ap11297/index.html?S_TACT=105AGX02&amp;S_CMP=EDU">build pipeline</a> can be used in the CI server to stage the build and testing feedback, to further mitigate the length of time that running tests takes. Deploying CI brings attention to how long these processes take and might help improve the entire development environment. Having fast enough tools can help the developers keep focused on what they are doing, without breaks for swordfights or reading email. Optimizing the build is still important, even in a hardware design environment, even when the runtime for regressions might be in terms of days or weeks. You might think the build process is only a comparatively small part of the overall runtime for a regression, but the designers spend most of their time looping through that comparatively small part.</p>
+
+<p>So what is the take away? Does CI have a place in a hardware design flow? I think that CI servers can certainly be used to manage running regressions and nightly builds. Smoke tests and scheduled build approaches can be controlled with most of the CI servers. However, the real continual building process required to move from scheduled builds to CI seems to be hard to map to hardware design, simply because of the length of time of the checkout/build/test loops. Tool improvements and generally faster hardware seems to be key to increasing the frequency of integration tests, at least for now. However, optimizing the interaction between the users and automated tools is a key and often overlooked part of developing an effective design flow, if you plan on using CI or not.</p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/zerstreutheit-and-the-hardware-design-flow.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/zerstreutheit-and-the-hardware-design-flow.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/28.html" rel="tag">28</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/eda.html">eda</a>
+                            <a href="http://fivecomputers.com/tag/software.html" class="selected">software</a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <h4 class="date">Aug 20,  2008</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/show-my-pc.html" rel="bookmark" title="Permanent Link to &quot;show my pc&quot;">show my pc</a>
+                    </h2>
+                    
+                    <p style="text-align: center;"><a href="http://www.flickr.com/photos/52043707@N00/2773340946/"><img src="http://farm4.static.flickr.com/3081/2773340946_6e4b085c39.jpg" height="334" width="500" alt="frisco shore" /></a><br /></p>
+
+<p>I'm on an extended work trip at the moment. My wife and I have been keeping touch with <a href="http://www.skype.com">Skype</a>, using the video conferencing and VoIP on a daily basis. It's great to be able to see each other and talk without speaking in to a phone. I've come to realise the value of a good microphone and proper speaker setup, as well as a decent camera. In general it has been really effective, at least within the US. Typically fast, quite clear audio and good picture quality.</p>
+
+<p>We also needed to look at some documents on the computer. Skype doesn't have a remote desktop sharing option and we had some problems getting the Windows Live Messenger working to share screens and there would be the added difficulty of sharing from Windows XP to my Mac (I'd have been using a VM Fusion Windows session). Instead, we tried <a href="http://www.showmypc.com">http://www.showmypc.com</a>. I was impressed how easy it was to set up, just download an application and run it (a bit of trust required there). Then there is a password that you share with the user at the other end of the link and you are connected. Under the hood it sets up a VNC session via an SSH server, but from an end user perspective, all you need is the password to connect. It was fast, easy to use and worked well Windows XP &lt;-&gt; OS X. They have options where you set up your own SSH server in the middle, rather than trusting their servers, but I think you have to pay for that option. In general, it was surprisingly easy and effective. We were able to still have the Skype video call running in parallel too.</p>
+
+<p>The picture of the beach? That's the Outer Banks in North Carolina - about 4 hours from where I'm working at the moment. I <a href="http://flickr.com/photos/mcgregorphoto/sets/72157606793809724/show/">took the opportunity</a> to go there for the weekend and camp out in the sand. Traveling for work isn't ideal but I try to make the most of the places I do get to go, in particular seeing the area or taking advantage of museums and art galleries I wouldn't normally have the chance to visit. In that respect, I tend to disagree with Grant Martin's sentiment over <a href="http://www.chipdesignmag.com/martins/2008/07/07/not-taking-a-country-for-granted/">on his blog</a>. I've still been able to disconnect on business trips and see a bit of the local culture. Two weeks ago I saw a <a href="http://www.ncartmuseum.org/collections/highlights/european/french/1770-1900/011_lrg.shtml">Monet</a> at the North Carolina museum of art. This weekend I was in the Outer Banks. I think you have to push yourself a bit to really take advantage of the opportunities that might be there, but it can certainly be done. For every business trip I've been on in the last few years, I've really worked to get to at least one museum or art gallery, just to make it worthwhile.</p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/show-my-pc.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/show-my-pc.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/20.html" rel="tag">20</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/software.html" class="selected">software</a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <h4 class="date">Jul 15,  2008</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/soap-gets-in-your-eyes.html" rel="bookmark" title="Permanent Link to &quot;SOAP gets in your eyes&quot;">SOAP gets in your eyes</a>
+                    </h2>
+                    
+                    <div style="text-align: center;">
+  <a href="http://www.flickr.com/photos/52043707@N00/1511995758/"><img width="500" height="334" src="http://farm3.static.flickr.com/2141/1511995758_bca60a43b4.jpg" alt="lava" /></a>
+</div>
+
+<p>I have a few days between a recently finished contract and before I start the next one. I've decided to use that time to learn a bit of <a href="http://www.ruby-lang.org/en/">Ruby</a> and the <a href="http://www.rubyonrails.org/">Rails</a> framework for a small project. I'm putting something together to do time tracking and communicate with the <a href="http://www.projectorpsa.com/">Professional Services Automation software</a> that we use in <a href="http://www.verilab.com" title="Verilab, Inc.">Verilab</a>. As ever this sort of learning only really happens on an '<em>as-needed</em>' basis so I think that a small driver project will move things along.</p>
+
+<p>One of the first things I've been working on is the underlying communications with the web services interface that Projector provides into their database. They use a <a href="http://en.wikipedia.org/wiki/SOAP">SOAP</a> interface, with a <a href="http://www.w3.org/TR/wsdl">Web Services Description Language (WSDL)</a> representation of the API. This WSDL file is a machine-readable, XML description of all of the API calls and expected types for those calls. You can interact with the SOAP interface directly, constructing the XML to place the request and then parsing the responses manually. However, that becomes painful very quickly, as the calls are very verbose and unwieldy. The solution is to use one of the various SOAP frameworks available, that interrogate the WSDL and then generate objects and methods to encapsulate the interface.<br /></p>
+
+<p>This all seemed mostly reasonable and I got a copy of <a href="http://dev.ctor.org/soap4r"><em>soap4r</em></a> which is the default Ruby SOAP interface. The latest version supports two interfaces, dynamically parsing the WSDL and generating object factories, or a script that statically parses the WSDL and generates a variety of helper classes that can be used to build the SOAP calls.<br /></p>
+
+<p>At this point, the almost total lack of documentation for <em>soap4r</em> started to bite me. There is plenty of sample code, assuming you only ever want to pass a string (like a stock ticker) and only ever really expect a single integer or float to come back (such as a stock price). Very few examples go much further than that, but the Projector SOAP API uses a variety of heavily nested complexTypes and it wasn't very clear at all how to access or manipulate them. I made the initial mistake of trying to use the dynamic WSDL parsing, but after a while switched to using the statically generated classes which helped somewhat. At least then I could read the source and see what the member variables were in the classes and also what the class names were. Part of the problem seems to be that the Ruby world prefers the <a href="http://en.wikipedia.org/wiki/Representational_State_Transfer">RESTful</a> approach to web services, so SOAP is something of an ugly step-child. But SOAP is what I have to work with to get the information I need.<br />
+<br />
+At one point, I abandoned the Ruby version and tried to build an equivalent set of queries in Python. I'm more familiar with that language and thought it might remove one of the levels of complexity from the problem. In the Python world, I tried using the <a href="https://fedorahosted.org/suds">SUDS</a> framework to manage the WSDL. In this case, SUDS only supports dynamic parsing of the WSDL file and this parsing is quite a computationally expensive task. It doesn't make for fast, iterative exploration when it takes about 30 seconds to start up the script each time. I wasn't able to pickle the results to cache the driver either. Again, the SUDS framework has a real dearth of documentation - in fact it is even more sparse than <em>soap4r</em>. However, poking around at the classes using the introspection features of Python helped me get a bit further along and also cast the Ruby experience in a different light. I was able to take what I'd learned in Python and apply it to the Ruby scripts and made quite a bit more progress.<br /></p>
+
+<p>I've been learning bits and pieces of Ruby along the way, too. Ruby is also a dynamic language with introspection, so I was able to start poking around in the objects, printing out methods and instance_variables to see what was going on. The interactive command line in Python is fantastic for doing this sort of exploration. I haven't yet found an equivalently powerful command line/ interactive way of doing this sort of playing around in Ruby (feel free to let me know how!). By some trial and error and dumping objects along the way I was able to get the data I wanted.<br /></p>
+
+<p>So a day and a half later, I now have a simple Ruby script that can talk to the ProjectorPSA SOAP API and query the list of active projects, then print out and count that list. Painful to get up the learning curve, but now at least I know how to work with the SOAP framework and make the method calls that I need. The equivalent Python script is almost there, but with a missing namespace in the generated XML that I haven't quite worked out how to control from the other side of the SUDS framework.<br /></p>
+
+<p style="text-align: left;">Overall, SOAP still seems very verbose and complex, for what it does - layers of objects, lots of XML, just to do very simple queries. A simple method invocation such as:</p>
+
+<pre>
+<code>&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;env:Envelope xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:env="http://schemas.xmlsoap.org/soap/envelope/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
+  &lt;env:Header&gt;
+        &lt;n1:OpsAuthenticationHeader 
+            xmlns:n1="http://www.opsplanning.com/webservices/public/data"
+            env:mustUnderstand="0"&gt;
+          &lt;n1:EmailAddress&gt;REMOVED&lt;/n1:EmailAddress&gt;
+          &lt;n1:Password&gt;REMOVED&lt;/n1:Password&gt;
+          &lt;n1:AccountName&gt;verilab&lt;/n1:AccountName&gt;
+        &lt;/n1:OpsAuthenticationHeader&gt;
+  &lt;/env:Header&gt;
+  &lt;env:Body&gt;
+    &lt;n2:ExportProjectList 
+       xmlns:n2="http://www.opsplanning.com/webservices/public/data"&gt;
+      &lt;n2:request xsi:type="n2:ExportProjectListRq"&gt;
+        &lt;n2:Parameters&gt;
+          &lt;n2:LimitToOpenForTimeOnly&gt;true&lt;/n2:LimitToOpenForTimeOnly&gt;
+          &lt;n2:LimitToOpenForCostOnly&gt;true&lt;/n2:LimitToOpenForCostOnly&gt;
+          &lt;n2:MaxRowsToReturn&gt;200&lt;/n2:MaxRowsToReturn&gt;
+          &lt;n2:OnlyCountRows&gt;false&lt;/n2:OnlyCountRows&gt;
+        &lt;/n2:Parameters&gt;
+      &lt;/n2:request&gt;
+    &lt;/n2:ExportProjectList&gt;
+  &lt;/env:Body&gt;
+&lt;/env:Envelope&gt;
+
+</code>
+</pre>
+
+<p>The Ruby code to generate this one remote procedure call is equally verbose, even with all the auto generated code within the <em>soap4r</em> framework:
+<pre>
+require 'rubygems'
+gem 'soap4r'
+require 'soap/wsdlDriver'
+require 'soap/header/simplehandler'
+require 'defaultDriver'</p>
+<h1>new authentication class to construct proper SOAP Authentication header for</h1>
+<h1>each access to the server</h1>
+<h1>this is idiomatic for the soap4r framework - it is what it is</h1>
+<p>class ClientAuthHeaderHandler &lt; SOAP::Header::SimpleHandler
+  def initialize(userid, passwd)
+    super(XSD::QName.new("http://www.opsplanning.com/webservices/public/data", 
+                         "OpsAuthenticationHeader"))
+    @sessionid = nil
+    @userid = userid
+    @passwd = passwd
+  end</p>
+<p>def on_simple_outbound
+    if @sessionid
+      { "sessionid" =&gt; @sessionid }
+    else
+      { "AccountName" =&gt; "verilab", "EmailAddress" =&gt; @userid, 
+        "Password" =&gt; @passwd }
+    end
+  end</p>
+<p>def on_simple_inbound(my_header, mustunderstand)
+    @sessionid = my_header["sessionid"]
+  end
+end</p>
+<h1>make sure everything is unicode-friendly, just in case</h1>
+<p>XSD::Charset.encoding = 'UTF8'</p>
+<h1>create the SOAP driver object to handle the requests</h1>
+<p>endpoint_url = ARGV.shift
+driver = OpsProjectorSvcSoap.new(endpoint_url)</p>
+<h1>enable debug output (showing SOAP XML) if you run this script with ruby -d</h1>
+<p>driver.wiredump_dev = STDOUT if $DEBUG</p>
+<h1>set up authentication object</h1>
+<p>user = "account name here"</p>
+<h1>uncomment to prompt for the password each time the script runs</h1>
+<p>passwd = ask("Password:") { |q| q.echo = false } </p>
+<h1>create the authentication token and stuff it into the driver's</h1>
+<h1>header for every SOAP request that gets generated</h1>
+<p>auth = ClientAuthHeaderHandler.new user, passwd
+driver.headerhandler &lt;&lt; auth</p>
+<h1>Wrap the request in a Rq object, inside an ExportProjectList object</h1>
+<h1>means it all unrolls to be the correct SOAP/XML. There may be a more direct</h1>
+<h1>way to do this from just the ExportProjectList and property setting?</h1>
+<h1>:LimitToOpenForTimeOnly =&gt; true ???</h1>
+<p>req = ExportProjectList.new(
+        ExportProjectListRq.new(
+            ExportProjectListRequest.new(true, true, nil, 2000000, nil, false) ) )</p>
+<h1>make the SOAP call, and extract the exportProjectListResult object</h1>
+<p>result = driver.exportProjectList(req).exportProjectListResult</p>
+<h1>display project list. The hierarchy can be intuited from the various bits of ruby</h1>
+<h1>generated by the wsdl2ruby.rb script (defaultMappingRegistry.rb, default.rb et al)</h1>
+<p>result.data.projectList.project.each { |project| print_project(project) }</p>
+<p></pre>The analogous Python code is similarly wordy. As our very bright admin, Will, says about SOAP '<em>run away, run away</em>'</p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/soap-gets-in-your-eyes.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/soap-gets-in-your-eyes.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/15.html" rel="tag">15</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/software.html" class="selected">software</a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <h4 class="date">Jul 11,  2008</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/viigo.html" rel="bookmark" title="Permanent Link to &quot;viigo&quot;">viigo</a>
+                    </h2>
+                    
+                    <p>I've had a <a href="http://www.blackberry.com/blackberrycurve.shtml">Blackberry Curve</a> for a while. Really like having a real keyboard and the screen is big enough to actually browse web pages on and read quite a bit of text. However, the built-in web browser is about the worst I've ever used. Slow, clunky, painful. I have been using Google Reader's mobile view to catch up on RSS feeds and blogs while out and about. A few days ago I downloaded the free <a href="http://viigo.com/home">Viigo</a> feed reader. A huge improvement! Heartily recommend it.</p>
+
+<p>The setup was a painful, as their web site wasn't particularly fast or flexible to edit feeds. Once I realised you could download an <a href="http://en.wikipedia.org/wiki/OPML">OMPL</a> format list from Google reader and upload it to Viigo things went much more smoothly. You can also link it directly to an aggregator feed, such as Google reader. This then keeps track of feeds that you add or remove from the other viewer, but it doesn't sync up what was read between each view, which would be a really nice feature.</p>
+
+<p>Other than the setup issues, I've found it great to use. Clean interface, fast and without the pain of being in the browser environment. The price is good too!</p>
+
+<p><br /></p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/viigo.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/viigo.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/07.html" rel="tag">07</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/software.html" class="selected">software</a>
+                            <a href="http://fivecomputers.com/tag/thingumyjigs.html">thingumyjigs</a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <h4 class="date">Jun 26,  2008</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/git-version-control-done-right.html" rel="bookmark" title="Permanent Link to &quot;Git - version control done right&quot;">Git - version control done right</a>
+                    </h2>
+                    
+                    <p><img width="500" height="334" src="http://farm3.static.flickr.com/2012/2573207802_7f55cbaab2.jpg" alt="concert hall" /></p>
+
+<p>As I've started working on this small CPU project, one of the first decisions I've been considering has been which version control system to use. I've been a user of subversion for most of my personal projects for several years now and am currently using it at a client. As a result I'm quite familiar with the ins and outs of using it on a variety of sizes of projects. I've become more aware of distributed systems, such as <a href="http://git.or.cz/">Git</a> and <a href="http://www.selenic.com/mercurial/wiki/">Mercurial</a> over the last year, but haven't really been able to get my head around the advantages of them. In particular, the quote below from Linus Torvalds has been in the back of my mind.</p>
+
+<p style="text-align: center;"><span style="font-size: 1.4em;"><em>"The slogan of Subversion for a while was 'CVS done right</em><em>', or something like that, and if you start with that kind of slogan, there's nowhere you can go. There is no way to do CVS right."</em></span></p>
+
+<p style="text-align: right; font-size: 10px;">- Linus Torvalds</p>
+
+<p>One of the main source control issues I've seen on several of the projects I've worked on has been the aversion to branches that most users have. Typically there is a big central source repository that everyone will check out from. You then develop in your own little world. When the particular piece of work is complete, you check it back in. Usually, there is a fairly high barrier or cost to those commits, with sets of test suites that you must pass before you can commit your code back to the central repository. The checks take hours to run and you can not check back in until your code passes all the tests. Otherwise everyone else is at risk. But I always found that if I was working on something non-trivial, I'd really like to make some progress and check point that half way, committing it in to just a local branch, then working on further. That would give me the confidence to make larger changes, safe in the knowledge I can revert back to a midway working point. That's what a branch would be for, after all, but not if they are hard to make and not if the commit cost is so high. So we never did that, working for days or weeks before committing any changes.</p>
+
+<p>The second common frustration I've seen with a centralized repository occurs when two people are working closely together on a piece of the system. This happens to characterise almost every verification endeavor, for example. By common definition, the verification and design work should be done by two different people, just to get extra eyes on the spec. This avoids duplicating erroneous assumptions about the design and is fundamental to the whole process. As a consequence, we are almost always faced with the situation where changes need to be made by two or more people, in distinct parts of the code (e.g., testbench and rtl) but cannot be checked in because of mutual dependencies. The changes depend on each other and all the commit checks will fail for either change on its own. Various ways around this exist, disabling affected checks in the commit scripts, copying files into each others workspaces and other hacks. All because fundamentally the centralised server approach, with costly branches and high commit costs, doesn't really let this sort of work proceed in an effective way.</p>
+
+<p>The third frustration is the general speed of the repository. Time to check things out, time to do merges, how long it takes to do a diff or an update. These operations can usually mean a break for coffee or a walk around while the tool fetches the changes, compares them and attempts to merge it all together. Compound that by working in remote sites or across multiple geographic locations.</p>
+
+<p>Git claims to solve these problems and be a whole lot faster at the same time.</p>
+
+<p>The key is in breaking away from a centralised server. The database is distributed to every developer. As a result, everyone works on their own branch by default. Making further branches is trivial, because they don't get sent to every other developer. Fewer issues with namespace collisions when naming a branch, no real concern about checking code in and someone else getting your partially finished work. Earlier today I'd listened to <a href="http://www.joelonsoftware.com/">Joel Spolsky</a> and <a href="http://www.codinghorror.com/">Jeff Atwood</a> <a href="http://itc.conversationsnetwork.org/shows/detail3710.html">talking</a> about the fact that Git makes branching trivial, but I didn't really understand why until I <a href="ttp://www.youtube.com/watch?v=4XpnKHJAok8">watched a really interesting presentation</a> from Linus Torvalds on the subject. It is supposed to be a talk about Git, but really he focuses almost exclusively on the advantages of a distributed repository. I'd initially thought the real advantage was the '<em>always available</em>' nature of a distributed repository, so that you could work on a plane or generally away from a network and still be able to check in, look at histories and all the things you normally need the central server access for. That's certainly part of the reason why it is interesting, but the branching and merging cost reduction that Git claims to offer is a much bigger deal.</p>
+
+<p><object width="425" height="344">
+  <param name="movie" value="http://www.youtube.com/v/4XpnKHJAok8&amp;hl=en" />
+  <embed width="425" height="344" src="http://www.youtube.com/v/4XpnKHJAok8&amp;hl=en" type="application/x-shockwave-flash" />
+</object></p>
+<p>For my second source of frustration above, Git also provides a solution. As there is no central repository, everyone can pull and push data to each other. The verification engineer and designer can exchange files more easily, through a tracked, version controlled system, rather than the usual sideband exchanges or hacks to the check-in scripts. Git also addresses that third issue, because all of the files are local and it has been designed for performance. Network overhead isn't an issue for a <em>diff</em> or history request as you have all the data locally. Merges are similarly less painful. The claimed performance is impressive and part of the reason why I want to try Git out.</p>
+<p>Now, the most glaring problem with all this is that it sounds like anarchy. There is no central organisation, check-ins can happen any time, so where did all the quality assurance go? Linus talks about the network of trust relationships in his presentation. But, you can still have acceptance tests on when you actually pull data from a particular user or set of users. You can require them to run a battery of tests before they are allowed to share their work with the rest of the project. The usual checks and balances can be put back in place for when the whole database gets reassembled, but the individual developers or groups of designers can work more efficiently in a sub-repository. Git also supports hierarchical projects that combine various blocks of code, in fact that seems to be the preferred use model. Each sub-system on a design would be a unique Git repository. It could be even broken down further and have each IP block in their own repository. The general approach that has been used in the past, with quality checks, can still be used with some changes, as a gate to when larger mergers take place. This probably requires some trusted people in the organisation to act as gatekeepers or guardians for each level, but the basic methodology shouldn't be too difficult to layer on top.</p>
+<p>You can read a lot more about Git on the <a href="http://git.or.cz/">homepage,</a> including conversion documents from other common source control systems and details on the actual commands to use. Looking through the <a href="http://git.or.cz/course/svn.html">SVN conversion document</a>, the git command syntax appears a bit cleaner and generally more intuitive to me. I also played around with the <em>merge</em> and <em>diff</em> tools and they seem powerful. It was very easy to create and populate a repository, for example. I plan on using it for the next few projects I work on to get a feel for how really useful it is and where the issues are hidden.</p>
+<p>Edit to add: I found this <a href="http://git.or.cz/gitwiki/GitSvnComparsion">draft version of the differences</a> between Git and Subversion quite useful.</p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/git-version-control-done-right.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/git-version-control-done-right.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/26.html" rel="tag">26</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/eda.html">eda</a>
+                            <a href="http://fivecomputers.com/tag/software.html" class="selected">software</a>
+                            <a href="http://fivecomputers.com/tag/verification.html">verification</a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <h4 class="date">Jun 20,  2008</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/a-somewhat-crazy-notion.html" rel="bookmark" title="Permanent Link to &quot;a somewhat crazy notion&quot;">a somewhat crazy notion</a>
+                    </h2>
+                    
+                    <p><a title="Death Valley, after the storm by Gordon McGregor, on Flickr" href="http://www.flickr.com/photos/mcgregorphoto/358741765/"><img height="333" width="500" alt="Death Valley, after the storm" src="http://farm1.static.flickr.com/146/358741765_9ab4eeb321.jpg" /></a>
+
+</p>
+
+<p>Many ideas have been whirling around in my head since being at DAC. I've been inspired to learn some new things, starting with the <a href="http://www.ovmworld.org/">Open Verification Methodology</a> but also revisiting some of the Electronic System Level tools and flows that I've worked with in the past. I'm interested in exploring visualization techniques and tools and how they might be applied to verification and design. I'd also like to learn more about a few of the more interesting formal verification tools, like <a href="http://www.onespin-solutions.com">OneSpin 360 MV</a> and maybe explore what is possible with ESL tools like <a href="http://www.bluespec.com/products/index.htm">Bluespec's SystemVerilog</a> flow or the various other similar tools that are out there.</p>
+
+<p>I have a difficult time learning things just for the sake of it, tending to be more driven by necessity rather than idle curiosity. I've been doing some work based around a small CPU core and started getting frustrated with the way the CPU was architected. This led me to start considering designing my own CPU, just for fun. Partly as a motivation to crack open a Hennessy &amp; Patterson book that I've been meaning to read for a few years, partly to see if I can do it, partly as a vehicle to hang all those other ideas upon.</p>
+
+<p>I've been looking around the web, browsing on <a href="http://opencores.org/">OpenCores</a> and finding humbling projects, such as <a href="http://homebrewcpu.org/">HomebrewCPU,</a> which is a Minix-compatible CPU entirely constructed from discrete gates. You can even browse the web pages that it is serving or telnet in to it! To my way of thinking, that is slightly nuts - impressive, but nuts all the same - five wire-wrapped boards to debug. My <a href="http://www.informatik.uni-trier.de/~ley/db/indices/a-tree/m/McGregor:Gordon.html">background is in FPGAs</a> and that seems the perfect technology for this sort of exploration - I'm also thinking along the way that I might be able to play with synthesisable verification or FPGA enhanced verification/ emulation as well as possibly using this as a platform for a reconfigurable architecture. Lots of ideas, potential and possibilities. It will also give me a chance to re-engage with FPGA technologies and learn about more about the state of those tools. The various tools are getting to a fairly mature point and a simple pipelined CPU shouldn't require too much work but still be complex enough to do interesting things with.</p>
+
+<p>I've been looking at <a href="http://www.xilinx.com">Xilinx</a> and <a href="http://www.altera.com">Altera </a>to get an understanding of their current tool flows and trying to work out language support and maturity - which would be the best option for systemVerilog, where the best simulation options are and that kind of thing. No real conclusions yet, but both have trial versions of what appears to be a complete tool chain, so I will probably drive a small example through both flows as a pipe cleaner.</p>
+
+<p>Then of course there are the more fundamental religious issues - CISC or RISC, what ISA to use. Roll my own, pick up an already defined but open architecture, or something in between? I'm looking for suggestions in this respect - I know ARM are quite litigious when it comes to cloning their ISA, so I'll be avoiding that, but <a href="http://www.opensparc.net/">OpenSPARC</a> might well be a good option. Any other suggestions? I'm not sure if the early MIPS ISAs are cloneable without problems? Maybe I could go really back to my roots and implement a <a href="http://en.wikipedia.org/wiki/Zx81">Z80 architecture</a>. The advantage of picking on an existing ISA is that the tools come mostly for free. While porting gas and gcc to my own ISA could also be an interesting experiment and learning experience, it would probably be more of a distraction than I want.</p>
+
+<p>I am a fan of the Python language and tend to write most of my <a href="http://gordonmcgregor.blogspot.com/2008/03/flickr-set-parser-for-gpsvisualizer.html">personal projects</a> in it. As a result, I'm intrigued by the potential for writing the core in Python, using some of the available extensions and libraries. Two packages seem to already exist, <a href="http://myhdl.jandecaluwe.com/doku.php">MyHDL</a> and <a href="http://pyhvl.sourceforge.net/">PyHVL</a>. MyHDL is Python extension to let you express parallel behaviour that can then be automatically translated to verilog or VHDL. PyHVL provides the other piece of the Python puzzle, enabling high-level verification in Python. So potentially I could do the design and verification in Python then drive through into an FPGA flow for implementation. <a href="http://www.coolverification.com/2008/06/ovm-world-summi.html">JL</a> jokingly mentioned the potential for an OVM port to Python but maybe it isn't such a crazy notion. The thing that Python is fantastic for is expressing complex ideas quickly and without a lot of fuss or housekeeping. From the verification perspective it seems to be a perfect match as I can focus more on the testing, and less on the language. I'm a bit more skeptical about using it on the design side but I think it might be worth a look.</p>
+
+<p>To kick things off, I found the description for a <a href="http://www.csie.ntu.edu.tw/~b92029/data/EXP/mcpu-doc.pdf">minimal CPU</a> on opencores. This is a really basic 8-bit processor, 4 op codes, couple of registers and a very simple, small architecture, yet it can still do some useful function. This evening I wrote a Python ISS for it, just to prove out some ideas. Took about an hour to get a working cycle-based ISS together for the architecture. Of course, immediately the next thing you need is an assembler and that was fairly easy to put together in Python too. Nothing particularly complex, but a two pass assembler that supports labels and constants and generates code that runs on the core. I'm able to assemble and run the example greatest common divisor (Dijkstra's algorithm) described in the paper and it has given me a good indication of the direction to go. So far, my couple of hour project can assemble and execute the following code:</p>
+
+<blockquote><p><span style="font-size: 0.8em;">start:<br />&nbsp; &nbsp; NOR allone&nbsp; &nbsp;&nbsp; &nbsp;; akku == 0<br />&nbsp; &nbsp; NOR b<br />&nbsp; &nbsp; ADD one&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;; akku = -b<br /><br />&nbsp; &nbsp; ADD a&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; ; akku = a - b<br />&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; ; Carry set when akku &gt;= 0<br />&nbsp; &nbsp; JCC neg<br /><br />&nbsp; &nbsp; STA a<br /><br />&nbsp; &nbsp; ADD allone&nbsp; &nbsp;&nbsp; &nbsp;<br />&nbsp; &nbsp; JCC end&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;; A=0 ? -&gt; end, result in b<br /><br />&nbsp; &nbsp; JCC start<br /><br />neg:<br />&nbsp; &nbsp; NOR zero<br />&nbsp; &nbsp; ADD one&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;; Akku = -Akku<br /><br />&nbsp; &nbsp; STA b<br />&nbsp; &nbsp; JCC start&nbsp; &nbsp;&nbsp; &nbsp; ; carry not altered<br /><br />end:<br />&nbsp; &nbsp; JCC end<br /><br />a: 10&nbsp; ; a &amp; b are the two values to consider<br />b: 30<br /><br />allone: 0xff&nbsp; ; various constants<br />zero:&nbsp; &nbsp;0<br />one:&nbsp; &nbsp; 1</span></p></blockquote>
+
+<p>Next step is to describe this trivial core in a synthesisable form and see how I get on running it through one or two FPGA flows. A few tests and some verification could be useful too! For FPGAs I'm much more used to the general <em>suck it and see </em>style of testing that is the norm. Synthesize, place and route and see if it works. In the last several years I've been working on much larger ASICs so have certainly seen the value of more robust verification and I think FPGA technology has probably spent too much time as the wild frontier of design robustness and testing. As this project progresses I want to explore what the best balance is for testing and how the test environments can use the FPGA to accelerate testing along the way.</p>
+
+<p>So plenty of things up in the air but I think this could be fun.</p>
+
+<p><br /></p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/a-somewhat-crazy-notion.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/a-somewhat-crazy-notion.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/20.html" rel="tag">20</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/cpu.html">cpu</a>
+                            <a href="http://fivecomputers.com/tag/dac.html">dac</a>
+                            <a href="http://fivecomputers.com/tag/eda.html">eda</a>
+                            <a href="http://fivecomputers.com/tag/esl.html">esl</a>
+                            <a href="http://fivecomputers.com/tag/software.html" class="selected">software</a>
+                            <a href="http://fivecomputers.com/tag/verification.html">verification</a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <h4 class="date">Jun  6,  2008</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/dac-for-verification.html" rel="bookmark" title="Permanent Link to &quot;DAC for verification&quot;">DAC for verification</a>
+                    </h2>
+                    
+                    <p>Each year, John Cooley does a great job <a href="http://www.deepchip.com/gadfly/gad060608.html">previewing the companies </a>at DAC. From that list, here's the ones that sound interesting to me.</p>
+
+<p><strong>OneSpin</strong>'s 360MV tool does something called "gap-detection" plus timing diagrams on your design's System Verilog Assertions. (booth 625)</p>
+
+<p><strong>Real Intent Meridian CDC</strong> for clock domain crossing verification.  Formal analysis and interfaces to simulation.<br />
+(booth 2540)</p>
+
+<p><strong>NuSym DeNibulator</strong>'s intelligent testbench"   It hunts down your hard to find coverage points and automatically tweaks your TB to reach them.  It's next gen constrained random.  (booth 379)</p>
+
+<p><strong>Certess Certitude</strong> testbench error injection.(booth 324)</p>
+
+<p>Another "intelligent testbench" is <strong>Mentor inFact</strong> - graphical tool that generates, grades, and then upgrades TBs.  It<br />
+now drives existing e, Vera, SV, or C/C++ TBs.  Does OVM &amp; VMM.(booth 2301)</p>
+
+<p><strong>CebaTech</strong> is showing their C2R Compiler,which takes untimed ANSI C and outputs Verilog RTL. (booth 760)</p>
+
+<p><strong>Forte Cynthesizer v3.4</strong> (SystemC design) adds support for Power Compiler for "best-in-class area, performance, and now power results" and "management of ECOs by graphically mapping RTL back to the original SystemC design" and inter-block interfaces.(booth 1645)</p>
+
+<p><strong>Mentor 's </strong><strong>Catapult C </strong>synth &amp; Vista ESL tools. (booth 2301)</p>
+
+<p><strong>Carbon's Model Studio</strong> does Verilog-RTL-to-C conversion for simulation, to get early models for architectural work(booth 2467)</p>
+
+<p><strong>Synfora Pico Extreme</strong> C synthesis tool (booth 329)</p>
+
+<p><strong>Bluespec</strong> : "general purpose high-level synthesis &amp; simulationfor modeling, verification and implementation". (booth 2367)</p>
+
+<p><strong>Imperas :</strong> yet-another-ISS tool, OVPsim, for embedded SW. (booth 467)</p>
+
+<p><strong>Mirabilis VisualSim</strong> does "graphical SystemC TLM 2.0 import without any code development; and power estimation of the full system." (booth 778)</p>
+
+<p><strong>Steve Golson's "Four Principles of Flow Engineering"</strong> DAC Tuesday at 10:30 AM, Room 206AB</p>
+
+<p><strong>Dassault Synchronicity DesignSync</strong> Cadence data management tools. (booth 620)</p>
+
+<p><strong>EVE ZeBu</strong> is showcasing PCIe and AXI synthesizable transactors and its System Verilog support for custom transactors.(booth 301)</p>
+
+<p><strong>Mentor Veloce</strong> "using mixed System Verilog and SystemC based upon System Verilog DPI standard 2.0" with Nucleus embedded RTOS (booth 2301)</p>
+
+<p><strong>Synfora Pico Extreme FPGA</strong> (booth 329)</p>
+
+<p><strong>VeriEZ EZVerify </strong>covers you design, assertions and testbench, with added full System Verilog support this year plus VMM/OVM checking (booth 1936)</p>
+
+<p><strong>Veritools</strong> usually has linters, code coverage and waveform viewers.  Supports SV dynamic objects. (booth 1334)</p>
+
+<p><strong></strong></p>
+
+<p><strong></strong></p>
+
+<p><strong>Denali</strong> <strong>PureSpec</strong> System Verilog methodology support (OVM,VMM, AVM) in all IP blocks. (booth 1611)</p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/dac-for-verification.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/dac-for-verification.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/06.html" rel="tag">06</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/software.html" class="selected">software</a>
+                            <a href="http://fivecomputers.com/tag/verification.html">verification</a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <h4 class="date">May 29,  2008</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/is-this-thing-on.html" rel="bookmark" title="Permanent Link to &quot;is this thing on...?&quot;">is this thing on...?</a>
+                    </h2>
+                    
+                    <p>Thomas J. Watson, the president of IBM,  once famously <a href="http://en.wikipedia.org/wiki/Thomas_J._Watson">didn't say</a> that <em>I think there is a world market for maybe five computers.</em> He is still widely quoted as having said it and it is usually trotted out as a good example of why we shouldn't make predictions about the future of technology. Mainly because those predictions almost always will make us look entirely foolish. The title of this blog is based on that quote, in the hope that it'll discourage me from making too many painful statements about what I think the future of EDA and verification might be, but that's what this blog is going to be about.</p>
+
+<p>Electronic design automation and functional verification are two pieces of the puzzle aiming to help close the design gap in the semiconductor industry. That's the gap between the amount of transistors we can put on a piece of silicon and the amount of transistors we can usefully put together to produce a working system that does something useful, in a reasonable period of time. The device physics guys have done a great job of getting well ahead of what we can usefully design. The main gap doesn't really seem to be what can be designed, though. It is what can be tested and verified to actually do what it is supposed to do.</p>
+
+<p>There are more challenges further down the pipe too, timing closure looms ever larger as a problem, further reduction in geometries threaten the basic assumptions that let us typically ignore the nasty analog reality and pretend we are in some digital fantasy of ones and zeros. Those are all big problems or at least getting bigger, but functional verification is swallowing vast amounts of engineering time on projects right now and we seem to be getting ever further behind the curve. ( I feel already that I've made two potential <em>5 computers</em> kind of statements in just this one paragraph.) EDA tools keep promising great leaps forward, but we still seem to be seeing the same promises and not so much progress. Raising the abstraction level of the design languages, increasing the quality of the verification, more reuse and large amounts of money invested in creating IP, but largely the industry still appears to be where it was 10 years ago - just with more people working ever harder on each product.</p>
+
+<p>The one saving grace in all this is that there is quite the demand for semiconductor devices. If you start counting up all the computers, portable devices, smart cars and embedded processors in use around your life,  you'll probably quite quickly realise you've maxed out that world market for 5 computers all on your own. In fact it is probably closer to 50 computers or computing devices in use around you. So at least the demand for products is there, even if we aren't quite sure how to design them all effectively, yet.</p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/is-this-thing-on.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/is-this-thing-on.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/29.html" rel="tag">29</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/eda-blogs.html">eda blogs</a>
+                            <a href="http://fivecomputers.com/tag/software.html" class="selected">software</a>
+                            <a href="http://fivecomputers.com/tag/verification.html">verification</a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <h4 class="date">Apr  8,  2008</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/time-tracking.html" rel="bookmark" title="Permanent Link to &quot;time tracking&quot;">time tracking</a>
+                    </h2>
+                    
+                    <p><a href="http://www.flickr.com/photos/52043707@N00/368709837/"><img width="360" height="240" alt="Panamint" src="http://farm1.static.flickr.com/166/368709837_c0ff160659.jpg" /></a></p>
+
+<p>One of the realities of doing consulting work is time tracking. I've used notebooks. I've used palm pilots, that I carried around only to track time. I've tried web based applications. Nothing quite does what I want it to do or is simple enough to keep out of the way. I've been playing around with Ruby and the Rails frameworks to come up with a solution that really does what I want. <a href="http://jexp.de/blog/archives/16-On-LEGO-Powered-Time-Tracking;-My-Daily-Column.html">Then I saw this</a>. I might have to re-think the whole thing. I'm particularly impressed with the image capture/ automatic entry.</p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/time-tracking.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/time-tracking.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/04.html" rel="tag">04</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/software.html" class="selected">software</a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <h4 class="date">Mar  6,  2008</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/visualising-complex-datasets.html" rel="bookmark" title="Permanent Link to &quot;visualising complex datasets&quot;">visualising complex datasets</a>
+                    </h2>
+                    
+                    <p>A great example of the sort of insight that you can glean from a lot of data, with the right sort of visualisation.</p>
+
+<p><object width="320" height="285" align="middle" id="VE_Player" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"><param value="http://static.videoegg.com/ted/flash/loader.swf" name="movie" /><param value="bgColor=FFFFFF&amp;file=http://static.videoegg.com/ted/movies/HANSROSLING_high.flv&amp;autoPlay=false&amp;fullscreenURL=http://static.videoegg.com/ted/flash/fullscreen.html&amp;forcePlay=false&amp;logo=&amp;allowFullscreen=true" name="FlashVars" /><param value="high" name="quality" /><param value="always" name="allowScriptAccess" /><param value="#FFFFFF" name="bgcolor" /><param value="noscale" name="scale" /><param value="window" name="wmode" /><embed width="320" height="285" align="middle" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" name="VE_Player" wmode="window" scale="noscale" bgcolor="#FFFFFF" allowscriptaccess="always" quality="high" flashvars="bgColor=FFFFFF&amp;file=http://static.videoegg.com/ted/movies/HANSROSLING_high.flv&amp;autoPlay=false&amp;fullscreenURL=http://static.videoegg.com/ted/flash/fullscreen.html&amp;forcePlay=false&amp;logo=&amp;allowFullscreen=true" src="http://static.videoegg.com/ted/flash/loader.swf"></embed></object></p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/visualising-complex-datasets.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/visualising-complex-datasets.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/03.html" rel="tag">03</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/eda.html">eda</a>
+                            <a href="http://fivecomputers.com/tag/software.html" class="selected">software</a>
+                            <a href="http://fivecomputers.com/tag/verification.html">verification</a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <div class="clear"></div>
+                <div class="pages">                
+                    <a href="http://fivecomputers.com/tag/software.html" class="prev_page">&larr;&nbsp;Previous</a>
+                    <a href="http://fivecomputers.com/tag/software3.html" class="next_page">Next&nbsp;&rarr;</a>
+                    <span>Page 2 of 3</span>
+                </div>
+
+                <div class="clear"></div>
+                <div id="footer">
+                    <p>
+                    <a href="https://twitter.com/GordonMcGregor">Twitter @GordonMcGregor</a>
+                    &middot;
+                    <a class="atom" href="http://fivecomputers.com/feeds/all.atom.xml">RSS Feed</a>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+    <script type="text/javascript">
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+    try {
+        var pageTracker = _gat._getTracker("UA-42678190-1");
+    pageTracker._trackPageview();
+    } catch(err) {}</script>
+<script type="text/javascript">
+    var disqus_shortname = 'fivecomputers';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+    </body>
+</html>

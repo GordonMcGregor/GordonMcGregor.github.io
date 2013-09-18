@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+        <title>Five Computers &middot; articles in the "sv, eda" category</title>
+        <link rel="shortcut icon" href="http://fivecomputers.com/favicon.ico" />
+        <link href="http://fivecomputers.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Five Computers Atom Feed" />
+                
+        <link rel="stylesheet" href="http://fivecomputers.com/theme/css/screen.css" type="text/css" />
+        <link rel="stylesheet" href="http://fivecomputers.com/theme/css/pygments.css" type="text/css" />
+
+
+    </head>
+    <body>
+        <div id="header">
+            <ul id="nav">
+                <li class="ephemeral selected"><a href="http://fivecomputers.com/category/sv-eda.html">sv, eda</a></li>
+                <li><a href="http://fivecomputers.com">Home</a></li>
+                <li><a href="http://fivecomputers.com/pages/about-gordon.html">About Gordon</a></li>
+                <li><a href="http://fivecomputers.com/archives.html">Archives</a></li>
+            </ul>
+            <div class="header_box">
+                <h1><a href="http://fivecomputers.com">Five Computers</a></h1>
+            </div>
+        </div>
+        <div id="wrapper">
+            <div id="content">
+                <h4 class="date">Jul 23,  2013</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/much-ado-about-nothing.html" rel="bookmark" title="Permanent Link to &quot;Much ado about nothing&quot;">Much ado about nothing</a>
+                    </h2>
+                    
+                    <p>Having wasted a few hours debugging a UVM issue with <code>`uvm_do</code> macros and a <code>pre_do</code> task in a parent class, I decided to dig in to starting sequences without using the macro implementations. Some of the main EDA companies recommend this approach and there was a <a href="http://events.dvcon.org/2011/proceedings/papers/09_1.pdf">good paper at DVCon</a> discussing the pros and cons of the various UVM macros.</p>
+<p>So while several people recommend using the methods directly and avoiding the macros, I didn't find a great deal of clear information that described the correct set of method calls to use for a sequence_item and sequence. The examples in Adam's paper above are somewhat confusing, mixing sequence_items and sequences within the same code in some cases and suffering from some typos in other samples. After I worked out the information below, I took another look at the paper and the examples are correct (ignoring the typos), but the interleaving of the sequence and sequence_item start makes the operations more complex than it needs to be.</p>
+<p>Luckily enough the UVM source code is all available and I found the simplest way to resolve this was just to go and look at the implementation. In particular, two files are useful: the macro implementations themselves in src/macros/uvm_sequence_defines.svh and the class definitions for sequences and sequence_item in src/seq/uvm_sequence_base.svh</p>
+<p>My first confusion stemmed from the class inheritance. </p>
+<p><center></p>
+<div class="highlight"><pre><span class="n">uvm_transaction</span>
+<span class="n">V</span>
+<span class="n">uvm_sequence_item</span>
+<span class="n">V</span>
+<span class="n">uvm_sequence_base</span>
+<span class="n">V</span>
+<span class="n">uvm_sequence</span>
+</pre></div>
+
+
+<p></center></p>
+<p>At first glance, this tends to imply that a <code>uvm_sequence</code> is just another type of <code>uvm_sequence_item</code> and they can be treated as interchangeable. However, it fairly quickly becomes apparent that this is only very superficially true. The reality is that sequences ( <code>uvm_sequence</code>) have a distinct API from sequence items (<code>uvm_sequence_item</code>) and only share a few common features.</p>
+<p>In particular, sequences runs on a sequencer, without any arbitration controlling their execution. Multiple sequences can be launched on a sequencer and will execute in parallel. In contrast, sequence_items are subject to arbitration to control access to the sequencer's downstream port. A multi-step arbitration handshake is done, but only for sequence items - not sequences. This is the fundamental difference in the API and the reason for the different methods used to start items and sequences.</p>
+<p>Sequences and sequence items can both be launched using the various uvm_do macros, so the common base does help provide this abstraction to a single interface, but it really just hides the multiple APIs that are being used behind the scenes. I agree with the view that it is better to just understand what is going on and use the function calls directly. That way you will tend not to be surprised by the various hooks provided for callbacks within the macro invocations. </p>
+<p>From <code>uvm_sequence_defines.svh</code>, the methods used to start a sequence item are:</p>
+<div class="highlight"><pre>   <span class="no">`uvm_create</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+   <span class="n">sequencer</span><span class="p">.</span><span class="n">wait_for_grant</span><span class="p">(</span><span class="n">prior</span><span class="p">);</span>                           
+   <span class="k">this</span><span class="p">.</span><span class="n">pre_do</span><span class="p">(</span><span class="mh">1</span><span class="p">);</span>
+   <span class="n">item</span><span class="p">.</span><span class="n">randomize</span><span class="p">();</span>
+   <span class="k">this</span><span class="p">.</span><span class="n">mid_do</span><span class="p">(</span><span class="n">item</span><span class="p">);</span>
+   <span class="n">sequencer</span><span class="p">.</span><span class="n">send_request</span><span class="p">(</span><span class="n">item</span><span class="p">);</span>
+   <span class="n">sequencer</span><span class="p">.</span><span class="n">wait_for_item_done</span><span class="p">();</span>
+   <span class="k">this</span><span class="p">.</span><span class="n">post_do</span><span class="p">(</span><span class="n">item</span><span class="p">);</span>
+</pre></div>
+
+
+<p>A sequence however, is launched with:</p>
+<div class="highlight"><pre>     <span class="no">`uvm_create</span><span class="p">(</span><span class="n">sub_seq</span><span class="p">)</span>                             
+     <span class="n">sub_seq</span><span class="p">.</span><span class="n">randomize</span><span class="p">();</span>
+     <span class="n">sub_seq</span><span class="p">.</span><span class="n">pre_start</span><span class="p">();</span>        
+     <span class="k">this</span><span class="p">.</span><span class="n">pre_do</span><span class="p">(</span><span class="mh">0</span><span class="p">);</span>             
+     <span class="k">this</span><span class="p">.</span><span class="n">mid_do</span><span class="p">(</span><span class="n">sub_seq</span><span class="p">);</span>       
+     <span class="n">sub_seq</span><span class="p">.</span><span class="n">body</span><span class="p">();</span>             
+     <span class="k">this</span><span class="p">.</span><span class="n">post_do</span><span class="p">(</span><span class="n">sub_seq</span><span class="p">);</span>      
+     <span class="n">sub_seq</span><span class="p">.</span><span class="n">post_start</span><span class="p">();</span>
+</pre></div>
+
+
+<p>Now, the <code>`uvm_create</code> macro call can be replaced with a direct call to the <code>factory::create</code> method, for both the sequence_item and sequence, something like this for a sequence_item,</p>
+<div class="highlight"><pre>    <span class="n">item</span> <span class="o">=</span> <span class="n">custom_sequence_item</span><span class="o">::</span><span class="n">type_id</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;item&quot;</span><span class="p">,,</span> <span class="n">get_full_name</span><span class="p">());</span>
+</pre></div>
+
+
+<p>or this for a sequence</p>
+<div class="highlight"><pre>    <span class="n">seq</span> <span class="o">=</span> <span class="n">custom_sequence</span><span class="o">::</span><span class="n">type_id</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;seq&quot;</span><span class="p">,,</span> <span class="n">get_full_name</span><span class="p">());</span>
+</pre></div>
+
+
+<p>In the sequence_item startup, the various calls after the create can be replaced by two functions that encapsulate the arbitration for the driver port, to actually launch a transaction.</p>
+<div class="highlight"><pre>   <span class="n">item</span> <span class="o">=</span> <span class="n">custom_sequence_item</span><span class="o">::</span><span class="n">type_id</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;item&quot;</span><span class="p">,</span> <span class="p">,</span> <span class="n">get_full_name</span><span class="p">());</span>
+   <span class="n">start_item</span><span class="p">(</span><span class="n">item</span><span class="p">);</span>                             
+   <span class="n">item</span><span class="p">.</span><span class="n">randomize</span><span class="p">();</span>
+   <span class="n">finish_item</span><span class="p">(</span><span class="n">item</span><span class="p">);</span>
+</pre></div>
+
+
+<p>Breaking up the <code>uvm_do</code> in this way provides more control over the randomization of the item - you can disable constraints, assign values after start_item, rather than trying to insert code in pre_do.  One fundamental problem with trying to use pre_do to modify constraints is there isn't a clear indication which call to <code>uvm_do</code> in the sequence body has triggered the callback to <code>pre_do</code>. The only indication in the pre_do API is if it is being called before a sequence_item is started or a sequence [via the is_item flag]. If you have multiple calls to <code>`uvm_do</code> (or start_item) in your sequence body, there isn't a reliable way to differentiate which call has triggered the callback (other than maybe looking at the existence of a member variable, if it has been created or not, but this fails with loops or threads of execution in the body)</p>
+<p>Similarly to start a sequence, there is a simpler API that encapsulates the various calls to pre_start, pre_do etc:</p>
+<div class="highlight"><pre>    <span class="n">seq</span> <span class="o">=</span> <span class="n">custom_sequence</span><span class="o">::</span><span class="n">type_id</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;seq&quot;</span><span class="p">,,</span> <span class="n">get_full_name</span><span class="p">());</span>
+    <span class="n">seq</span><span class="p">.</span><span class="n">randomize</span><span class="p">();</span>
+    <span class="n">seq</span><span class="p">.</span><span class="n">start</span><span class="p">(</span><span class="n">target_sequencer</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+</pre></div>
+
+
+<p>These 4 calls for a sequence_item and 3 calls for a sequence can then be further enhanced using control over constraints, randomize with {} constructs and also using the prioritization arguments to the tasks, or providing a different target sequencer. The end result is much more flexible than the 18 flavours of <code>`uvm_do</code> macros and easier to work out the flow of execution. </p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/much-ado-about-nothing.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/much-ado-about-nothing.html">posted at  9:30 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/sv-eda.html" rel="tag">sv, eda</a>                                                
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <div class="clear"></div>
+                <div id="footer">
+                    <p>
+                    <a href="https://twitter.com/GordonMcGregor">Twitter @GordonMcGregor</a>
+                    &middot;
+                    <a class="atom" href="http://fivecomputers.com/feeds/all.atom.xml">RSS Feed</a>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+    <script type="text/javascript">
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+    try {
+        var pageTracker = _gat._getTracker("UA-42678190-1");
+    pageTracker._trackPageview();
+    } catch(err) {}</script>
+<script type="text/javascript">
+    var disqus_shortname = 'fivecomputers';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+    </body>
+</html>

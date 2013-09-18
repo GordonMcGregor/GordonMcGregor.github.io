@@ -1,85 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-        <meta charset="utf-8">
-        <title>Five Computers - python, eda</title>
-        <link rel="stylesheet" href="/theme/css/main.css">
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+        <title>Five Computers &middot; articles in the "python, eda" category</title>
+        <link rel="shortcut icon" href="http://fivecomputers.com/favicon.ico" />
+        <link href="http://fivecomputers.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Five Computers Atom Feed" />
                 
-        <!--[if IE]>
-            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
-</head>
+        <link rel="stylesheet" href="http://fivecomputers.com/theme/css/screen.css" type="text/css" />
+        <link rel="stylesheet" href="http://fivecomputers.com/theme/css/pygments.css" type="text/css" />
 
-<body id="index" class="home">
-        <header id="banner" class="body">
-                <h1><a href="/">Five Computers </a></h1>
-                <nav><ul>
-                                                    <li><a href="/pages/about.html">About</a></li>
-                                                                    <li ><a href="/category/blogging.html">blogging</a></li>
-                                    <li ><a href="/category/converted.html">converted</a></li>
-                                    <li class="active"><a href="/category/python-eda.html">python, eda</a></li>
-                                                </ul></nav>
-        </header><!-- /#banner -->
-                
-            
 
-                            <aside id="featured" class="body">
-                <article>
-                    <h1 class="entry-title"><a href="/a-vcd-parser.html">A VCD Parser</a></h1> 
-                    <footer class="post-info">
-        <abbr class="published" title="2013-07-18T20:40:00">
-                Thu 18 July 2013
-        </abbr>
+    </head>
+    <body>
+        <div id="header">
+            <ul id="nav">
+                <li class="ephemeral selected"><a href="http://fivecomputers.com/category/python-eda.html">python, eda</a></li>
+                <li><a href="http://fivecomputers.com">Home</a></li>
+                <li><a href="http://fivecomputers.com/pages/about-gordon.html">About Gordon</a></li>
+                <li><a href="http://fivecomputers.com/archives.html">Archives</a></li>
+            </ul>
+            <div class="header_box">
+                <h1><a href="http://fivecomputers.com">Five Computers</a></h1>
+            </div>
+        </div>
+        <div id="wrapper">
+            <div id="content">
+                <h4 class="date">Jul 21,  2013</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/a-sample-of-sv.html" rel="bookmark" title="Permanent Link to &quot;A sample of SV&quot;">A sample of SV</a>
+                    </h2>
+                    
+                    <p>I've recently migrated my blog from Typepad to <a href="http://getpelican.com">Pelican</a>, hosted on GitHub. One nice feature of that is that I can write simple posts in Markdown syntax and it uses the Pygments syntax highlighting engine.  <a href="systemverilog-support-in-pygments.html">A while ago</a> I added SystemVerilog support to Pygments and looking below, it seems to be working!</p>
+<div class="highlight"><pre><span class="k">module</span> <span class="n">top</span><span class="p">;</span>
+    <span class="kn">import</span> <span class="nn">user_pkg::*</span><span class="p">;</span>
+    <span class="kn">import</span> <span class="nn">uvm_pkg::*</span><span class="p">;</span>
+    <span class="n">env</span> <span class="n">e</span><span class="p">;</span>
 
-                <address class="vcard author">
-                By <a class="url fn" href="/author/gordon-mcgregor.html">Gordon McGregor</a>
-        </address>
-        <p>In <a href="/category/python-eda.html">python, eda</a>. </p>
+    <span class="k">initial</span> <span class="k">begin</span>
+        <span class="no">`uvm_info</span><span class="p">(</span><span class="s">&quot;top&quot;</span><span class="p">,</span><span class="s">&quot;In top initial block&quot;</span><span class="p">,</span><span class="no">UVM_MEDIUM</span><span class="p">)</span>
+        <span class="n">e</span> <span class="o">=</span> <span class="k">new</span><span class="p">(</span><span class="s">&quot;env&quot;</span><span class="p">,</span> <span class="k">null</span><span class="p">);</span>
+        <span class="n">run_test</span><span class="p">();</span>
+    <span class="k">end</span>
+<span class="k">endmodule</span>
+</pre></div>
 
-</footer><!-- /.post-info --><p>Someone mentioned that a generic VCD parser might be useful. <a href="https://github.com/GordonMcGregor/vcd_parser]">So I wrote one.</a></p>
-<p>It seems to be mostly functional, after a few tweaks and some valuable suggestions from collegues. </p>
-<p>The tokenizer got particular attention:</p>
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/a-sample-of-sv.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/a-sample-of-sv.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/python-eda.html" rel="tag">python, eda</a>                                                
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <h4 class="date">Jul 18,  2013</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/a-vcd-parser.html" rel="bookmark" title="Permanent Link to &quot;A VCD Parser&quot;">A VCD Parser</a>
+                    </h2>
+                    
+                    <p>A co-worker mentioned that a generic VCD parser might be useful. <a href="https://github.com/GordonMcGregor/vcd_parser">So I wrote one</a>. It is mostly functional, after a few tweaks and some valuable suggestions from colleagues. </p>
+<p>The tokenizer got particular attention, due to the rather neat generator expression, assigned to <code>tokeniser</code></p>
 <div class="highlight"><pre><span class="k">def</span> <span class="nf">extract</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fh</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;Tokenize and parse the VCD file&#39;&#39;&#39;</span>
     <span class="c"># open the VCD file and create a token generator</span>
     <span class="n">tokeniser</span> <span class="o">=</span> <span class="p">(</span><span class="n">word</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">fh</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span> <span class="k">if</span> <span class="n">word</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">count</span><span class="p">,</span> <span class="n">token</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tokeniser</span><span class="p">):</span>
-</pre></div>                </article>
-                                    <p class="paginator">
-        Page 1 / 1
-    </p>
-                            </aside><!-- /#featured -->
-                                                </ol><!-- /#posts-list -->
-                        </section><!-- /#content -->
-                    <section id="extras" class="body">
-                        <div class="blogroll">
-                        <h2>blogroll</h2>
-                        <ul>
-                                                    <li><a href="http://getpelican.com/">Pelican</a></li>
-                                                    <li><a href="http://python.org/">Python.org</a></li>
-                                                    <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
-                                                    <li><a href="#">You can modify those links in your config file</a></li>
-                                                </ul>
-                </div><!-- /.blogroll -->
-                                <div class="social">
-                        <h2>social</h2>
-                        <ul>
-                            <li><a href="/None" type="application/atom+xml" rel="alternate">atom feed</a></li>
-                            
-                                                    <li><a href="#">You can add links in your config file</a></li>
-                                                    <li><a href="#">Another social link</a></li>
-                                                </ul>
-                </div><!-- /.social -->
-                </section><!-- /#extras -->
+</pre></div>
 
-        <footer id="contentinfo" class="body">
-                <address id="about" class="vcard body">
-                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
-                </address><!-- /#about -->
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/a-vcd-parser.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/a-vcd-parser.html">posted at  8:40 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/python-eda.html" rel="tag">python, eda</a>                                                
+                    </div>
+                    <div class="clear"></div>
+                </div>
 
-                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
-        </footer><!-- /#contentinfo -->
-
-</body>
+                <div class="clear"></div>
+                <div id="footer">
+                    <p>
+                    <a href="https://twitter.com/GordonMcGregor">Twitter @GordonMcGregor</a>
+                    &middot;
+                    <a class="atom" href="http://fivecomputers.com/feeds/all.atom.xml">RSS Feed</a>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+    <script type="text/javascript">
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+    try {
+        var pageTracker = _gat._getTracker("UA-42678190-1");
+    pageTracker._trackPageview();
+    } catch(err) {}</script>
+<script type="text/javascript">
+    var disqus_shortname = 'fivecomputers';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+    </body>
 </html>

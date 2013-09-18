@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Five Computers</title><link href="http://fivecomputers.com/" rel="alternate"></link><link href="http://fivecomputers.com/feeds/systemverilog-osx.atom.xml" rel="self"></link><id>http://fivecomputers.com/</id><updated>2013-08-07T09:18:00-05:00</updated><entry><title>DVT Eclipse License under OS X</title><link href="http://fivecomputers.com/dvt-eclipse-license-under-os-x.html" rel="alternate"></link><updated>2013-08-07T09:18:00-05:00</updated><author><name>Gordon McGregor</name></author><id>tag:fivecomputers.com,2013-08-07:dvt-eclipse-license-under-os-x.html</id><summary type="html">&lt;p&gt;I find the &lt;a href="http://www.dvteclipse.com"&gt;DVT Eclipse SystemVerilog editor&lt;/a&gt; to be exceptionally useful when developing testbenches. One tricky thing to set up when installing these tools in OS X, is how to set an environment variable to point to the license file, for a GUI application.&lt;/p&gt;
+&lt;p&gt;To set environment variables, they need to be defined before the GUI executes. In OS X this is achieved in the &lt;code&gt;/etc/launchd.conf&lt;/code&gt; file (that you probably have to create)&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;sudo&lt;/span&gt; &lt;span class="n"&gt;vim&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;etc&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;launchd&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;conf&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;In that file, set the environment variables using csh syntax. For the DVT license file, the environment variable is DVT_LICENSE_FILE&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;setenv&lt;/span&gt; &lt;span class="n"&gt;DVT_LICENSE_FILE&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Path&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;to&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;dvt&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;license&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Then, reboot your system and the environment variable should be set for all applications. You can check by opening a shell after the reboot and checking the environment variable:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;echo&lt;/span&gt; &lt;span class="err"&gt;$&lt;/span&gt;&lt;span class="n"&gt;DVT_LICENSE_FILE&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;</summary></entry></feed>

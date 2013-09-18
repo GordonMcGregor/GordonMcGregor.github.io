@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Five Computers</title><link href="http://fivecomputers.com/" rel="alternate"></link><link href="http://fivecomputers.com/feeds/sv-eda.atom.xml" rel="self"></link><id>http://fivecomputers.com/</id><updated>2013-07-23T21:30:00-05:00</updated><entry><title>Much ado about nothing</title><link href="http://fivecomputers.com/much-ado-about-nothing.html" rel="alternate"></link><updated>2013-07-23T21:30:00-05:00</updated><author><name>Gordon McGregor</name></author><id>tag:fivecomputers.com,2013-07-23:much-ado-about-nothing.html</id><summary type="html">&lt;p&gt;Having wasted a few hours debugging a UVM issue with &lt;code&gt;`uvm_do&lt;/code&gt; macros and a &lt;code&gt;pre_do&lt;/code&gt; task in a parent class, I decided to dig in to starting sequences without using the macro implementations. Some of the main EDA companies recommend this approach and there was a &lt;a href="http://events.dvcon.org/2011/proceedings/papers/09_1.pdf"&gt;good paper at DVCon&lt;/a&gt; discussing the pros and cons of the various UVM macros.&lt;/p&gt;
+&lt;p&gt;So while several people recommend using the methods directly and avoiding the macros, I didn't find a great deal of clear information that described the correct set of method calls to use for a sequence_item and sequence. The examples in Adam's paper above are somewhat confusing, mixing sequence_items and sequences within the same code in some cases and suffering from some typos in other samples. After I worked out the information below, I took another look at the paper and the examples are correct (ignoring the typos), but the interleaving of the sequence and sequence_item start makes the operations more complex than it needs to be.&lt;/p&gt;
+&lt;p&gt;Luckily enough the UVM source code is all available and I found the simplest way to resolve this was just to go and look at the implementation. In particular, two files are useful: the macro implementations themselves in src/macros/uvm_sequence_defines.svh and the class definitions for sequences and sequence_item in src/seq/uvm_sequence_base.svh&lt;/p&gt;
+&lt;p&gt;My first confusion stemmed from the class inheritance. &lt;/p&gt;
+&lt;p&gt;&lt;center&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;uvm_transaction&lt;/span&gt;
+&lt;span class="n"&gt;V&lt;/span&gt;
+&lt;span class="n"&gt;uvm_sequence_item&lt;/span&gt;
+&lt;span class="n"&gt;V&lt;/span&gt;
+&lt;span class="n"&gt;uvm_sequence_base&lt;/span&gt;
+&lt;span class="n"&gt;V&lt;/span&gt;
+&lt;span class="n"&gt;uvm_sequence&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;At first glance, this tends to imply that a &lt;code&gt;uvm_sequence&lt;/code&gt; is just another type of &lt;code&gt;uvm_sequence_item&lt;/code&gt; and they can be treated as interchangeable. However, it fairly quickly becomes apparent that this is only very superficially true. The reality is that sequences ( &lt;code&gt;uvm_sequence&lt;/code&gt;) have a distinct API from sequence items (&lt;code&gt;uvm_sequence_item&lt;/code&gt;) and only share a few common features.&lt;/p&gt;
+&lt;p&gt;In particular, sequences runs on a sequencer, without any arbitration controlling their execution. Multiple sequences can be launched on a sequencer and will execute in parallel. In contrast, sequence_items are subject to arbitration to control access to the sequencer's downstream port. A multi-step arbitration handshake is done, but only for sequence items - not sequences. This is the fundamental difference in the API and the reason for the different methods used to start items and sequences.&lt;/p&gt;
+&lt;p&gt;Sequences and sequence items can both be launched using the various uvm_do macros, so the common base does help provide this abstraction to a single interface, but it really just hides the multiple APIs that are being used behind the scenes. I agree with the view that it is better to just understand what is going on and use the function calls directly. That way you will tend not to be surprised by the various hooks provided for callbacks within the macro invocations. &lt;/p&gt;
+&lt;p&gt;From &lt;code&gt;uvm_sequence_defines.svh&lt;/code&gt;, the methods used to start a sequence item are:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;   &lt;span class="no"&gt;`uvm_create&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;item&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+   &lt;span class="n"&gt;sequencer&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;wait_for_grant&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;prior&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;                           
+   &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;pre_do&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mh"&gt;1&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+   &lt;span class="n"&gt;item&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;randomize&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+   &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mid_do&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;item&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+   &lt;span class="n"&gt;sequencer&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;send_request&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;item&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+   &lt;span class="n"&gt;sequencer&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;wait_for_item_done&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+   &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;post_do&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;item&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;A sequence however, is launched with:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;     &lt;span class="no"&gt;`uvm_create&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;sub_seq&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;                             
+     &lt;span class="n"&gt;sub_seq&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;randomize&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+     &lt;span class="n"&gt;sub_seq&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;pre_start&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;        
+     &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;pre_do&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mh"&gt;0&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;             
+     &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mid_do&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;sub_seq&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;       
+     &lt;span class="n"&gt;sub_seq&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;body&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;             
+     &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;post_do&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;sub_seq&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;      
+     &lt;span class="n"&gt;sub_seq&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;post_start&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Now, the &lt;code&gt;`uvm_create&lt;/code&gt; macro call can be replaced with a direct call to the &lt;code&gt;factory::create&lt;/code&gt; method, for both the sequence_item and sequence, something like this for a sequence_item,&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;    &lt;span class="n"&gt;item&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;custom_sequence_item&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="n"&gt;type_id&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="n"&gt;create&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;item&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,,&lt;/span&gt; &lt;span class="n"&gt;get_full_name&lt;/span&gt;&lt;span class="p"&gt;());&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;or this for a sequence&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;    &lt;span class="n"&gt;seq&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;custom_sequence&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="n"&gt;type_id&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="n"&gt;create&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;seq&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,,&lt;/span&gt; &lt;span class="n"&gt;get_full_name&lt;/span&gt;&lt;span class="p"&gt;());&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;In the sequence_item startup, the various calls after the create can be replaced by two functions that encapsulate the arbitration for the driver port, to actually launch a transaction.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;   &lt;span class="n"&gt;item&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;custom_sequence_item&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="n"&gt;type_id&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="n"&gt;create&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;item&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;get_full_name&lt;/span&gt;&lt;span class="p"&gt;());&lt;/span&gt;
+   &lt;span class="n"&gt;start_item&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;item&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;                             
+   &lt;span class="n"&gt;item&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;randomize&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+   &lt;span class="n"&gt;finish_item&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;item&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Breaking up the &lt;code&gt;uvm_do&lt;/code&gt; in this way provides more control over the randomization of the item - you can disable constraints, assign values after start_item, rather than trying to insert code in pre_do.  One fundamental problem with trying to use pre_do to modify constraints is there isn't a clear indication which call to &lt;code&gt;uvm_do&lt;/code&gt; in the sequence body has triggered the callback to &lt;code&gt;pre_do&lt;/code&gt;. The only indication in the pre_do API is if it is being called before a sequence_item is started or a sequence [via the is_item flag]. If you have multiple calls to &lt;code&gt;`uvm_do&lt;/code&gt; (or start_item) in your sequence body, there isn't a reliable way to differentiate which call has triggered the callback (other than maybe looking at the existence of a member variable, if it has been created or not, but this fails with loops or threads of execution in the body)&lt;/p&gt;
+&lt;p&gt;Similarly to start a sequence, there is a simpler API that encapsulates the various calls to pre_start, pre_do etc:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;    &lt;span class="n"&gt;seq&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;custom_sequence&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="n"&gt;type_id&lt;/span&gt;&lt;span class="o"&gt;::&lt;/span&gt;&lt;span class="n"&gt;create&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;seq&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,,&lt;/span&gt; &lt;span class="n"&gt;get_full_name&lt;/span&gt;&lt;span class="p"&gt;());&lt;/span&gt;
+    &lt;span class="n"&gt;seq&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;randomize&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+    &lt;span class="n"&gt;seq&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;start&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;target_sequencer&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;These 4 calls for a sequence_item and 3 calls for a sequence can then be further enhanced using control over constraints, randomize with {} constructs and also using the prioritization arguments to the tasks, or providing a different target sequencer. The end result is much more flexible than the 18 flavours of &lt;code&gt;`uvm_do&lt;/code&gt; macros and easier to work out the flow of execution. &lt;/p&gt;</summary></entry></feed>

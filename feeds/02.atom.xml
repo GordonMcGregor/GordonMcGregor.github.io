@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Five Computers</title><link href="http://fivecomputers.com/" rel="alternate"></link><link href="http://fivecomputers.com/feeds/02.atom.xml" rel="self"></link><id>http://fivecomputers.com/</id><updated>2012-02-05T00:00:00-06:00</updated><entry><title>Hobgoblins</title><link href="http://fivecomputers.com/hobgoblins.html" rel="alternate"></link><updated>2012-02-05T00:00:00-06:00</updated><author><name>GordonMcGregor</name></author><id>tag:fivecomputers.com,2012-02-05:hobgoblins.html</id><summary type="html">&lt;p&gt;&lt;center&gt;
+  &lt;p&gt;&lt;span class="st"&gt;&lt;i&gt;A foolish consistency is the hobgoblin of little minds, adored by little statesmen and philosophers and divines&lt;/i&gt;&lt;/span&gt;&lt;/p&gt;&lt;/p&gt;
+&lt;p&gt;&lt;p style="text-align: right;"&gt;&lt;i&gt;-&lt;/i&gt; R. W. Emerson&lt;/p&gt;
+&lt;/center&gt;
+&lt;p&gt;Looking over the VPI iterator sample code I posted last night from PyHVL, I noticed something. I've defined the API as follows:&lt;/p&gt;
+&lt;div class="highlight" style="background: #f8f8f8"&gt;
+  &lt;pre style="line-height: 125%"&gt;
+&lt;span style="color: #008000; font-weight: bold"&gt;def&lt;/span&gt; &lt;span style="color: #0000FF"&gt;vpi_iterator&lt;/span&gt;(handle, type&lt;span style="color: #666666"&gt;=&lt;/span&gt;vpiNet):
+&lt;/pre&gt;
+&lt;/div&gt;With the &lt;i&gt;handle&lt;/i&gt; first and an optional &lt;i&gt;type&lt;/i&gt; parameter second, taking the default value of &lt;i&gt;vpiNet&lt;/i&gt;. Looking again at the C implementation, I see that the method signature is the reverse:&lt;br /&gt;
+&lt;div class="highlight" style="background: #f8f8f8"&gt;
+  &lt;pre style="line-height: 125%"&gt;
+itr &lt;span style="color: #666666"&gt;=&lt;/span&gt; vpi_iterate(vpiNet, mod);
+&lt;/pre&gt;
+&lt;/div&gt;Now, I'm faced with a decision. I could make the Python &lt;i&gt;vpi_iterator()&lt;/i&gt; call consistent with the similar C API, and reverse the parameters, or I can keep it the same way. Keeping it the same way allows the use of the default argument for &lt;i&gt;vpiNet&lt;/i&gt;. Optional arguments must follow required arguments, so I couldn't reverse it and keep the &lt;i&gt;type&lt;/i&gt;=&lt;i&gt;vpiNet&lt;/i&gt; as an option, it would have to become &lt;i&gt;(type, handle).&lt;/i&gt; In this case, I don't think the default type is particularly intuitive from the name, so I would tend to think there is more value in reversing the arguments, so that it is consistent with the C API's similar function signature.&lt;br /&gt;
+&lt;div class="highlight" style="background: #f8f8f8"&gt;
+  &lt;pre style="line-height: 125%"&gt;
+&lt;span style="color: #008000; font-weight: bold"&gt;def&lt;/span&gt; &lt;span style="color: #0000FF"&gt;vpi_iterator&lt;/span&gt;(type, handle):
+&lt;/pre&gt;
+&lt;/div&gt;Some people might think this is a totally arbitrary consideration. I believe this sort of detail is important. My favorite languages are internally consistent, so that when you start using a new library or part of the language, the structures and idioms are so familiar you can often code things correctly without having fully read the documentation. Most of the Python standard library is like that, you can pick up a new library and be productive, quickly, because there aren't jarring inconstancies. If I want people to use this &lt;i&gt;vpi_iterator&lt;/i&gt; method, coming from C, it will help if it matches the general argument patterns used there. Less friction to getting code working first time.&lt;br /&gt;
+Each of these is just a small thing that you have to remember, but each time it catches you out it is annoying and maybe knocks you off your train of thought to fix it. The details and consistency are important to people being productive in a language.&lt;br /&gt;
+&lt;br /&gt;
+I wish SystemVerilog had more of that consistency - semicolons to mark the end of a function definition, then a &lt;i&gt;begin/end&lt;/i&gt; syntax for blocks, or &lt;i&gt;{}&lt;/i&gt; for some parts of the language to define blocks. &lt;i&gt;end, endfunction, endtask&lt;/i&gt;. Just extra details that get in the way of writing clean code the first time.&lt;br /&gt;
+&lt;br /&gt;&lt;/p&gt;</summary><category term="verification"></category></entry><entry><title>Improving sshfs connections</title><link href="http://fivecomputers.com/improving-sshfs-connections.html" rel="alternate"></link><updated>2012-02-05T00:00:00-06:00</updated><author><name>GordonMcGregor</name></author><id>tag:fivecomputers.com,2012-02-05:improving-sshfs-connections.html</id><summary type="html">&lt;p&gt;I'm finding &lt;a href="http://www.fivecomputers.com/2012/04/sshfs-for-os-x-lion.html"&gt;sshfs&lt;/a&gt; to be excellent for remotely accessing drives over ssh. There's a couple of tweaks to the ssh config file that can make things even better. If you haven't used an ssh config file, it can be used to store general and connection specific information, to save you typing it every time. The file lives in &lt;i&gt;~/.ssh/config&lt;/i&gt;&lt;/p&gt;
+
+&lt;pre&gt;
+Host &amp;lt;hostname&amp;gt;
+
+features
+
+Host &amp;lt;otherhostname&amp;gt;
+
+features
+&lt;/pre&gt;
+
+&lt;p&gt;e.g.,
+&lt;pre&gt;
+Host short&lt;/p&gt;
+&lt;p&gt;Hostname ssh.long_url_name.com&lt;/p&gt;
+&lt;p&gt;Username myusername
+&lt;/pre&gt;so, instead of typing &lt;i&gt;ssh myusername@ssh.long_url_name.com&lt;/i&gt; I can instead run the following:
+&lt;pre&gt;
+ssh short
+&lt;/pre&gt;To improve the sshfs you should add&lt;br /&gt;
+&lt;pre&gt;
+ServerAliveInterval 15 
+&lt;/pre&gt;to the Host that you connect over sshfs, which will make sshfs to a ssh keepalive ping every 15 seconds.&lt;/p&gt;</summary><category term=""></category></entry><entry><title>complete</title><link href="http://fivecomputers.com/complete.html" rel="alternate"></link><updated>2008-02-12T00:00:00-06:00</updated><author><name>GordonMcGregor</name></author><id>tag:fivecomputers.com,2008-02-12:complete.html</id><summary type="html">&lt;p&gt;Finally! Now my Mac &lt;a href="http://news.bbc.co.uk/2/hi/technology/7760344.stm"&gt;can do everything&lt;/a&gt; my windows machine can do. I&amp;#39;m so happy.&lt;/p&gt;</summary><category term="software"></category></entry></feed>

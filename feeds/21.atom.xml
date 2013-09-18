@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Five Computers</title><link href="http://fivecomputers.com/" rel="alternate"></link><link href="http://fivecomputers.com/feeds/21.atom.xml" rel="self"></link><id>http://fivecomputers.com/</id><updated>2012-12-21T00:00:00-06:00</updated><entry><title>A simple turtle graphics Domain Specific Language (DSL) parser</title><link href="http://fivecomputers.com/a-simple-turtle-graphics-domain-specific-language-dsl-parser.html" rel="alternate"></link><updated>2012-12-21T00:00:00-06:00</updated><author><name>GordonMcGregor</name></author><id>tag:fivecomputers.com,2012-12-21:a-simple-turtle-graphics-domain-specific-language-dsl-parser.html</id><summary type="html">&lt;p&gt;I&amp;#39;ve been working through some of the exercises in &amp;#39;&lt;a href="http://pragprog.com/the-pragmatic-programmer" target="_self"&gt;The Pragmatic Programmer&lt;/a&gt;&amp;#39; while using it to mentor a colleague. &amp;#0160;In particular, I spent a bit of time working on the Domain Specific Language section and considering creating little DSLs to provide flexible control. I&amp;#39;ve painfully implemented DSLs in SystemVerilog/ UVM sequences in the past and thought about how I typically do this: build a parser, create tokens, then dispatch various execution functions to implement the commands. &amp;#0160;Often, the pain of building all these pieces in a language like C or SV is enough of a barrier that I wouldn&amp;#39;t even start. &amp;#0160;&lt;/p&gt;
+
+&lt;p&gt;The example in the book is a simple Logo/ Turtle control language. &amp;#0160;Pen up, Pen down, draw, turn, etc. It tries to simplify things by using single letter command codes and only one optional argument.&lt;/p&gt;
+
+&lt;p&gt;&lt;span style="font-family: &amp;#39;courier new&amp;#39;, courier;"&gt;P 2&lt;/span&gt;
+&lt;/p&gt;
+
+&lt;p&gt;&lt;span style="font-family: &amp;#39;courier new&amp;#39;, courier;"&gt;D&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span style="font-family: &amp;#39;courier new&amp;#39;, courier;"&gt;W 2&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span style="font-family: &amp;#39;courier new&amp;#39;, courier;"&gt;N 1&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span style="font-family: &amp;#39;courier new&amp;#39;, courier;"&gt;E 1&amp;#0160;&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span style="font-family: &amp;#39;courier new&amp;#39;, courier;"&gt;S 1&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span style="font-family: &amp;#39;courier new&amp;#39;, courier;"&gt;U&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;I know Python has a &lt;a href="http://docs.python.org/2/library/turtle.html" target="_self"&gt;Logo/ Turtle engine built in&lt;/a&gt;&amp;#0160;so I decided to try to write a command parser/ dispatcher that would work with that, and let me write commands in a text file and have them execute Python Turtle commands.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;#39;s an example script (you can see the results of this at the end of this post):&lt;/p&gt;
+
+&lt;pre&gt;&lt;span style="font-family: &amp;#39;courier new&amp;#39;, courier;"&gt;color &amp;quot;green&amp;quot;&lt;/span&gt;&lt;br /&gt;&lt;span style="font-family: &amp;#39;courier new&amp;#39;, courier;"&gt;up&lt;/span&gt;&lt;br /&gt;&lt;span style="font-family: &amp;#39;courier new&amp;#39;, courier;"&gt;goto 0 -50 # comments are allowed&lt;/span&gt;&lt;br /&gt;&lt;span style="font-family: &amp;#39;courier new&amp;#39;, courier;"&gt;down&lt;/span&gt;&lt;br /&gt;&lt;span style="font-family: &amp;#39;courier new&amp;#39;, courier;"&gt;circle 50&lt;/span&gt;&lt;br /&gt;&lt;span style="font-family: &amp;#39;courier new&amp;#39;, courier;"&gt;up&lt;/span&gt;&lt;br /&gt;&lt;span style="font-family: &amp;#39;courier new&amp;#39;, courier;"&gt;color &amp;quot;red&amp;quot;&lt;/span&gt;&lt;br /&gt;&lt;span style="font-family: &amp;#39;courier new&amp;#39;, courier;"&gt;write &amp;quot;Done!&amp;quot;&lt;/span&gt;&lt;br /&gt;&lt;span style="font-family: &amp;#39;courier new&amp;#39;, courier;"&gt;sleep 2&lt;/span&gt;&lt;br /&gt;&lt;span style="font-family: &amp;#39;courier new&amp;#39;, courier;"&gt;exit&lt;/span&gt;&lt;/pre&gt;
+
+&lt;p&gt;I thought initially about having to parse out all the commands and arguments, then writing a large switch/ case statement (&lt;a href="http://bytebaker.com/2008/11/03/switch-case-statement-in-python/" target="_self"&gt;or the Python equivalent with a dictionary&lt;/a&gt;). &amp;#0160;After thinking about it a little longer I realised I didn&amp;#39;t have to do that at all. &amp;#0160;I could use the Introspection in Python to look up available methods and if they exist, call them. In fact, as not finding the method will just cause an exception, I can just try executing any command and if it fails, catch it and move on.&lt;/p&gt;
+
+&lt;p&gt;So after parsing the input text stream (throw away comments, break up tokens using whitespace) then I just try to execute the command in the global namespace. &amp;#0160;I&amp;#39;ve pulled all the turtle functions into that namespace, so any turtle function is a valid command in my little parser. &amp;#0160;The &lt;span style="font-family: &amp;#39;courier new&amp;#39;, courier;"&gt;globals()[command[0]]&lt;/span&gt; in the code below looks up the function in the global namespace and then calls it, using the other parts of the command (&lt;span style="font-family: &amp;#39;courier new&amp;#39;, courier;"&gt;command[1:]&lt;/span&gt;), after they&amp;#39;ve each been processed through the Python &lt;span style="font-family: &amp;#39;courier new&amp;#39;, courier;"&gt;eval&lt;/span&gt; function to convert them from strings to whatever format they happen to be (numbers or strings mainly). &amp;#0160;The final trick in this is using the * operator to take take a list and pass it as one argument after another to the function:&lt;/p&gt;
+
+&lt;pre&gt;globals()[command[0]](*(map(eval, command[1:])))&lt;/pre&gt;
+
+&lt;p&gt;
+&lt;br /&gt;
+And that&amp;#39;s all that&amp;#39;s needed to implement a full Logo language parser and execution engine. The command syntax is fault tolerant and reports errors, with line numbers. &amp;#0160;New commands can be added easily, by defining new functions. &amp;#0160;They&amp;#39;ll be automatically supported as they are added to the namespace. &lt;/p&gt;
+
+&lt;p&gt;Being able to pull something like this together quickly means that writing little Domain Specific Languages is possible and quite a low bar. &amp;#0160;Doing something similar in C is often more daunting and even worse in a language like SystemVerilog, with such a poor string and file handling library. &amp;#0160;There&amp;#39;s a real value in being able to program at such a high level, that can greatly enhance what&amp;#39;s possible or likely to be attempted in a verification environment. You &lt;em&gt;could&lt;/em&gt; do this in SystemVerilog, but how often would you even think to attempt it, without rejecting it as too much work?&lt;/p&gt;
+
+&lt;p&gt;&amp;#0160;&lt;/p&gt;
+
+&lt;div class="highlight" style="background: #f8f8f8;"&gt;
+&lt;pre style="line-height: 125%;"&gt;&lt;span style="color: #408080; font-style: italic;"&gt;# pull all the turtle commands into the global namespace, so they are valid commands&lt;/span&gt;
+&lt;span style="color: #008000; font-weight: bold;"&gt;from&lt;/span&gt; &lt;span style="color: #0000ff; font-weight: bold;"&gt;turtle&lt;/span&gt; &lt;span style="color: #008000; font-weight: bold;"&gt;import&lt;/span&gt; &lt;span style="color: #666666;"&gt;*&lt;/span&gt;
+
+&lt;span style="color: #408080; font-style: italic;"&gt;# Use these 3 lines to make &amp;#39;sleep&amp;#39; and &amp;#39;exit&amp;#39; useable commands&lt;/span&gt;
+&lt;span style="color: #008000; font-weight: bold;"&gt;from&lt;/span&gt; &lt;span style="color: #0000ff; font-weight: bold;"&gt;time&lt;/span&gt; &lt;span style="color: #008000; font-weight: bold;"&gt;import&lt;/span&gt; sleep
+&lt;span style="color: #008000; font-weight: bold;"&gt;from&lt;/span&gt; &lt;span style="color: #0000ff; font-weight: bold;"&gt;sys&lt;/span&gt; &lt;span style="color: #008000; font-weight: bold;"&gt;import&lt;/span&gt; &lt;span style="color: #008000;"&gt;exit&lt;/span&gt;, argv
+
+&lt;span style="color: #408080; font-style: italic;"&gt;# Given a handle to a series of strings of commands, do them&lt;/span&gt;
+&lt;span style="color: #008000; font-weight: bold;"&gt;def&lt;/span&gt; &lt;span style="color: #0000ff;"&gt;parse_and_draw&lt;/span&gt;(commands):
+    &lt;span style="color: #008000; font-weight: bold;"&gt;for&lt;/span&gt; (line_number, line) &lt;span style="color: #aa22ff; font-weight: bold;"&gt;in&lt;/span&gt; &lt;span style="color: #008000;"&gt;enumerate&lt;/span&gt;(commands):
+        line &lt;span style="color: #666666;"&gt;=&lt;/span&gt; line&lt;span style="color: #666666;"&gt;.&lt;/span&gt;split(&lt;span style="color: #ba2121;"&gt;&amp;#39;#&amp;#39;&lt;/span&gt;)[&lt;span style="color: #666666;"&gt;0&lt;/span&gt;]  &lt;span style="color: #408080; font-style: italic;"&gt;# throw away comments&lt;/span&gt;
+
+        &lt;span style="color: #008000; font-weight: bold;"&gt;if&lt;/span&gt; line:  &lt;span style="color: #408080; font-style: italic;"&gt;# if there is anything left after getting rid of comments&lt;/span&gt;
+
+            command &lt;span style="color: #666666;"&gt;=&lt;/span&gt; line&lt;span style="color: #666666;"&gt;.&lt;/span&gt;strip()&lt;span style="color: #666666;"&gt;.&lt;/span&gt;split(&lt;span style="color: #ba2121;"&gt;&amp;#39; &amp;#39;&lt;/span&gt;)  &lt;span style="color: #408080; font-style: italic;"&gt;# parse using spaces to delimit tokens  &lt;/span&gt;
+                                               &lt;span style="color: #408080; font-style: italic;"&gt;# a big limitation of this, we can&amp;#39;t have strings with spaces&lt;/span&gt;
+                                               &lt;span style="color: #408080; font-style: italic;"&gt;# e.g.,  &amp;quot;hello world&amp;quot; won&amp;#39;t work as it&amp;#39;ll get split up&lt;/span&gt;
+                                               &lt;span style="color: #408080; font-style: italic;"&gt;# into [&amp;#39;&amp;quot;hello&amp;#39;, &amp;#39;world&amp;quot;&amp;#39;] neither of which bits are valid when eval&amp;#39;ed&lt;/span&gt;
+
+            &lt;span style="color: #008000; font-weight: bold;"&gt;if&lt;/span&gt; command[&lt;span style="color: #666666;"&gt;0&lt;/span&gt;]:  &lt;span style="color: #408080; font-style: italic;"&gt;# if we have any command left &lt;/span&gt;
+                            &lt;span style="color: #408080; font-style: italic;"&gt;# (e.g., an indented comment would dissappear)&lt;/span&gt;
+
+                &lt;span style="color: #008000; font-weight: bold;"&gt;try&lt;/span&gt;:
+                    &lt;span style="color: #408080; font-style: italic;"&gt;# The meat of the dispatcher is the next line&lt;/span&gt;
+                    &lt;span style="color: #408080; font-style: italic;"&gt;# using a try/ except means we can always try to run any command&lt;/span&gt;
+                    &lt;span style="color: #408080; font-style: italic;"&gt;# and assume that it is valid and catch if it isn&amp;#39;t.&lt;/span&gt;
+                    &lt;span style="color: #408080; font-style: italic;"&gt;# globals() returns a dictionary of every function defined in the global namespace&lt;/span&gt;
+                    &lt;span style="color: #408080; font-style: italic;"&gt;# including all the turtle commands because of the from turtle import *&lt;/span&gt;
+                    &lt;span style="color: #408080; font-style: italic;"&gt;# command[0] is used as a key to look up the function name&lt;/span&gt;
+                    &lt;span style="color: #408080; font-style: italic;"&gt;# we then pass all of the other tokens (command[1:]) through eval (using map)&lt;/span&gt;
+                    &lt;span style="color: #408080; font-style: italic;"&gt;# and pass them as arguments to the function we looked up&lt;/span&gt;
+
+                    &lt;span style="color: #008000;"&gt;globals&lt;/span&gt;()[command[&lt;span style="color: #666666;"&gt;0&lt;/span&gt;]](&lt;span style="color: #666666;"&gt;*&lt;/span&gt;(&lt;span style="color: #008000;"&gt;map&lt;/span&gt;(&lt;span style="color: #008000;"&gt;eval&lt;/span&gt;, command[&lt;span style="color: #666666;"&gt;1&lt;/span&gt;:])))
+
+                    &lt;span style="color: #408080; font-style: italic;"&gt;# a key error occurs if we don&amp;#39;t find command[0] in the global namespace&lt;/span&gt;
+                &lt;span style="color: #008000; font-weight: bold;"&gt;except&lt;/span&gt; &lt;span style="color: #d2413a; font-weight: bold;"&gt;KeyError&lt;/span&gt;:
+                    &lt;span style="color: #008000; font-weight: bold;"&gt;print&lt;/span&gt; &lt;span style="color: #ba2121;"&gt;&amp;#39;Unknown command&amp;#39;&lt;/span&gt;, command[&lt;span style="color: #666666;"&gt;0&lt;/span&gt;], &lt;span style="color: #ba2121;"&gt;&amp;#39;on line &amp;#39;&lt;/span&gt;, line_number
+
+                    &lt;span style="color: #408080; font-style: italic;"&gt;# Some other error occurred (e.g., the called function raised an Exception)&lt;/span&gt;
+                    &lt;span style="color: #408080; font-style: italic;"&gt;# report it here and continue on (if we didn&amp;#39;t catch it, the program would end)&lt;/span&gt;
+                &lt;span style="color: #008000; font-weight: bold;"&gt;except&lt;/span&gt; &lt;span style="color: #d2413a; font-weight: bold;"&gt;Exception&lt;/span&gt; &lt;span style="color: #008000; font-weight: bold;"&gt;as&lt;/span&gt; e:
+                    &lt;span style="color: #008000; font-weight: bold;"&gt;print&lt;/span&gt; &lt;span style="color: #ba2121;"&gt;&amp;#39;Invalid command&amp;#39;&lt;/span&gt;, command[&lt;span style="color: #666666;"&gt;0&lt;/span&gt;], &lt;span style="color: #ba2121;"&gt;&amp;#39;on line &amp;#39;&lt;/span&gt;, line_number,  e
+
+
+&lt;span style="color: #008000; font-weight: bold;"&gt;if&lt;/span&gt; __name__ &lt;span style="color: #666666;"&gt;==&lt;/span&gt; &lt;span style="color: #ba2121;"&gt;&amp;#39;__main__&amp;#39;&lt;/span&gt;:
+    &lt;span style="color: #408080; font-style: italic;"&gt;# open the first file on the command line, get commands from that and run them&lt;/span&gt;
+    commands &lt;span style="color: #666666;"&gt;=&lt;/span&gt; &lt;span style="color: #008000;"&gt;open&lt;/span&gt;(argv[&lt;span style="color: #666666;"&gt;1&lt;/span&gt;])&lt;span style="color: #666666;"&gt;.&lt;/span&gt;xreadlines()
+
+    &lt;span style="color: #408080; font-style: italic;"&gt;# note that the parse and draw routine works on a list of commands, it doesn&amp;#39;t know about files&lt;/span&gt;
+    &lt;span style="color: #408080; font-style: italic;"&gt;# or anything else.  This seperation is is useful, as we can get commands from anywhere&lt;/span&gt;
+    parse_and_draw(commands)
+&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&amp;#0160;&lt;/p&gt;
+
+&lt;p&gt;
+&lt;a class="asset-img-link" href="http://fivecomputers.typepad.com/.a/6a00e54efca38e8834017c34da956e970b-pi" style="display: inline;"&gt;&lt;img alt="12:21:12 10:37 AM" border="0" class="asset  asset-image at-xid-6a00e54efca38e8834017c34da956e970b image-full" src="http://fivecomputers.typepad.com/.a/6a00e54efca38e8834017c34da956e970b-800wi" title="12:21:12 10:37 AM" /&gt;&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;</summary><category term="books"></category><category term="eda"></category><category term="verification"></category></entry></feed>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+        <title>Five Computers &middot; DVT Eclipse License under OS X</title>
+        <link rel="shortcut icon" href="http://fivecomputers.com/favicon.ico" />
+        <link href="http://fivecomputers.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Five Computers Atom Feed" />
+                
+        <link rel="stylesheet" href="http://fivecomputers.com/theme/css/screen.css" type="text/css" />
+        <link rel="stylesheet" href="http://fivecomputers.com/theme/css/pygments.css" type="text/css" />
+
+
+    </head>
+    <body>
+        <div id="header">
+            <ul id="nav">
+                <li><a href="http://fivecomputers.com">Home</a></li>
+                <li><a href="http://fivecomputers.com/pages/about-gordon.html">About Gordon</a></li>
+                <li><a href="http://fivecomputers.com/archives.html">Archives</a></li>
+            </ul>
+            <div class="header_box">
+                <h1><a href="http://fivecomputers.com">Five Computers</a></h1>
+            </div>
+        </div>
+        <div id="wrapper">
+            <div id="content">
+                <h4 class="date">Aug  7,  2013</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/dvt-eclipse-license-under-os-x.html" rel="bookmark" title="Permanent Link to &quot;DVT Eclipse License under OS X&quot;">DVT Eclipse License under OS X</a>
+                    </h2>
+                    
+                    <p>I find the <a href="http://www.dvteclipse.com">DVT Eclipse SystemVerilog editor</a> to be exceptionally useful when developing testbenches. One tricky thing to set up when installing these tools in OS X, is how to set an environment variable to point to the license file, for a GUI application.</p>
+<p>To set environment variables, they need to be defined before the GUI executes. In OS X this is achieved in the <code>/etc/launchd.conf</code> file (that you probably have to create)</p>
+<div class="highlight"><pre><span class="n">sudo</span> <span class="n">vim</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">launchd</span><span class="p">.</span><span class="n">conf</span>
+</pre></div>
+
+
+<p>In that file, set the environment variables using csh syntax. For the DVT license file, the environment variable is DVT_LICENSE_FILE</p>
+<div class="highlight"><pre><span class="n">setenv</span> <span class="n">DVT_LICENSE_FILE</span> <span class="o">/</span><span class="n">Path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">dvt</span><span class="p">.</span><span class="n">license</span>
+</pre></div>
+
+
+<p>Then, reboot your system and the environment variable should be set for all applications. You can check by opening a shell after the reboot and checking the environment variable:</p>
+<div class="highlight"><pre><span class="n">echo</span> <span class="err">$</span><span class="n">DVT_LICENSE_FILE</span>
+</pre></div>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/dvt-eclipse-license-under-os-x.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/dvt-eclipse-license-under-os-x.html">posted at  9:18 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/systemverilog-osx.html" rel="tag">systemverilog, osx</a>                                                
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+<!-- test -->
+
+<div class="comments">
+  <h2>Comments !</h2>
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+    var disqus_identifier = "dvt-eclipse-license-under-os-x.html";
+    var disqus_url = "http://fivecomputers.com/dvt-eclipse-license-under-os-x.html";
+    (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = 'http://fivecomputers.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+</div>
+
+                <div class="clear"></div>
+                <div id="footer">
+                    <p>
+                    <a href="https://twitter.com/GordonMcGregor">Twitter @GordonMcGregor</a>
+                    &middot;
+                    <a class="atom" href="http://fivecomputers.com/feeds/all.atom.xml">RSS Feed</a>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+    <script type="text/javascript">
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+    try {
+        var pageTracker = _gat._getTracker("UA-42678190-1");
+    pageTracker._trackPageview();
+    } catch(err) {}</script>
+<script type="text/javascript">
+    var disqus_shortname = 'fivecomputers';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+    </body>
+</html>

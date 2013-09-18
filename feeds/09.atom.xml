@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Five Computers</title><link href="http://fivecomputers.com/" rel="alternate"></link><link href="http://fivecomputers.com/feeds/09.atom.xml" rel="self"></link><id>http://fivecomputers.com/</id><updated>2012-09-05T00:00:00-05:00</updated><entry><title>A UVM layer for PyHVL</title><link href="http://fivecomputers.com/a-uvm-layer-for-pyhvl.html" rel="alternate"></link><updated>2012-09-05T00:00:00-05:00</updated><author><name>GordonMcGregor</name></author><id>tag:fivecomputers.com,2012-09-05:a-uvm-layer-for-pyhvl.html</id><summary type="html">&lt;p&gt;Over the past few years I've been building verification environments in Python, hooked up to SystemVerilog and Verilog simulators. The glue is &lt;a href="http://sourceforge.net/projects/pyhvl/"&gt;PyHVL&lt;/a&gt;. But PyHVL is just the glue. It does open up the possibility of dynamic languages and scripting to talk to your test bench, but it isn't enough to implement a complete verification environment, quickly.&lt;/p&gt;
+
+&lt;p&gt;To that end, I've started building analogues for most of the &lt;a href="http://www.uvmworld.org/"&gt;UVM&lt;/a&gt; classes, in Python/ PyHVL. Monitors, drivers, checkers, interfaces, scoreboards, all the standard sorts of pieces that you'd expect from a modern verification environment. With no compiling between iterations, and a command-line REPL to drop to for debug and interactive exploration. All backed with the batteries-included philosophy of Python. The sweet spot for this is probably somewhere within a fully fleshed out SystemVerilog testbench, leveraging the best features of SV (RTL/design, randomization with constraints, coverage, assertions) with the best features of Python for the higher level pieces of the testbench. At the same time, there is the potential to write the entire testbench in Python and the whole design in Verilog and use a free simulator such as &lt;a href="http://iverilog.icarus.com/"&gt;Icarus&lt;/a&gt; or &lt;a href="http://sourceforge.net/projects/gplcver/"&gt;CVer&lt;/a&gt;. Python brings a variety of useful features for testbench development; dynamic language, rapid development, rich set of libraries, fast iteration and a high level programming abstraction.&lt;/p&gt;
+
+&lt;p&gt;I've been able to write models of processors that actually execute instructions and check the RTL, where the initial development time for a working CPU model was about 4 hours. There is effectively no recompile time cost - just re-run and the Python verification environment is re-interpreted as the simulation starts up.&lt;/p&gt;
+
+&lt;p&gt;The main advantage of using Python for a testbench is writing less code. Less code means fewer bugs. The higher level language features of Python let you write more efficient code. As a quick example, here is the entire class definition for a PyHVL/ UVM interface, ready to hook up to RTL and monitor/drive signals in a DUT.&lt;/p&gt;
+
+&lt;div class="highlight" style="background: #f8f8f8"&gt;
+  &lt;pre style="line-height: 125%"&gt;
+&lt;span style="color: #008000; font-weight: bold"&gt;from&lt;/span&gt; &lt;span style="color: #0000FF; font-weight: bold"&gt;pluvm.uvm_package&lt;/span&gt; &lt;span style="color: #008000; font-weight: bold"&gt;import&lt;/span&gt; &lt;span style="color: #666666"&gt;*&lt;/span&gt;
+
+HOST_BUS_SIGNALS&lt;span style="color: #666666"&gt;=&lt;/span&gt;(&lt;span style="color: #BA2121"&gt;'reset'&lt;/span&gt;, &lt;span style="color: #BA2121"&gt;'clock'&lt;/span&gt;, &lt;span style="color: #BA2121"&gt;'cycle_count'&lt;/span&gt;, &lt;span style="color: #BA2121"&gt;'host_rdata'&lt;/span&gt;, &lt;span style="color: #BA2121"&gt;'host_ack'&lt;/span&gt;,
+                  &lt;span style="color: #BA2121"&gt;'host_err'&lt;/span&gt;, &lt;span style="color: #BA2121"&gt;'host_address'&lt;/span&gt;, &lt;span style="color: #BA2121"&gt;'host_valid'&lt;/span&gt;, &lt;span style="color: #BA2121"&gt;'host_wdata'&lt;/span&gt;, 
+                  &lt;span style="color: #BA2121"&gt;'host_strobe'&lt;/span&gt;, &lt;span style="color: #BA2121"&gt;'host_rwb'&lt;/span&gt;)
+
+&lt;span style="color: #008000; font-weight: bold"&gt;class&lt;/span&gt; &lt;span style="color: #0000FF; font-weight: bold"&gt;host_interface&lt;/span&gt;(uvm_interface):
+
+        &lt;span style="color: #008000; font-weight: bold"&gt;def&lt;/span&gt; &lt;span style="color: #0000FF"&gt;__init__&lt;/span&gt;(&lt;span style="color: #008000"&gt;self&lt;/span&gt;, name, hierarchy):
+                uvm_interface&lt;span style="color: #666666"&gt;.&lt;/span&gt;__init__(&lt;span style="color: #008000"&gt;self&lt;/span&gt;, name, hierarchy)
+
+                &lt;span style="color: #008000; font-weight: bold"&gt;for&lt;/span&gt; signal &lt;span style="color: #AA22FF; font-weight: bold"&gt;in&lt;/span&gt; HOST_BUS_SIGNALS:
+                        &lt;span style="color: #008000"&gt;self&lt;/span&gt;&lt;span style="color: #666666"&gt;.&lt;/span&gt;add_signal(signal)
+
+&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;These classes can of course leverage the standard pyunit test frameworks and have unit tests in every class.&lt;/p&gt;</summary><category term=""></category></entry></feed>

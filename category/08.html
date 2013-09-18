@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+        <title>Five Computers &middot; articles in the "08" category</title>
+        <link rel="shortcut icon" href="http://fivecomputers.com/favicon.ico" />
+        <link href="http://fivecomputers.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Five Computers Atom Feed" />
+                
+        <link rel="stylesheet" href="http://fivecomputers.com/theme/css/screen.css" type="text/css" />
+        <link rel="stylesheet" href="http://fivecomputers.com/theme/css/pygments.css" type="text/css" />
+
+
+    </head>
+    <body>
+        <div id="header">
+            <ul id="nav">
+                <li class="ephemeral selected"><a href="http://fivecomputers.com/category/08.html">08</a></li>
+                <li><a href="http://fivecomputers.com">Home</a></li>
+                <li><a href="http://fivecomputers.com/pages/about-gordon.html">About Gordon</a></li>
+                <li><a href="http://fivecomputers.com/archives.html">Archives</a></li>
+            </ul>
+            <div class="header_box">
+                <h1><a href="http://fivecomputers.com">Five Computers</a></h1>
+            </div>
+        </div>
+        <div id="wrapper">
+            <div id="content">
+                <h4 class="date">Aug  4,  2009</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/creating-a-codeswarm-movie.html" rel="bookmark" title="Permanent Link to &quot;creating a codeswarm movie&quot;">creating a codeswarm movie</a>
+                    </h2>
+                    
+                    <p style="text-align: center;"><a href="http://www.flickr.com/photos/52043707@N00/3423187687/"><img src="http://farm4.static.flickr.com/3631/3423187687_4a8a94a5bd.jpg" height="375" width="500" alt="code swarm frame" /></a></p>
+
+<p style="text-align: center;"><a href="http://www.mcgregorphoto.com/pub/svipcodeswarm.mpg">Download video (3Mb)</a></p>
+
+<p>A codeswarm is a visualization of the activity within a source code repository. The image and linked video above shows the lifetime of one of <a href="http://www.verilab.com" title="Verilab, Inc.">Verilab's</a> source repositories. You can see code being created, the check-ins as they happen and an indication of which users are doing the work at any given time. It is an example of an <em>'</em><a href="http://www.benfry.com"><em>organic information visualization</em></a>' and is created using the <a href="http://processing.org/">Processing</a> toolkit. The original visualization tools were developed by <a href="http://vis.cs.ucdavis.edu/~ogawa/codeswarm/">Michael Ogawa</a> and the <a href="http://code.google.com/p/codeswarm/">source code is available on Google code</a>.</p>
+
+<p>In this particular case I created the animation on OS X 10.5, using a combination of codeswarm, ffmpeg and LAME. If you are interested in doing something like this yourself:</p>
+
+<p>First you'll need to make sure you have a recent version of the Java Development Kit installed (JDK 1.5 or later). You'll also need a recent version of Ant installed. (I have version 1.7.0, which ships with OS X as default). Download the code_swarm source and install it. Then execute '<em>ant run</em>'. If all is well, you should get a dialog box prompting you for the source repository, user name and password.</p>
+
+<p>At this point, I put in the svn+ssh URL for the Verilab repository that I wanted to visualize. Everything fell over, with a Java error (NoClassDefFoundError within com/trilead/ssh2). From this I realised I needed to install the SSH libraries for <a href="http://www.trilead.com/Products/Trilead_SSH_for_Java/">Java, from Trilead</a>. I downloaded those, unpacked them and added the <em>jar</em> file to my CLASSPATH. Along the way I found out the default OS X CLASSPATH definition is in <em>/System/Library/Java/JavaConfig.plist</em> which may be useful as a starting point.</p>
+
+<p>With that fixed, I again ran '<em>ant run</em>' and put in the relevant information. A bit of time passes as the checkin information is extracted from the repository, then the visualisation runs. You'll find that repository information that was extracted is saved, under the ./data directory (look for the latest realtime_sample.*.xml file) . This is useful for the next stages, as you don't have to fetch the information again. If you want to create a video of the visualisation, there are a few more hoops to jump through.</p>
+
+<p>You will need to configure codeswarm to save the frames for each stage of the visualisation. You do this by editing the <em>./data/sample.config</em> file. First off, copy it to a new version for your particular project. Then edit these values:</p>
+
+<ul>
+  <li>InputFile= [Point it at the new realtime_sample&lt;number&gt;.xml file in the data directory, that contains the checkin information for your project]</li>
+
+  <li>TakeSnapshots=true</li>
+</ul>
+
+<p>That's all you really need to change. You can also change the other values, to alter the visualisation. The ColorAssignX= statements use regexp values to differentiate different types of checkin and colour code them accordingly. Play around with the other values, with TakeSnapshots set to false and re-run the visualisation until you get something you are satisfied with. Then run one more time with TakeSnapshots=true to save off the frame images. You can run with the new configuration by running '<em>ant run data/your_project.config'</em><br /></p>
+
+<p>After running with TakeSnapshots enabled, you'll have a set of images in the ./frames directory, (controlled by the SnapshotLocation option in the config file). The final step is to assemble those into a movie. The easiest way I found to do this is to use the command-line utility, ffmpeg. There are a variety of ways to install ffmpeg, but the simplest way seems to be to install <a href="http://homepage.mac.com/major4/">ffmpegX</a> and <a href="http://www.macosxhints.com/article.php?story=20061220082125312">then extract the binary</a> from the application bundle. You can also get it using <a href="http://www.finkproject.org/">Fink</a> or <a href="http://www.macports.org/">MacPorts</a>. If you want to use an audio track with your visualisation, you will also probably require <a href="http://lame.sourceforge.net">LAME</a>. With ffmpeg working, it is simple to point it towards the image files from codeswarm and produce the final movie. The finishing touch was adding some music from an mp3 file, then limiting the duration via the -t switch, to end when the video frames ran out, rather than playing all of the music.</p>
+
+<p>ffmpeg -i frames/code_swarm-%05d.png -i 6_sym.mp3 -qmax 15 -t 100 -f image2 -r 24 &lt;output_filename&gt;.mpg</p>
+
+<p>You can run 'ffmpeg' without any switches to get help on the options. If all goes well, you should end up with an MPEG format video in the file &lt;output_filename&gt;.mpg.</p>
+
+<div class="posttagsblock"><a href="http://technorati.com/tag/OSX" rel="tag">OSX</a>, <a href="http://technorati.com/tag/visualisation" rel="tag">visualisation</a></div>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/creating-a-codeswarm-movie.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/creating-a-codeswarm-movie.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/08.html" rel="tag">08</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/software.html">software</a>
+                            <a href="http://fivecomputers.com/tag/verification.html">verification</a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/iphone-development.html" rel="bookmark" title="Permanent Link to &quot;iPhone development&quot;">iPhone development</a>
+                    </h2>
+                    
+                    <p style="text-align: center;"><a href="http://www.flickr.com/photos/52043707@N00/3424097092/"><img src="http://farm4.static.flickr.com/3305/3424097092_1811e15916.jpg" height="500" width="266" alt="iPhone Simulator" /></a><br /></p>
+
+<p>Interested in learning about iPhone development? Want to study at Stanford? Don't want to pay the tuition fees? On <a href="http://deimos3.apple.com/WebObjects/Core.woa/Browse/itunes.stanford.edu.2024353965.02024353968">iTunesU</a> (the lecture streaming part of iTunes) you can follow along with <a href="http://www.stanford.edu/class/cs193p/cgi-bin/index.php">class cs193p</a> from Stanford, on iPhone Application Development. In addition to the good quality video of the lectures, all of the class slides, handouts and assignments <a href="http://www.stanford.edu/class/cs193p/cgi-bin/downloads.php">are available</a>, for free. If you have an Intel Mac, you can also download the <a href="http://developer.apple.com/TOOLS/xcode/">development tools</a>, <a href="http://developer.apple.com/iphone/">iPhone SDK and a simulator</a>, again all free. If you do want to actually develop and test applications on an iPhone or iPod Touch, you'll need to pay the $99 developer fee to get the encryption keys that let you run applications on a phone and allows you to submit apps for the app store. At least for the basics, the simulator is useful as a target platform for testing, although there are differences between it and the final platform. (features such as multi-touch and the accelerometer are hard to test for example, unless you want to start shaking your computer).</p>
+
+<p>Lifehacker recently <a href="http://lifehacker.com/software/education/technophilia-get-a-free-college-education-online-201979.php">had an article</a> on all of the educational resources that are becoming available on the web, for free. iTunesU is a good example of the sort of teaching resources that are out there, if you look. The quality is variable, but there are some excellent resources if you are prepared to dig.</p>
+
+<div class="posttagsblock"><a href="http://technorati.com/tag/OSX" rel="tag">OSX</a></div>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/iphone-development.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/iphone-development.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/08.html" rel="tag">08</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/software.html">software</a>
+                            <a href="http://fivecomputers.com/tag/webtech.html">web/tech</a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <div class="clear"></div>
+                <div id="footer">
+                    <p>
+                    <a href="https://twitter.com/GordonMcGregor">Twitter @GordonMcGregor</a>
+                    &middot;
+                    <a class="atom" href="http://fivecomputers.com/feeds/all.atom.xml">RSS Feed</a>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+    <script type="text/javascript">
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+    try {
+        var pageTracker = _gat._getTracker("UA-42678190-1");
+    pageTracker._trackPageview();
+    } catch(err) {}</script>
+<script type="text/javascript">
+    var disqus_shortname = 'fivecomputers';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+    </body>
+</html>

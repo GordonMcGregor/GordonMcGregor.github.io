@@ -1,42 +1,146 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-        <meta charset="utf-8">
-        <title>Five Computers - software</title>
-        <link rel="stylesheet" href="/theme/css/main.css">
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+        <title>Five Computers &middot; articles tagged "software"</title>
+        <link rel="shortcut icon" href="http://fivecomputers.com/favicon.ico" />
+        <link href="http://fivecomputers.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Five Computers Atom Feed" />
                 
-        <!--[if IE]>
-            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
-</head>
+        <link rel="stylesheet" href="http://fivecomputers.com/theme/css/screen.css" type="text/css" />
+        <link rel="stylesheet" href="http://fivecomputers.com/theme/css/pygments.css" type="text/css" />
 
-<body id="index" class="home">
-        <header id="banner" class="body">
-                <h1><a href="/">Five Computers </a></h1>
-                <nav><ul>
-                                                    <li><a href="/pages/about.html">About</a></li>
-                                                                    <li ><a href="/category/blogging.html">blogging</a></li>
-                                    <li ><a href="/category/converted.html">converted</a></li>
-                                    <li ><a href="/category/python-eda.html">python, eda</a></li>
-                                                </ul></nav>
-        </header><!-- /#banner -->
-                
-            
 
-                            <aside id="featured" class="body">
-                <article>
-                    <h1 class="entry-title"><a href="/csv-the-easy-way.html">csv the easy way</a></h1> 
-                    <footer class="post-info">
-        <abbr class="published" title="2011-01-23T00:00:00">
-                Sun 23 January 2011
-        </abbr>
+    </head>
+    <body>
+        <div id="header">
+            <ul id="nav">
+                <li class="ephemeral selected"><a href="http://fivecomputers.com/tag/software.html">software</a></li>
+                <li><a href="http://fivecomputers.com">Home</a></li>
+                <li><a href="http://fivecomputers.com/pages/about-gordon.html">About Gordon</a></li>
+                <li><a href="http://fivecomputers.com/archives.html">Archives</a></li>
+            </ul>
+            <div class="header_box">
+                <h1><a href="http://fivecomputers.com">Five Computers</a></h1>
+            </div>
+        </div>
+        <div id="wrapper">
+            <div id="content">
+                <h4 class="date">Apr 20,  2012</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/simple-web-server.html" rel="bookmark" title="Permanent Link to &quot;Simple web server&quot;">Simple web server</a>
+                    </h2>
+                    
+                    <p>Ever find you need to implement a web server or provide some web pages on a local network? Maybe you don't have an Apache server up and running or don't want to go to the trouble of configuring it. I've found this with <a href="http://www.naturaldocs.org/">Natural Docs</a> documentation, where the tools will generate a bunch of .html files that you can read locally if you are on the machine where they are generated. <a href="http://www.fivecomputers.com/2012/04/systemverilog-support-in-pygments.html">Pygments</a> also will generate html formatted files that you might want to serve. However, you might want to make them accessible to a small team. Here is a quick trick that can make this task very simple. Python ships with a basic HTTP server module. You can get it up and running, serving files from a given directory down with the following command:</p>
 
-                <address class="vcard author">
-                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
-        </address>
-        <p>In <a href="/category/converted.html">converted</a>. </p>
-<p>tags: <a href="/tag/software.html">software</a></p>
-</footer><!-- /.post-info --><p>I've recently started using <a href="http://fogcreek.com/">FogCreek's</a> <a href="http://www.fogcreek.com/FogBugz/">FogBugz</a> project hosting for a small personal project. It has a built-in Mercurial source repository, with some enhancements, called Kiln, and good task/ project tracking features. Quite similar to those you find in <a href="http://trac.edgewall.org/">Trac</a>. Rather than putting together the various servers to track my own project, I figured I might as well use what they give away for free, for small project teams. I had a list of tasks that I wanted to import into the FogBugz task list, from a CSV file. In fact, this was a CSV file I'd exported from a different FogBugz site, but it could well have been any list of comma seperated values holding task information. The trick was how to get that information from my computer onto the FogBugz site. They didn't have any obvious CSV import option, but they do publish an XML API. Luckily enough, there is also a set of <a href="https://our.fogbugz.com/default.asp?W1048">python bindings around the API</a>. Amazingly enough, I was able to open and read the CSV file, parse it, login in to my FogBugz account and upload the new tasks to the server with just this little snippet of code.</p>
+<pre>
+python -m SimpleHTTPServer
+</pre>
+
+<p>and that's all there is to it! The default port will be 8000, but you can provide a different port on the command line (just add the port number after the SimpleHTTPServer - any number above reserved range of 0-1024 will work. The server will be accessible to any machines that can see that port on the machine it is running on. The server won't handle a high load and isn't particular secure, so I wouldn't make it available to the general public. But if you need to serve some pages quickly and simply, to a small number of users within a private network, this can be a really fast way to get to that point. If and when the load becomes an issue, or security concerns are important, then a heavyweight server like Apache is a much better choice.</p>
+
+<p>Once the server is up and running you access it via a web browser at http://machine_name:8000 File paths are all relative to the directory the server is running in. If there is an index.html in that directory, it will be loaded by default when you access the server at that URL.</p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/simple-web-server.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/simple-web-server.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/20.html" rel="tag">20</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/software.html" class="selected">software</a>
+                            <a href="http://fivecomputers.com/tag/thingumyjigs.html">thingumyjigs</a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <h4 class="date">Jan  5,  2012</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/simplified-vpi-iterators-using-pyhvl-generators.html" rel="bookmark" title="Permanent Link to &quot;Simplified VPI iterators using PyHVL generators&quot;">Simplified VPI iterators using PyHVL generators</a>
+                    </h2>
+                    
+                    <p>I've been using <a href="http://pyhvl.sourceforge.net/">PyHVL</a> for a variety of verification tasks in the past few years. PyHVL is an open source Python integration for Verilog and SystemVerilog simulators. To give a quick taste of what it can do for you, consider the following SystemVerilog VPI C code.</p>
+
+<div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%">
+<span style="color: #B00040">void</span> display_nets(mod)
+    vpiHandle mod;
+    {
+       vpiHandle net;
+       vpiHandle itr;
+       vpi_printf(<span style="color: #BA2121">"Nets declared in module %s</span><span style="color: #BB6622; font-weight: bold">\n</span><span style="color: #BA2121">"</span>,
+       vpi_get_str(vpiFullName, mod));
+</pre>
+  <pre style="line-height: 125%">
+       itr <span style="color: #666666">=</span> vpi_iterate(vpiNet, mod);
+</pre>
+  <pre style="line-height: 125%">
+
+       <span style="color: #008000; font-weight: bold">while</span> (net <span style="color: #666666">=</span> vpi_scan(itr))
+          {
+          vpi_printf(<span style="color: #BA2121">"</span><span style="color: #BB6622; font-weight: bold">\t</span><span style="color: #BA2121">%s"</span>, vpi_get_str(vpiName, net));
+          <span style="color: #008000; font-weight: bold">if</span> (vpi_get(vpiVector, net))
+          {
+             vpi_printf(<span style="color: #BA2121">" of size %d</span><span style="color: #BB6622; font-weight: bold">\n</span><span style="color: #BA2121">"</span>, vpi_get(vpiSize, net));
+          }
+          <span style="color: #008000; font-weight: bold">else</span> vpi_printf(<span style="color: #BA2121">"</span><span style="color: #BB6622; font-weight: bold">\n</span><span style="color: #BA2121">"</span>);
+       }
+    }
+</pre>
+</div>
+
+<p>Here is the equivalent VPI code, this time written in Python, using PyHVL.</p>
+
+<div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%">
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">display_nets</span>(module):
+</pre>
+  <pre style="line-height: 125%">
+    <span style="color: #008000; font-weight: bold">print</span> <span style="color: #BA2121">'Nets declared in module'</span>, get_str(vpiFullName, module) 
+</pre>
+  <pre style="line-height: 125%">
+    <span style="color: #008000; font-weight: bold">for</span> net <span style="color: #AA22FF; font-weight: bold">in</span> vpi_iterator(module, vpiNet):
+        <span style="color: #008000; font-weight: bold">print</span> <span style="color: #BA2121">'</span><span style="color: #BB6622; font-weight: bold">\t</span><span style="color: #BB6688; font-weight: bold">%s</span><span style="color: #BA2121"> </span><span style="color: #BB6688; font-weight: bold">%s</span><span style="color: #BA2121">'</span> <span style="color: #666666">%</span> ( get_str(vpiName, net), 
+                get(vpiVector, net) <span style="color: #AA22FF; font-weight: bold">and</span> <span style="color: #BA2121">'of size </span><span style="color: #BB6688; font-weight: bold">%d</span><span style="color: #BA2121">'</span> <span style="color: #666666">%</span> get(vpiSize, net) <span style="color: #AA22FF; font-weight: bold">or</span> <span style="color: #BA2121">''</span>)
+</pre>
+</div>
+
+<p>The magic happens in the implementation of the <i>vpi_iterator()</i> method, which uses a Python <i>yield</i> instruction to turn the method into a generator. <a href="http://wiki.python.org/moin/Generators">Generators</a> are much like functions, except they maintain a frozen stack frame, at the point where the <i>yield</i> occurs. All existing variables within the method maintain their state and execution picks up where it left off, just after the <i>yield</i>. The example also uses lazy evaluation of the result of <i>get(vpiVector, net)</i> to either call <i>get(vpiSize, net)</i> or not print the <i>'of size</i>' additional string.</p>
+
+<div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%">
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">vpi_iterator</span>(handle, <span style="color: #008000">type</span><span style="color: #666666">=</span>vpiNet):
+    iterator <span style="color: #666666">=</span> iterate(<span style="color: #008000">type</span>, handle)
+    <span style="color: #008000; font-weight: bold">if</span> iterator:
+        handle <span style="color: #666666">=</span> scan(iterator)
+        <span style="color: #008000; font-weight: bold">while</span> handle:
+            <span style="color: #008000; font-weight: bold">yield</span> handle
+            handle <span style="color: #666666">=</span> scan(iterator)
+
+</pre>
+</div>
+
+<p>This lets you write loops <i>inside out</i> as one of my colleagues aptly put it. The outcome is you can simplify the management of loops and indices and focus on the point of the loop. You write less code, you introduce fewer bugs. The code is easier to read and maintain as a result. This is just a very small example of some of the power of using a modern scripting language like Python, as an adjunct to a SystemVerilog simulator.</p>
+
+<p>If you spend much time writing VPI code, you should take a look at PyHVL. It could make your life much simpler, or get in touch and I can help you with it.</p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/simplified-vpi-iterators-using-pyhvl-generators.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/simplified-vpi-iterators-using-pyhvl-generators.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/01.html" rel="tag">01</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/software.html" class="selected">software</a>
+                            <a href="http://fivecomputers.com/tag/verification.html">verification</a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <h4 class="date">Jan 23,  2011</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/csv-the-easy-way.html" rel="bookmark" title="Permanent Link to &quot;csv the easy way&quot;">csv the easy way</a>
+                    </h2>
+                    
+                    <p>I've recently started using <a href="http://fogcreek.com/">FogCreek's</a> <a href="http://www.fogcreek.com/FogBugz/">FogBugz</a> project hosting for a small personal project. It has a built-in Mercurial source repository, with some enhancements, called Kiln, and good task/ project tracking features. Quite similar to those you find in <a href="http://trac.edgewall.org/">Trac</a>. Rather than putting together the various servers to track my own project, I figured I might as well use what they give away for free, for small project teams. I had a list of tasks that I wanted to import into the FogBugz task list, from a CSV file. In fact, this was a CSV file I'd exported from a different FogBugz site, but it could well have been any list of comma seperated values holding task information. The trick was how to get that information from my computer onto the FogBugz site. They didn't have any obvious CSV import option, but they do publish an XML API. Luckily enough, there is also a set of <a href="https://our.fogbugz.com/default.asp?W1048">python bindings around the API</a>. Amazingly enough, I was able to open and read the CSV file, parse it, login in to my FogBugz account and upload the new tasks to the server with just this little snippet of code.</p>
 
 <p><br />
 <div class="highlight">
@@ -52,201 +156,255 @@
 <p><span class="n">fb</span><span class="o">.</span><span class="n">logoff</span><span class="p">()</span>
 </pre>
 </div>Pretty cool if you ask me! Quick and dirty, throwaway code, but so powerful for so few lines.<br />
-<br /></p>                </article>
-                            </aside><!-- /#featured -->
-                            <section id="content" class="body">
-                    <h1>Other articles</h1>
-                    <hr />
-                    <ol id="posts-list" class="hfeed">
-                                                
+<br /></p>
 
-                 
-                        <li><article class="hentry">    
-                <header>
-                    <h1><a href="/a-command-line-for-the-gui.html" rel="bookmark"
-                           title="Permalink to a command line for the gui">a command line for the gui</a></h1>
-                </header>
-                
-                <div class="entry-content">
-                <footer class="post-info">
-        <abbr class="published" title="2008-10-11T00:00:00">
-                Sat 11 October 2008
-        </abbr>
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/csv-the-easy-way.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/csv-the-easy-way.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/23.html" rel="tag">23</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/software.html" class="selected">software</a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
 
-                <address class="vcard author">
-                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
-        </address>
-        <p>In <a href="/category/converted.html">converted</a>. </p>
-<p>tags: <a href="/tag/software.html">software</a></p>
-</footer><!-- /.post-info -->                <p style="text-align: center;"><a href="http://www.flickr.com/photos/52043707@N00/1471486765/"><img src="http://farm2.static.flickr.com/1085/1471486765_ffb394dbfe.jpg" height="334" width="500" alt="open" /></a><br /></p>
+                <h4 class="date">Aug  4,  2009</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/creating-a-codeswarm-movie.html" rel="bookmark" title="Permanent Link to &quot;creating a codeswarm movie&quot;">creating a codeswarm movie</a>
+                    </h2>
+                    
+                    <p style="text-align: center;"><a href="http://www.flickr.com/photos/52043707@N00/3423187687/"><img src="http://farm4.static.flickr.com/3631/3423187687_4a8a94a5bd.jpg" height="375" width="500" alt="code swarm frame" /></a></p>
 
-<p>I've been experimenting with Mac OS X now for a few months. Trying to work out if it is a reasonable platform for <a href="http://www.verilab.com" title="Verilab, Inc.">Verilab</a> to use internally for our various computing needs. One thing that I've come to love and now struggle to live without is a small ...</p>
-                <a class="readmore" href="/a-command-line-for-the-gui.html">read more</a>
-                                </div><!-- /.entry-content -->
-            </article></li>
-                            
+<p style="text-align: center;"><a href="http://www.mcgregorphoto.com/pub/svipcodeswarm.mpg">Download video (3Mb)</a></p>
 
-                 
-                        <li><article class="hentry">    
-                <header>
-                    <h1><a href="/show-my-pc.html" rel="bookmark"
-                           title="Permalink to show my pc">show my pc</a></h1>
-                </header>
-                
-                <div class="entry-content">
-                <footer class="post-info">
-        <abbr class="published" title="2008-08-20T00:00:00">
-                Wed 20 August 2008
-        </abbr>
+<p>A codeswarm is a visualization of the activity within a source code repository. The image and linked video above shows the lifetime of one of <a href="http://www.verilab.com" title="Verilab, Inc.">Verilab's</a> source repositories. You can see code being created, the check-ins as they happen and an indication of which users are doing the work at any given time. It is an example of an <em>'</em><a href="http://www.benfry.com"><em>organic information visualization</em></a>' and is created using the <a href="http://processing.org/">Processing</a> toolkit. The original visualization tools were developed by <a href="http://vis.cs.ucdavis.edu/~ogawa/codeswarm/">Michael Ogawa</a> and the <a href="http://code.google.com/p/codeswarm/">source code is available on Google code</a>.</p>
 
-                <address class="vcard author">
-                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
-        </address>
-        <p>In <a href="/category/converted.html">converted</a>. </p>
-<p>tags: <a href="/tag/software.html">software</a></p>
-</footer><!-- /.post-info -->                <p style="text-align: center;"><a href="http://www.flickr.com/photos/52043707@N00/2773340946/"><img src="http://farm4.static.flickr.com/3081/2773340946_6e4b085c39.jpg" height="334" width="500" alt="frisco shore" /></a><br /></p>
+<p>In this particular case I created the animation on OS X 10.5, using a combination of codeswarm, ffmpeg and LAME. If you are interested in doing something like this yourself:</p>
 
-<p>I'm on an extended work trip at the moment. My wife and I have been keeping touch with <a href="http://www.skype.com">Skype</a>, using the video conferencing and VoIP on a daily basis. It's great to be able to see each other and talk without speaking in to a phone. I've ...</p>
-                <a class="readmore" href="/show-my-pc.html">read more</a>
-                                </div><!-- /.entry-content -->
-            </article></li>
-                            
+<p>First you'll need to make sure you have a recent version of the Java Development Kit installed (JDK 1.5 or later). You'll also need a recent version of Ant installed. (I have version 1.7.0, which ships with OS X as default). Download the code_swarm source and install it. Then execute '<em>ant run</em>'. If all is well, you should get a dialog box prompting you for the source repository, user name and password.</p>
 
-                 
-                        <li><article class="hentry">    
-                <header>
-                    <h1><a href="/soap-gets-in-your-eyes.html" rel="bookmark"
-                           title="Permalink to SOAP gets in your eyes">SOAP gets in your eyes</a></h1>
-                </header>
-                
-                <div class="entry-content">
-                <footer class="post-info">
-        <abbr class="published" title="2008-07-15T00:00:00">
-                Tue 15 July 2008
-        </abbr>
+<p>At this point, I put in the svn+ssh URL for the Verilab repository that I wanted to visualize. Everything fell over, with a Java error (NoClassDefFoundError within com/trilead/ssh2). From this I realised I needed to install the SSH libraries for <a href="http://www.trilead.com/Products/Trilead_SSH_for_Java/">Java, from Trilead</a>. I downloaded those, unpacked them and added the <em>jar</em> file to my CLASSPATH. Along the way I found out the default OS X CLASSPATH definition is in <em>/System/Library/Java/JavaConfig.plist</em> which may be useful as a starting point.</p>
 
-                <address class="vcard author">
-                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
-        </address>
-        <p>In <a href="/category/converted.html">converted</a>. </p>
-<p>tags: <a href="/tag/software.html">software</a></p>
-</footer><!-- /.post-info -->                <div style="text-align: center;">
-  <a href="http://www.flickr.com/photos/52043707@N00/1511995758/"><img width="500" height="334" src="http://farm3.static.flickr.com/2141/1511995758_bca60a43b4.jpg" alt="lava" /></a>
+<p>With that fixed, I again ran '<em>ant run</em>' and put in the relevant information. A bit of time passes as the checkin information is extracted from the repository, then the visualisation runs. You'll find that repository information that was extracted is saved, under the ./data directory (look for the latest realtime_sample.*.xml file) . This is useful for the next stages, as you don't have to fetch the information again. If you want to create a video of the visualisation, there are a few more hoops to jump through.</p>
+
+<p>You will need to configure codeswarm to save the frames for each stage of the visualisation. You do this by editing the <em>./data/sample.config</em> file. First off, copy it to a new version for your particular project. Then edit these values:</p>
+
+<ul>
+  <li>InputFile= [Point it at the new realtime_sample&lt;number&gt;.xml file in the data directory, that contains the checkin information for your project]</li>
+
+  <li>TakeSnapshots=true</li>
+</ul>
+
+<p>That's all you really need to change. You can also change the other values, to alter the visualisation. The ColorAssignX= statements use regexp values to differentiate different types of checkin and colour code them accordingly. Play around with the other values, with TakeSnapshots set to false and re-run the visualisation until you get something you are satisfied with. Then run one more time with TakeSnapshots=true to save off the frame images. You can run with the new configuration by running '<em>ant run data/your_project.config'</em><br /></p>
+
+<p>After running with TakeSnapshots enabled, you'll have a set of images in the ./frames directory, (controlled by the SnapshotLocation option in the config file). The final step is to assemble those into a movie. The easiest way I found to do this is to use the command-line utility, ffmpeg. There are a variety of ways to install ffmpeg, but the simplest way seems to be to install <a href="http://homepage.mac.com/major4/">ffmpegX</a> and <a href="http://www.macosxhints.com/article.php?story=20061220082125312">then extract the binary</a> from the application bundle. You can also get it using <a href="http://www.finkproject.org/">Fink</a> or <a href="http://www.macports.org/">MacPorts</a>. If you want to use an audio track with your visualisation, you will also probably require <a href="http://lame.sourceforge.net">LAME</a>. With ffmpeg working, it is simple to point it towards the image files from codeswarm and produce the final movie. The finishing touch was adding some music from an mp3 file, then limiting the duration via the -t switch, to end when the video frames ran out, rather than playing all of the music.</p>
+
+<p>ffmpeg -i frames/code_swarm-%05d.png -i 6_sym.mp3 -qmax 15 -t 100 -f image2 -r 24 &lt;output_filename&gt;.mpg</p>
+
+<p>You can run 'ffmpeg' without any switches to get help on the options. If all goes well, you should end up with an MPEG format video in the file &lt;output_filename&gt;.mpg.</p>
+
+<div class="posttagsblock"><a href="http://technorati.com/tag/OSX" rel="tag">OSX</a>, <a href="http://technorati.com/tag/visualisation" rel="tag">visualisation</a></div>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/creating-a-codeswarm-movie.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/creating-a-codeswarm-movie.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/08.html" rel="tag">08</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/software.html" class="selected">software</a>
+                            <a href="http://fivecomputers.com/tag/verification.html">verification</a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/iphone-development.html" rel="bookmark" title="Permanent Link to &quot;iPhone development&quot;">iPhone development</a>
+                    </h2>
+                    
+                    <p style="text-align: center;"><a href="http://www.flickr.com/photos/52043707@N00/3424097092/"><img src="http://farm4.static.flickr.com/3305/3424097092_1811e15916.jpg" height="500" width="266" alt="iPhone Simulator" /></a><br /></p>
+
+<p>Interested in learning about iPhone development? Want to study at Stanford? Don't want to pay the tuition fees? On <a href="http://deimos3.apple.com/WebObjects/Core.woa/Browse/itunes.stanford.edu.2024353965.02024353968">iTunesU</a> (the lecture streaming part of iTunes) you can follow along with <a href="http://www.stanford.edu/class/cs193p/cgi-bin/index.php">class cs193p</a> from Stanford, on iPhone Application Development. In addition to the good quality video of the lectures, all of the class slides, handouts and assignments <a href="http://www.stanford.edu/class/cs193p/cgi-bin/downloads.php">are available</a>, for free. If you have an Intel Mac, you can also download the <a href="http://developer.apple.com/TOOLS/xcode/">development tools</a>, <a href="http://developer.apple.com/iphone/">iPhone SDK and a simulator</a>, again all free. If you do want to actually develop and test applications on an iPhone or iPod Touch, you'll need to pay the $99 developer fee to get the encryption keys that let you run applications on a phone and allows you to submit apps for the app store. At least for the basics, the simulator is useful as a target platform for testing, although there are differences between it and the final platform. (features such as multi-touch and the accelerometer are hard to test for example, unless you want to start shaking your computer).</p>
+
+<p>Lifehacker recently <a href="http://lifehacker.com/software/education/technophilia-get-a-free-college-education-online-201979.php">had an article</a> on all of the educational resources that are becoming available on the web, for free. iTunesU is a good example of the sort of teaching resources that are out there, if you look. The quality is variable, but there are some excellent resources if you are prepared to dig.</p>
+
+<div class="posttagsblock"><a href="http://technorati.com/tag/OSX" rel="tag">OSX</a></div>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/iphone-development.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/iphone-development.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/08.html" rel="tag">08</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/software.html" class="selected">software</a>
+                            <a href="http://fivecomputers.com/tag/webtech.html">web/tech</a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <h4 class="date">Apr 30,  2009</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/what-did-you-say.html" rel="bookmark" title="Permanent Link to &quot;what did you say?&quot;">what did you say?</a>
+                    </h2>
+                    
+                    <div style="text-align: center;">
+  <a href="http://www.wordle.net/gallery/wrdl/799366/Gordon%27s_tweets" title="Wordle: Gordon's tweets"><img src="http://fivecomputers.typepad.com/.a/6a00e54efca38e883401156f6c5ebd970c-pi" width="700" height="319" alt="Wordle - Gordon_s tweets-1.jpg" /></a><br />
 </div>
 
-<p>I have a few days between a recently finished contract and before I start the next one. I've decided to use that time to learn a bit of <a href="http://www.ruby-lang.org/en/">Ruby</a> and the <a href="http://www.rubyonrails.org/">Rails</a> framework for a small project. I'm putting something together to do time tracking and communicate with ...</p>
-                <a class="readmore" href="/soap-gets-in-your-eyes.html">read more</a>
-                                </div><!-- /.entry-content -->
-            </article></li>
-                            
+<p>I've been poking around at the <a href="http://apiwiki.twitter.com/Twitter-API-Documentation">Twitter API</a>, in part just out of curiosity about what features are exposed. I have an interest in writing some visualisation widgets based upon it. The iPhone development course is also using a Twitter client as something of a 'hello world' app, too. Today, Tim O'Reilly pointed to a <a href="http://radar.oreilly.com/2009/04/wordle-visualization-timoreilly-tweetstream.html">wordle visualisation</a> of all the things that he's tweeted and <a href="http://code.activestate.com/recipes/576594/">gave a link</a> to some code that could be used to download everything you'd tweeted. I had a look at it and decided to write something similar, using the Twitter API directly, rather than scraping the Twitter site.</p>
 
-                 
-                        <li><article class="hentry">    
-                <header>
-                    <h1><a href="/time-tracking.html" rel="bookmark"
-                           title="Permalink to time tracking">time tracking</a></h1>
-                </header>
-                
-                <div class="entry-content">
-                <footer class="post-info">
-        <abbr class="published" title="2008-04-08T00:00:00">
-                Tue 08 April 2008
-        </abbr>
+<p>The Twitter API I've been using is the excellent, minimalist <a href="http://mike.verdone.ca/twitter/">python twitter tools</a> by Mike Verdone. The main advantage over other python Twitter APIs is that ptt doesn't redefine any of the API calls. It does exactly what it says in the published <a href="http://apiwiki.twitter.com/Twitter-API-Documentation">Twitter API</a>. As a result, it is incredibly easy to use. The 100 or so lines it is implemented in are also a very instructive read, to <a href="http://github.com/sixohsix/twitter/blob/ea668dec2e122000b0025a8cfc02c860388f621d/twitter/api.py">see how it is put together</a>. I think it is a great example of how the attributes in Python can be used.</p>
 
-                <address class="vcard author">
-                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
-        </address>
-        <p>In <a href="/category/converted.html">converted</a>. </p>
-<p>tags: <a href="/tag/software.html">software</a></p>
-</footer><!-- /.post-info -->                <p><a href="http://www.flickr.com/photos/52043707@N00/368709837/"><img width="360" height="240" alt="Panamint" src="http://farm1.static.flickr.com/166/368709837_c0ff160659.jpg" /></a></p>
+<p>The code I wrote is <a href="http://www.mcgregorphoto.com/pub/what_did_you_say.py.txt">available for download</a>. It respects the rate limiting imposed by Twitter and will output all of the tweets for a particular user, to a file called &lt;username&gt;.tweet in the file it is run from. You can change which users are fetched in the main() ftn. The resulting text file can be opened up and then copy/ pasted over into the <a href="http://www.wordle.net/create">wordle creator.</a></p>
 
-<p>One of the realities of doing consulting work is time tracking. I've used notebooks. I've used palm pilots, that I carried around only to track time. I've tried web based applications. Nothing quite does what I want it to do or is simple enough to keep out ...</p>
-                <a class="readmore" href="/time-tracking.html">read more</a>
-                                </div><!-- /.entry-content -->
-            </article></li>
-                            
+<p><br /></p>
+<div class="posttagsblock"><a href="http://technorati.com/tag/geekery" rel="tag">geekery</a>, <a href="http://technorati.com/tag/Twitter" rel="tag">Twitter</a>, <a href="http://technorati.com/tag/visualisation" rel="tag">visualisation</a></div>
 
-                 
-                        <li><article class="hentry">    
-                <header>
-                    <h1><a href="/complete.html" rel="bookmark"
-                           title="Permalink to complete">complete</a></h1>
-                </header>
-                
-                <div class="entry-content">
-                <footer class="post-info">
-        <abbr class="published" title="2008-02-12T00:00:00">
-                Tue 12 February 2008
-        </abbr>
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/what-did-you-say.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/what-did-you-say.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/30.html" rel="tag">30</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/current-affairs.html">current affairs</a>
+                            <a href="http://fivecomputers.com/tag/software.html" class="selected">software</a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
 
-                <address class="vcard author">
-                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
-        </address>
-        <p>In <a href="/category/converted.html">converted</a>. </p>
-<p>tags: <a href="/tag/software.html">software</a></p>
-</footer><!-- /.post-info -->                <p>Finally! Now my Mac <a href="http://news.bbc.co.uk/2/hi/technology/7760344.stm">can do everything</a> my windows machine can do. I&#39;m so happy.</p>
-                <a class="readmore" href="/complete.html">read more</a>
-                                </div><!-- /.entry-content -->
-            </article></li>
-                            
+                <h4 class="date">Feb 16,  2009</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/edward-tufte-and-presenting-data.html" rel="bookmark" title="Permanent Link to &quot;edward tufte and presenting data&quot;">edward tufte and presenting data</a>
+                    </h2>
+                    
+                    <p style="text-align: center;"><a href="http://www.flickr.com/photos/52043707@N00/3171697571/"><img src="http://farm2.static.flickr.com/1065/3171697571_bf6e359fff.jpg" height="333" width="500" alt="me" /></a><br /></p>
 
-                 
-                        <li><article class="hentry">    
-                <header>
-                    <h1><a href="/image-recovery.html" rel="bookmark"
-                           title="Permalink to image recovery">image recovery</a></h1>
-                </header>
-                
-                <div class="entry-content">
-                <footer class="post-info">
-        <abbr class="published" title="2008-01-12T00:00:00">
-                Sat 12 January 2008
-        </abbr>
+<p>I was lucky enough to attend a seminar from <a href="http://www.edwardtufte.com/tufte/">Edward Tufte</a>, a couple of weeks ago, on the <a href="http://www.edwardtufte.com/tufte/courses">Presentation of Data and Information</a>. Edward Tufte is probably best known for the book '<em><a href="http://www.edwardtufte.com/tufte/books_vdqi">The Quantitative Display of Visual Information</a></em>' and was an engaging and entertaining presenter. He has a very different style from the normal Powerpoint-driven presentation approach. In fact, much of his work is railing against the uses and abuses of Powerpoint and similar slide techniques.</p>
 
-                <address class="vcard author">
-                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
-        </address>
-        <p>In <a href="/category/converted.html">converted</a>. </p>
-<p>tags: <a href="/tag/software.html">software</a></p>
-</footer><!-- /.post-info -->                <p style="text-align: center;"><a href="http://www.flickr.com/photos/52043707@N00/3065452649/"><img src="http://farm4.static.flickr.com/3284/3065452649_8fda438ae8.jpg" height="334" width="500" alt="" /></a><br /></p>
+<p>The main take-away I got from the whole day was that if you have to communicate complicated data sets or information, that you really need to consider how people will use and interact with the data first. Too often, we go straight to presentation software and start trying to work out how to express the information in slides, rather than taking the time to consider if there are other, better ways to impart the information. Tufte was very keen on the concept of a 'super-graphic' which is a data rich, high resolution physical handout that lets participants see and consider a lot of data at once. A map is a great example of a super-graphic, or the weather page in a typical newspaper. A key part of this is that paper is much higher resolution than a typical computer screen (72dpi to 600dpi means you can show a whole lot more data in the same space). This is why multiple display screens are really useful for serious work. It also means that printing out and sharing data is a great way to get information infront of people in a meeting, rather than drip feeding it from slides)</p>
 
-<p><a href="http://www.flickr.com/photos/mcgregorphoto">I take a lot of pictures</a>. On occasion, I get too impatient when downloading images from my compact flash cards. I'll swap the card without ejecting it properly and sometimes the cards get corrupted. Typically, when that happens the file allocation table of the previous card that was in ...</p>
-                <a class="readmore" href="/image-recovery.html">read more</a>
-                                </div><!-- /.entry-content -->
-            </article></li>
-                            </ol><!-- /#posts-list -->
-                            <p class="paginator">
-        Page 1 / 1
-    </p>
-                        </section><!-- /#content -->
-                    <section id="extras" class="body">
-                        <div class="blogroll">
-                        <h2>blogroll</h2>
-                        <ul>
-                                                    <li><a href="http://getpelican.com/">Pelican</a></li>
-                                                    <li><a href="http://python.org/">Python.org</a></li>
-                                                    <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
-                                                    <li><a href="#">You can modify those links in your config file</a></li>
-                                                </ul>
-                </div><!-- /.blogroll -->
-                                <div class="social">
-                        <h2>social</h2>
-                        <ul>
-                            <li><a href="/None" type="application/atom+xml" rel="alternate">atom feed</a></li>
-                            
-                                                    <li><a href="#">You can add links in your config file</a></li>
-                                                    <li><a href="#">Another social link</a></li>
-                                                </ul>
-                </div><!-- /.social -->
-                </section><!-- /#extras -->
+<p>I compare this idea to another guide I saw in the same week on creating powerpoint presentations that admonishes that there should never be more than 8 numbers on any slide or graphic. Tufte's response to this was repeatedly '<em>when did we become so stupid, just because we walked into a business meeting?</em>' People handle large, complex data displays every day in the real world. People read and study sports scores in a newspaper, or financial reports without any trouble at all.</p>
 
-        <footer id="contentinfo" class="body">
-                <address id="about" class="vcard body">
-                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
-                </address><!-- /#about -->
+<p>Let the data drive the presentation format, rather than the presentation software drive how the data is displayed.</p>
 
-                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
-        </footer><!-- /#contentinfo -->
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/edward-tufte-and-presenting-data.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/edward-tufte-and-presenting-data.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/16.html" rel="tag">16</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/books.html">books</a>
+                            <a href="http://fivecomputers.com/tag/software.html" class="selected">software</a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
 
-</body>
+                <h4 class="date">Jan  8,  2009</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/makers-schedule-managers-schedule.html" rel="bookmark" title="Permanent Link to &quot;maker's schedule, manager's schedule&quot;">maker's schedule, manager's schedule</a>
+                    </h2>
+                    
+                    <p>I've always had a dread of mid-afternoon status meetings. Now maybe I understand it a bit better, because of Paul Graham's excellent essay on the difference between <a href="http://www.paulgraham.com/makersschedule.html">being on a maker's schedule and being on a manager's schedule</a>. Seems to share a lot of ideas with Csikszentmihalyi and his ideas of creativity and flow states.</p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/makers-schedule-managers-schedule.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/makers-schedule-managers-schedule.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/01.html" rel="tag">01</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/eda.html">eda</a>
+                            <a href="http://fivecomputers.com/tag/film.html">film</a>
+                            <a href="http://fivecomputers.com/tag/software.html" class="selected">software</a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <h4 class="date">Dec  6,  2008</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/metrics.html" rel="bookmark" title="Permanent Link to &quot;metrics&quot;">metrics</a>
+                    </h2>
+                    
+                    <p><a href="http://flickr.com/photos/mcgregorphoto/2572384411/"><img border="0" alt="Metal" title="Metal" src="http://fivecomputers.typepad.com/photos/uncategorized/2008/06/12/metal.jpg" style="margin: 0px 5px 5px 0px; float: left;" /></a>
+Listened to <a href="http://www.chipdesignmag.com/bailey/">Brian Bailey</a> talking on the missing metrics for verification coverage at the <a href="http://www.certess.com/">Certess</a> booth on Wednesday. This was a really interesting talk discussing the standard code coverage and functional coverage metrics and pointing out that we don't really currently have a good metric to track when we are doing useful verification or not. Functional coverage is used for this, but care needs to be taken to ensure we are covering the right things.</p>
+
+<p>There's a danger that functional coverage, which was originally designed to track the quality of random stimulus, is used to only track that stimulus. In this way, we might not consider if the behaviour is actually checked or not. The same ideas are represented in David Robinson's verification planning presentation at DAC. Requirements and functional coverage without checkers is a waste of time and effort. It is possible to get 100% coverage, with lots of cover points and no enabled or implemented checkers in a design. Careful testbench design, or tools like <a href="http://www.certess.com/">Certess</a>, can be used to address these issues but only once you realise that functional coverage isn't a magic bullet. </p>
+
+<p>I also saw a demo of the Certess product, <a href="http://www.certess.com/product/">Certitude</a>. It randomly inserts errors into the device under test (DUT) to give a way to evaluate the quality of the testbench surrounding the DUT. The basic idea is that if the design is mutated in a particular way, the testbench is good if it can detect the error, or has a hole if this failure mode cannot be seen in the checkers. This artificial bug insertion is something I do on an ad-hoc way when developing a testbench and Certitude automates and expands on this commonly used approach.</p>
+
+<p>You can <a href="http://electronicsystemlevel.com/EDA-Cover-up.pdf">read a paper </a>from Brian on this topic.
+</p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/metrics.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/metrics.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/12.html" rel="tag">12</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/eda.html">eda</a>
+                            <a href="http://fivecomputers.com/tag/software.html" class="selected">software</a>
+                            <a href="http://fivecomputers.com/tag/verification.html">verification</a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <h4 class="date">Oct 11,  2008</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/a-command-line-for-the-gui.html" rel="bookmark" title="Permanent Link to &quot;a command line for the gui&quot;">a command line for the gui</a>
+                    </h2>
+                    
+                    <p style="text-align: center;"><a href="http://www.flickr.com/photos/52043707@N00/1471486765/"><img src="http://farm2.static.flickr.com/1085/1471486765_ffb394dbfe.jpg" height="334" width="500" alt="open" /></a><br /></p>
+
+<p>I've been experimenting with Mac OS X now for a few months. Trying to work out if it is a reasonable platform for <a href="http://www.verilab.com" title="Verilab, Inc.">Verilab</a> to use internally for our various computing needs. One thing that I've come to love and now struggle to live without is a small add-on called <a href="http://en.wikipedia.org/wiki/Qu%C4%B1c%C4%B8s%C4%B1%C9%A9%E2%85%B4%CE%B5%CA%80">Quicksilver</a>. Superficially it isn't very interesting. A <a href="http://docs.blacktree.com/quicksilver/what_is_quicksilver">fast application launcher</a> - where's the fun in that? But after you delve a bit deeper, it becomes something else. It is really a command line interface for OS X, on top of the GUI.</p>
+
+<p>I hit a key and up it pops. Type a few characters and I can launch an application. I don't have to search through drop down menus or find icons on a desktop - much faster. I want to get a music player to jump to the next track - hot key and type '<em>next</em>'. Stop the music, type '<em>stop</em>'. The magic is that I don't have to switch away from what I'm currently doing, go to a different window or application and do anything. Want to email someone? Hot key, type a bit of their name and select their email address - again, without switching away from what you are working in. I can even open and edit text files without starting up a text editor - extend a todo list, add a calendar entry to my google calendar, all from the command line within the GUI. All without switching away from the current context. I can run unix terminal commands, search in documents, select groups of files and email them to someone, do quick calculations. It is amazingly more efficient than using a mouse and hunting for applications and buttons.</p>
+
+<p>I've always been a bit of a command-line junkie, wanting to know the keyboard shortcuts for things in a GUI environment, liking having a command prompt, but Quicksilver is different. It's a visual blend of command-line and GUI. Taking the best bits of both and putting them right under my fingertips. Highly recommended. Shame there isn't anything nearly as good for Windows XP or linux that I've found. Look <a href="http://www.43folders.com/topics/quicksilver">here</a> for more ideas about what Quicksilver can do.</p>
+
+<p><br /></p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/a-command-line-for-the-gui.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/a-command-line-for-the-gui.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/10.html" rel="tag">10</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/software.html" class="selected">software</a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <div class="clear"></div>
+                <div class="pages">
+                    <a href="http://fivecomputers.com/tag/software2.html" class="next_page">Next&nbsp;&rarr;</a>
+                    <span>Page 1 of 3</span>
+                </div>
+
+                <div class="clear"></div>
+                <div id="footer">
+                    <p>
+                    <a href="https://twitter.com/GordonMcGregor">Twitter @GordonMcGregor</a>
+                    &middot;
+                    <a class="atom" href="http://fivecomputers.com/feeds/all.atom.xml">RSS Feed</a>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+    <script type="text/javascript">
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+    try {
+        var pageTracker = _gat._getTracker("UA-42678190-1");
+    pageTracker._trackPageview();
+    } catch(err) {}</script>
+<script type="text/javascript">
+    var disqus_shortname = 'fivecomputers';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+    </body>
 </html>

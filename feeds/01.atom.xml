@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Five Computers</title><link href="http://fivecomputers.com/" rel="alternate"></link><link href="http://fivecomputers.com/feeds/01.atom.xml" rel="self"></link><id>http://fivecomputers.com/</id><updated>2012-01-05T00:00:00-06:00</updated><entry><title>Pygmentize files and paste them into Microsoft Word in OS X</title><link href="http://fivecomputers.com/pygmentize-files-and-paste-them-into-microsoft-word-in-os-x.html" rel="alternate"></link><updated>2012-01-05T00:00:00-06:00</updated><author><name>GordonMcGregor</name></author><id>tag:fivecomputers.com,2012-01-05:pygmentize-files-and-paste-them-into-microsoft-word-in-os-x.html</id><summary type="html">&lt;p&gt;Writing some documents using Microsoft Word and I wanted to be able to drop in syntax highlighted versions of the source code. Pygmentize will generate RTF format, which is great for pasting in to Word, but you have to get it there. The best way I've found is using the OS X terminal (I like using &lt;a href="http://www.iterm2.com/#/section/home"&gt;iTerm2&lt;/a&gt;). I then use a feature of the command line &lt;i&gt;open&lt;/i&gt; command, which makes it read from &lt;i&gt;stdin&lt;/i&gt; and open the output in TextEdit. This text can then be cut and pasted directly in to Word, preserving all the formatting.&lt;/p&gt;
+
+&lt;p&gt;Run the command:&lt;/p&gt;
+
+&lt;pre&gt;
+pygmentize -f rtf &amp;lt;file to highlight&amp;gt; | open -f
+&lt;/pre&gt;
+
+&lt;p&gt;Then in the TextEdit window, press&lt;/p&gt;
+&lt;div style="display: inline !important;"&gt;
+  &lt;i&gt;&lt;span style="font-style: normal;"&gt;⌘&lt;/span&gt;&lt;/i&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;i&gt;a&lt;/i&gt;,&lt;/p&gt;
+&lt;div style="display: inline !important;"&gt;
+  &lt;i&gt;&lt;span style="font-style: normal;"&gt;⌘&lt;/span&gt;&lt;/i&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;i&gt;c&lt;/i&gt; to select all and copy it. Switch to Word and hit&lt;/p&gt;
+&lt;div style="display: inline !important;"&gt;
+  &lt;i&gt;&lt;span style="font-style: normal;"&gt;⌘&lt;/span&gt;&lt;/i&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;i&gt;v&lt;/i&gt; to paste.&lt;/p&gt;</summary><category term=""></category></entry><entry><title>Simplified VPI iterators using PyHVL generators</title><link href="http://fivecomputers.com/simplified-vpi-iterators-using-pyhvl-generators.html" rel="alternate"></link><updated>2012-01-05T00:00:00-06:00</updated><author><name>GordonMcGregor</name></author><id>tag:fivecomputers.com,2012-01-05:simplified-vpi-iterators-using-pyhvl-generators.html</id><summary type="html">&lt;p&gt;I've been using &lt;a href="http://pyhvl.sourceforge.net/"&gt;PyHVL&lt;/a&gt; for a variety of verification tasks in the past few years. PyHVL is an open source Python integration for Verilog and SystemVerilog simulators. To give a quick taste of what it can do for you, consider the following SystemVerilog VPI C code.&lt;/p&gt;
+
+&lt;div class="highlight" style="background: #f8f8f8"&gt;
+  &lt;pre style="line-height: 125%"&gt;
+&lt;span style="color: #B00040"&gt;void&lt;/span&gt; display_nets(mod)
+    vpiHandle mod;
+    {
+       vpiHandle net;
+       vpiHandle itr;
+       vpi_printf(&lt;span style="color: #BA2121"&gt;"Nets declared in module %s&lt;/span&gt;&lt;span style="color: #BB6622; font-weight: bold"&gt;\n&lt;/span&gt;&lt;span style="color: #BA2121"&gt;"&lt;/span&gt;,
+       vpi_get_str(vpiFullName, mod));
+&lt;/pre&gt;
+  &lt;pre style="line-height: 125%"&gt;
+       itr &lt;span style="color: #666666"&gt;=&lt;/span&gt; vpi_iterate(vpiNet, mod);
+&lt;/pre&gt;
+  &lt;pre style="line-height: 125%"&gt;
+
+       &lt;span style="color: #008000; font-weight: bold"&gt;while&lt;/span&gt; (net &lt;span style="color: #666666"&gt;=&lt;/span&gt; vpi_scan(itr))
+          {
+          vpi_printf(&lt;span style="color: #BA2121"&gt;"&lt;/span&gt;&lt;span style="color: #BB6622; font-weight: bold"&gt;\t&lt;/span&gt;&lt;span style="color: #BA2121"&gt;%s"&lt;/span&gt;, vpi_get_str(vpiName, net));
+          &lt;span style="color: #008000; font-weight: bold"&gt;if&lt;/span&gt; (vpi_get(vpiVector, net))
+          {
+             vpi_printf(&lt;span style="color: #BA2121"&gt;" of size %d&lt;/span&gt;&lt;span style="color: #BB6622; font-weight: bold"&gt;\n&lt;/span&gt;&lt;span style="color: #BA2121"&gt;"&lt;/span&gt;, vpi_get(vpiSize, net));
+          }
+          &lt;span style="color: #008000; font-weight: bold"&gt;else&lt;/span&gt; vpi_printf(&lt;span style="color: #BA2121"&gt;"&lt;/span&gt;&lt;span style="color: #BB6622; font-weight: bold"&gt;\n&lt;/span&gt;&lt;span style="color: #BA2121"&gt;"&lt;/span&gt;);
+       }
+    }
+&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Here is the equivalent VPI code, this time written in Python, using PyHVL.&lt;/p&gt;
+
+&lt;div class="highlight" style="background: #f8f8f8"&gt;
+  &lt;pre style="line-height: 125%"&gt;
+&lt;span style="color: #008000; font-weight: bold"&gt;def&lt;/span&gt; &lt;span style="color: #0000FF"&gt;display_nets&lt;/span&gt;(module):
+&lt;/pre&gt;
+  &lt;pre style="line-height: 125%"&gt;
+    &lt;span style="color: #008000; font-weight: bold"&gt;print&lt;/span&gt; &lt;span style="color: #BA2121"&gt;'Nets declared in module'&lt;/span&gt;, get_str(vpiFullName, module) 
+&lt;/pre&gt;
+  &lt;pre style="line-height: 125%"&gt;
+    &lt;span style="color: #008000; font-weight: bold"&gt;for&lt;/span&gt; net &lt;span style="color: #AA22FF; font-weight: bold"&gt;in&lt;/span&gt; vpi_iterator(module, vpiNet):
+        &lt;span style="color: #008000; font-weight: bold"&gt;print&lt;/span&gt; &lt;span style="color: #BA2121"&gt;'&lt;/span&gt;&lt;span style="color: #BB6622; font-weight: bold"&gt;\t&lt;/span&gt;&lt;span style="color: #BB6688; font-weight: bold"&gt;%s&lt;/span&gt;&lt;span style="color: #BA2121"&gt; &lt;/span&gt;&lt;span style="color: #BB6688; font-weight: bold"&gt;%s&lt;/span&gt;&lt;span style="color: #BA2121"&gt;'&lt;/span&gt; &lt;span style="color: #666666"&gt;%&lt;/span&gt; ( get_str(vpiName, net), 
+                get(vpiVector, net) &lt;span style="color: #AA22FF; font-weight: bold"&gt;and&lt;/span&gt; &lt;span style="color: #BA2121"&gt;'of size &lt;/span&gt;&lt;span style="color: #BB6688; font-weight: bold"&gt;%d&lt;/span&gt;&lt;span style="color: #BA2121"&gt;'&lt;/span&gt; &lt;span style="color: #666666"&gt;%&lt;/span&gt; get(vpiSize, net) &lt;span style="color: #AA22FF; font-weight: bold"&gt;or&lt;/span&gt; &lt;span style="color: #BA2121"&gt;''&lt;/span&gt;)
+&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The magic happens in the implementation of the &lt;i&gt;vpi_iterator()&lt;/i&gt; method, which uses a Python &lt;i&gt;yield&lt;/i&gt; instruction to turn the method into a generator. &lt;a href="http://wiki.python.org/moin/Generators"&gt;Generators&lt;/a&gt; are much like functions, except they maintain a frozen stack frame, at the point where the &lt;i&gt;yield&lt;/i&gt; occurs. All existing variables within the method maintain their state and execution picks up where it left off, just after the &lt;i&gt;yield&lt;/i&gt;. The example also uses lazy evaluation of the result of &lt;i&gt;get(vpiVector, net)&lt;/i&gt; to either call &lt;i&gt;get(vpiSize, net)&lt;/i&gt; or not print the &lt;i&gt;'of size&lt;/i&gt;' additional string.&lt;/p&gt;
+
+&lt;div class="highlight" style="background: #f8f8f8"&gt;
+  &lt;pre style="line-height: 125%"&gt;
+&lt;span style="color: #008000; font-weight: bold"&gt;def&lt;/span&gt; &lt;span style="color: #0000FF"&gt;vpi_iterator&lt;/span&gt;(handle, &lt;span style="color: #008000"&gt;type&lt;/span&gt;&lt;span style="color: #666666"&gt;=&lt;/span&gt;vpiNet):
+    iterator &lt;span style="color: #666666"&gt;=&lt;/span&gt; iterate(&lt;span style="color: #008000"&gt;type&lt;/span&gt;, handle)
+    &lt;span style="color: #008000; font-weight: bold"&gt;if&lt;/span&gt; iterator:
+        handle &lt;span style="color: #666666"&gt;=&lt;/span&gt; scan(iterator)
+        &lt;span style="color: #008000; font-weight: bold"&gt;while&lt;/span&gt; handle:
+            &lt;span style="color: #008000; font-weight: bold"&gt;yield&lt;/span&gt; handle
+            handle &lt;span style="color: #666666"&gt;=&lt;/span&gt; scan(iterator)
+
+&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This lets you write loops &lt;i&gt;inside out&lt;/i&gt; as one of my colleagues aptly put it. The outcome is you can simplify the management of loops and indices and focus on the point of the loop. You write less code, you introduce fewer bugs. The code is easier to read and maintain as a result. This is just a very small example of some of the power of using a modern scripting language like Python, as an adjunct to a SystemVerilog simulator.&lt;/p&gt;
+
+&lt;p&gt;If you spend much time writing VPI code, you should take a look at PyHVL. It could make your life much simpler, or get in touch and I can help you with it.&lt;/p&gt;</summary><category term="software"></category><category term="verification"></category></entry><entry><title>maker's schedule, manager's schedule</title><link href="http://fivecomputers.com/makers-schedule-managers-schedule.html" rel="alternate"></link><updated>2009-01-08T00:00:00-06:00</updated><author><name>GordonMcGregor</name></author><id>tag:fivecomputers.com,2009-01-08:makers-schedule-managers-schedule.html</id><summary type="html">&lt;p&gt;I've always had a dread of mid-afternoon status meetings. Now maybe I understand it a bit better, because of Paul Graham's excellent essay on the difference between &lt;a href="http://www.paulgraham.com/makersschedule.html"&gt;being on a maker's schedule and being on a manager's schedule&lt;/a&gt;. Seems to share a lot of ideas with Csikszentmihalyi and his ideas of creativity and flow states.&lt;/p&gt;</summary><category term="eda"></category><category term="film"></category><category term="software"></category></entry><entry><title>image recovery</title><link href="http://fivecomputers.com/image-recovery.html" rel="alternate"></link><updated>2008-01-12T00:00:00-06:00</updated><author><name>GordonMcGregor</name></author><id>tag:fivecomputers.com,2008-01-12:image-recovery.html</id><summary type="html">&lt;p style="text-align: center;"&gt;&lt;a href="http://www.flickr.com/photos/52043707@N00/3065452649/"&gt;&lt;img src="http://farm4.static.flickr.com/3284/3065452649_8fda438ae8.jpg" height="334" width="500" alt="" /&gt;&lt;/a&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://www.flickr.com/photos/mcgregorphoto"&gt;I take a lot of pictures&lt;/a&gt;. On occasion, I get too impatient when downloading images from my compact flash cards. I'll swap the card without ejecting it properly and sometimes the cards get corrupted. Typically, when that happens the file allocation table of the previous card that was in the reader gets written onto the new card, or the FAT gets corrupted in some other way. The images are still there, but you can't access them. This happened to me last weekend and I didn't have any recovery software on this laptop. I had a look around online and the only recovery programs I could find were close to $100. I had a bit of free time so I decided to try writing my own instead. Turns out a basic recovery tool is actually really simple to put together.&lt;/p&gt;
+
+&lt;p&gt;A couple of things made it possible to do quite simple image recovery, successfully. Firstly, I always format the cards in the camera before I use them. So I know when the camera is writing images to the cards, the card is empty. Secondly, I never delete images in the camera. This means there is no fragmentation on the drive. The images are simply stored sequentially on the memory. The FAT format is fairly simple, based on sectors that are multiples of 512 bytes in size, that are collected together in clusters that vary depending on the disk formating. Images are written into linked lists of those clusters. Potentially the clusters could be fragmented across the drive, particularly if images are deleted and new ones stored on the disk. With a clean start and no images deleted, it is reasonable to assume that the images will just be stored on concurrent clusters. I think damaged sectors are managed at the a physical level on the disks, so they are mapped out of the available space (feel free to correct me on this). Anyway, with these assumptions made, it is possible to write a simple tool to parse a disk image and extract images, with a high likelihood of a successful result.&lt;/p&gt;
+
+&lt;p&gt;The first step is to get the data. I did the recovery on a unix system and used &lt;em&gt;dd&lt;/em&gt; to get the initial image. You have to dump the actual physical device, not one of the disk partitions (as those are essentially what has become corrupt)&lt;/p&gt;
+
+&lt;p style="text-align: center;"&gt;d&lt;em&gt;d if=/dev/rdisk1 of=image.img bs=512&lt;/em&gt;&lt;/p&gt;
+
+&lt;p style="text-align: left;"&gt;The block size is set to 512 to match the formating of the compact flash card. This step takes a while, but eventually you'll have an image file, &lt;em&gt;image.img&lt;/em&gt; which is a low level copy of the data on the drive. The next step is to work out a way to identify the files you are looking to recover. I wrote a simple hex dump tool that prints the first few bytes of a file. I used this on a representative sample of the Canon &lt;em&gt;cr2&lt;/em&gt; RAW files to get a search key to identify the start of a file.&lt;/p&gt;
+
+&lt;p style="text-align: left;"&gt;--- show_header.py ---&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p style="text-align: left;"&gt;&lt;/p&gt;
+
+  &lt;p style="text-align: left;"&gt;&lt;em&gt;import sys&lt;/em&gt;&lt;/p&gt;
+
+  &lt;p style="text-align: left;"&gt;&lt;em&gt;file = open(sys.argv[1], 'rb')&lt;/em&gt;&lt;/p&gt;
+
+  &lt;p style="text-align: left;"&gt;&lt;em&gt;header = file.read(12)&lt;/em&gt;&lt;/p&gt;
+
+  &lt;p style="text-align: left;"&gt;&lt;em&gt;headerhex = header.encode('hex')&lt;/em&gt;&lt;/p&gt;
+
+  &lt;p style="text-align: left;"&gt;&lt;em&gt;print headerhex&lt;/em&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;--- end show_header.py ---&lt;/p&gt;
+
+&lt;p&gt;This little bit of python can be applied to a group of files with xargs&lt;/p&gt;
+
+&lt;p style="text-align: center;"&gt;&lt;em&gt;ls *.cr2 | xargs -n 1 python show_header.py&lt;/em&gt;&lt;/p&gt;
+
+&lt;p style="text-align: left;"&gt;From that output, it is easy enough to find a representive number of bytes that can be used to identify the start of a file. I also had recorded some audio with the camera, so did a similar process with .wav files to extract them correctly.&lt;/p&gt;
+
+&lt;p style="text-align: left;"&gt;Then all you have to do is iterate through the disk image in &lt;em&gt;block_size&lt;/em&gt; chunks, checking for those file signatures at the start of each sector. When you find a file signature, start dumping all the data to a new file, until you find another signature. That's all there is to it. Note that there are no warranties with this. I'm offering no guarantees that it will work, or even will not wipe your computer. &lt;strong&gt;Use at your own risk&lt;/strong&gt;. With this I was able to recover the 150+ images that I'd taken and several audio files. It actually works surprisingly quickly once the disk image has been made. Also worth mentioning that the JPEG header matching is untested, as I didn't have any JPEG files on this particular disk, but is included here for completeness.&lt;/p&gt;
+
+&lt;p style="text-align: left;"&gt;&lt;a href="http://www.mcgregorphoto.com/pub/source/image_recovery.python"&gt;Download the source for image_recovery.py&lt;/a&gt; (you'll probably need to change the file extension - web server doesn't like serving .py files)&lt;/p&gt;</summary><category term="software"></category></entry></feed>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Five Computers</title><link href="http://fivecomputers.com/" rel="alternate"></link><link href="http://fivecomputers.com/feeds/systemverilog.atom.xml" rel="self"></link><id>http://fivecomputers.com/</id><updated>2013-08-16T13:41:00-05:00</updated><entry><title>Serving local web pages</title><link href="http://fivecomputers.com/serving-local-web-pages.html" rel="alternate"></link><updated>2013-08-16T13:41:00-05:00</updated><author><name>Gordon McGregor</name></author><id>tag:fivecomputers.com,2013-08-16:serving-local-web-pages.html</id><summary type="html">&lt;p&gt;I've been trying to improve some SystemVerilog constraints, in Synopsys VCS. One useful approach is to use the profiling features of the constraint solver to explore particular constraints that might be burning lots of cycles or proving hard to solve. There's a VCS runtime switch to turn on constraint profiling:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="n"&gt;ntb_solve_debug&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;profile&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;This creates a profile report in the &lt;code&gt;simv.cst&lt;/code&gt; directory, in &lt;code&gt;html/profile.xml&lt;/code&gt; The documentation mentions that this file is viewable in Chrome and Firefox but doesn't work in IE. However, it now seems like it also isn't viewable in Chrome. Instead, it hits a security issue: &lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;Unsafe&lt;/span&gt; &lt;span class="n"&gt;attempt&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="n"&gt;load&lt;/span&gt; &lt;span class="n"&gt;URL&lt;/span&gt; &lt;span class="n"&gt;file&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="c1"&gt;///projects/simv.cst/html/cstrProf.xsl &lt;/span&gt;
+&lt;span class="n"&gt;from&lt;/span&gt; &lt;span class="n"&gt;frame&lt;/span&gt; &lt;span class="n"&gt;with&lt;/span&gt; &lt;span class="n"&gt;URL&lt;/span&gt; &lt;span class="n"&gt;file&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="c1"&gt;///projects/simv.cst/html/profile.xml. &lt;/span&gt;
+&lt;span class="n"&gt;Domains&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;protocols&lt;/span&gt; &lt;span class="n"&gt;and&lt;/span&gt; &lt;span class="n"&gt;ports&lt;/span&gt; &lt;span class="n"&gt;must&lt;/span&gt; &lt;span class="n"&gt;match&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Now, the file does load in Firefox, but I've been trying to avoid running multiple browsers. There is however a simple fix. You can run a web server and serve up the profile over html. That maybe sounds like a lot of work, but python ships with one in the standard library and it will run as a command-line loaded module. So, simply change directory to your build directory (or close to it - the server lets you navigate the file hierarchy too) and run&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;python&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;m&lt;/span&gt; &lt;span class="n"&gt;SimpleHTTPServer&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Then in a browser on the same machine, open http://localhost:8000  E.g., if you run the server in the directory with the profile, you can go directly to http://localhost:8000/profile.xml&lt;/p&gt;</summary></entry><entry><title>Language Specification Length</title><link href="http://fivecomputers.com/language-specification-length.html" rel="alternate"></link><updated>2013-08-12T06:34:00-05:00</updated><author><name>Gordon McGregor</name></author><id>tag:fivecomputers.com,2013-08-12:language-specification-length.html</id><summary type="html">&lt;p&gt;&lt;center&gt;
+&lt;img alt="Language Complexity" src="http://fivecomputers.com/static/images/language_complexity.png" /&gt;
+&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;Now, just as &lt;a href="https://twitter.com/GordonMcGregor/status/104282867168845825"&gt;number of keywords&lt;/a&gt; isn't the sole indicator of the complexity of a language, the length of the specification doesn't tell the entire story. However, SystemVerilog in the new 2012 version clocks in at 1315 pages.&lt;/p&gt;
+&lt;p&gt;&lt;center&gt;
+&lt;blockquote class="twitter-tweet"&gt;&lt;p&gt;Language Specification page count&amp;#10;C++ 865&amp;#10;Java 644&amp;#10;C 540&amp;#10;C# 511&amp;#10;Ruby 311&amp;#10;Smalltalk 303&amp;#10;Erlang 31&amp;#10;&amp;#10;Well played Erlang. Well played.&lt;/p&gt;&amp;mdash; Jonas Elfström (@jonelf) &lt;a href="https://twitter.com/jonelf/statuses/366854642774183936"&gt;August 12, 2013&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src="//platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;&lt;/center&gt;&lt;/p&gt;</summary></entry></feed>

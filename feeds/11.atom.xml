@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Five Computers</title><link href="http://fivecomputers.com/" rel="alternate"></link><link href="http://fivecomputers.com/feeds/11.atom.xml" rel="self"></link><id>http://fivecomputers.com/</id><updated>2008-11-06T00:00:00-06:00</updated><entry><title>Where are they now?</title><link href="http://fivecomputers.com/where-are-they-now.html" rel="alternate"></link><updated>2008-11-06T00:00:00-06:00</updated><author><name>GordonMcGregor</name></author><id>tag:fivecomputers.com,2008-11-06:where-are-they-now.html</id><summary type="html">&lt;p&gt;&lt;a href="http://fivecomputers.typepad.com/photos/uncategorized/2008/06/11/_s3t8496.jpg"&gt;&lt;img height="426" border="0" width="640" alt="_s3t8496" title="_s3t8496" src="http://www.fivecomputers.com/images/2008/06/11/_s3t8496.jpg" style="margin: 0px 5px 5px 0px; display: block;" /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;DAC started early with a Mentor sponsored breakfast at 7:30. Got to see a bit about some of their testbench automation tools that help steer coverage to more interesting parts of the design. There are a few other companies here that have similar products. The aim is to move beyond user driven constrained random testing and let the tools help in solving the problem.&lt;/p&gt;
+
+&lt;p&gt;After that, I listened to Gary Smith on the state of the EDA industry. Highlights:&lt;/p&gt;
+
+&lt;ul&gt;&lt;li&gt;It's all about the software&lt;/li&gt;
+
+&lt;li&gt;Threads are dead&lt;/li&gt;
+
+&lt;li&gt;C is finished to be replaced by some useful concurrent language - brush up on Occam I say&lt;/li&gt;
+
+&lt;li&gt;Verification is a solved problem and will be automated - don't bother being a verification engineer&lt;/li&gt;
+
+&lt;li&gt;Almost 38% of companies roll their own EDA tools&lt;/li&gt;&lt;/ul&gt;
+
+&lt;p&gt;His talk made for an interesting start to the day, at least.&lt;/p&gt;
+
+&lt;p&gt;I spent the rest of the day attending various sessions and tool demos, which I'll write more about later. I've been surprised how low attendance is. There are a lot of people from the tool companies in their booths, but not many customers for them to talk to - and that was on Monday, the free attendance day when there aren't that many technical sessions or other distractions. &lt;/p&gt;
+
+&lt;p&gt;The Open Verification Methodology(OVM) is a hot item this year, with many sessions discussing issues around use and interoperability. Many vendors are showing products or claiming compatibility with this new standard. SystemVerilog is the other dominant theme though SystemC still has some traction. The last time I was at DAC SystemC was the new kid on the block that everyone was expecting to take over the world, not so much any more and it has settled into a system level modeling niche. &lt;/p&gt;
+
+&lt;p&gt;The disturbing thing I am seeing is how little progress has been made in the last decade in the ESL tool industry. Many years ago I was working on ARM926 designs that were not on the bleeding edge, even then. Today, many ESL companies are still just showing support for ARM9 or being excited about performance of their ARM7 models. That's at least 2 or 3 cycles behind the latest processor technologies and a huge leap in tool complexity to keep up. Synthesis capacities are rising much slower than the process technologies, tools companies are stalling out, reimplementing the same technologies to support systemC, systemVerilog or what ever the new hot language or methodology is, without apparently making any significant progress.&lt;/p&gt;
+
+&lt;p&gt;The other problem that the ESL companies face is the lack of models for their particular product line. Many seem to be falling into the same trap - expecting customer demand to dictate which models to develop. But that isn't going to work - the systems designers need the models right around when they decide they need the models. There is no lead time. There certainly isn't the 6 months to 1 year lead time it takes to find the right ESL company, negotiate and convince them to start creating a model, get the team together and write and verify the model, then deliver it back to the system architect. When the architect wants the model, there might be a 1 week lead time. Maybe a month, before serious work needs to start. The whole investigation better be mostly finished in 6 months. ESL companies need to seed their model libraries in anticipation of customer need. If they wait for the customer, they'll always be too late to be any use at all and keep going round that loop. In spite of that glaring hole, ESL is another hot ticket at DAC this year. Software design and implementation continues to increase in cost and complexity and HW/SW co-design companies are proliferating as a result.&lt;/p&gt;
+
+&lt;p&gt;With the apparent dearth of progress and lack of useful model or up-to-date models, I'm not too surprised that almost 40% of companies are looking inwards for their EDA tools. Might also explain where everyone is this year, too. &lt;/p&gt;
+
+&lt;p&gt;The one bright light in the ESL space is that although many of the tools and methodologies haven't changed much in the last 5 years, they do seem to have moved on from being all smoke and mirrors and snake oil to perhaps actually working. So maybe things haven't changed, they've just become real.&lt;/p&gt;</summary><category term="eda"></category><category term="esl"></category></entry></feed>

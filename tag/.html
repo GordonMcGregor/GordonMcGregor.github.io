@@ -1,42 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-        <meta charset="utf-8">
-        <title>Five Computers - </title>
-        <link rel="stylesheet" href="/theme/css/main.css">
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+        <title>Five Computers &middot; articles tagged ""</title>
+        <link rel="shortcut icon" href="http://fivecomputers.com/favicon.ico" />
+        <link href="http://fivecomputers.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Five Computers Atom Feed" />
                 
-        <!--[if IE]>
-            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
-</head>
+        <link rel="stylesheet" href="http://fivecomputers.com/theme/css/screen.css" type="text/css" />
+        <link rel="stylesheet" href="http://fivecomputers.com/theme/css/pygments.css" type="text/css" />
 
-<body id="index" class="home">
-        <header id="banner" class="body">
-                <h1><a href="/">Five Computers </a></h1>
-                <nav><ul>
-                                                    <li><a href="/pages/about.html">About</a></li>
-                                                                    <li ><a href="/category/blogging.html">blogging</a></li>
-                                    <li ><a href="/category/converted.html">converted</a></li>
-                                    <li ><a href="/category/python-eda.html">python, eda</a></li>
-                                                </ul></nav>
-        </header><!-- /#banner -->
-                
-            
 
-                            <aside id="featured" class="body">
-                <article>
-                    <h1 class="entry-title"><a href="/a-uvm-layer-for-pyhvl.html">A UVM layer for PyHVL</a></h1> 
-                    <footer class="post-info">
-        <abbr class="published" title="2012-09-05T00:00:00">
-                Wed 05 September 2012
-        </abbr>
-
-                <address class="vcard author">
-                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
-        </address>
-        <p>In <a href="/category/converted.html">converted</a>. </p>
-<p>tags: <a href="/tag/.html"></a></p>
-</footer><!-- /.post-info --><p>Over the past few years I've been building verification environments in Python, hooked up to SystemVerilog and Verilog simulators. The glue is <a href="http://sourceforge.net/projects/pyhvl/">PyHVL</a>. But PyHVL is just the glue. It does open up the possibility of dynamic languages and scripting to talk to your test bench, but it isn't enough to implement a complete verification environment, quickly.</p>
+    </head>
+    <body>
+        <div id="header">
+            <ul id="nav">
+                <li class="ephemeral selected"><a href="http://fivecomputers.com/tag/.html"></a></li>
+                <li><a href="http://fivecomputers.com">Home</a></li>
+                <li><a href="http://fivecomputers.com/pages/about-gordon.html">About Gordon</a></li>
+                <li><a href="http://fivecomputers.com/archives.html">Archives</a></li>
+            </ul>
+            <div class="header_box">
+                <h1><a href="http://fivecomputers.com">Five Computers</a></h1>
+            </div>
+        </div>
+        <div id="wrapper">
+            <div id="content">
+                <h4 class="date">Sep  5,  2012</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/a-uvm-layer-for-pyhvl.html" rel="bookmark" title="Permanent Link to &quot;A UVM layer for PyHVL&quot;">A UVM layer for PyHVL</a>
+                    </h2>
+                    
+                    <p>Over the past few years I've been building verification environments in Python, hooked up to SystemVerilog and Verilog simulators. The glue is <a href="http://sourceforge.net/projects/pyhvl/">PyHVL</a>. But PyHVL is just the glue. It does open up the possibility of dynamic languages and scripting to talk to your test bench, but it isn't enough to implement a complete verification environment, quickly.</p>
 
 <p>To that end, I've started building analogues for most of the <a href="http://www.uvmworld.org/">UVM</a> classes, in Python/ PyHVL. Monitors, drivers, checkers, interfaces, scoreboards, all the standard sorts of pieces that you'd expect from a modern verification environment. With no compiling between iterations, and a command-line REPL to drop to for debug and interactive exploration. All backed with the batteries-included philosophy of Python. The sweet spot for this is probably somewhere within a fully fleshed out SystemVerilog testbench, leveraging the best features of SV (RTL/design, randomization with constraints, coverage, assertions) with the best features of Python for the higher level pieces of the testbench. At the same time, there is the potential to write the entire testbench in Python and the whole design in Verilog and use a free simulator such as <a href="http://iverilog.icarus.com/">Icarus</a> or <a href="http://sourceforge.net/projects/gplcver/">CVer</a>. Python brings a variety of useful features for testbench development; dynamic language, rapid development, rich set of libraries, fast iteration and a high level programming abstraction.</p>
 
@@ -63,287 +58,371 @@ HOST_BUS_SIGNALS<span style="color: #666666">=</span>(<span style="color: #BA212
 </pre>
 </div>
 
-<p>These classes can of course leverage the standard pyunit test frameworks and have unit tests in every class.</p>                </article>
-                            </aside><!-- /#featured -->
-                            <section id="content" class="body">
-                    <h1>Other articles</h1>
-                    <hr />
-                    <ol id="posts-list" class="hfeed">
-                                                
+<p>These classes can of course leverage the standard pyunit test frameworks and have unit tests in every class.</p>
 
-                 
-                        <li><article class="hentry">    
-                <header>
-                    <h1><a href="/sshfs-for-os-x-lion.html" rel="bookmark"
-                           title="Permalink to sshfs for OS X Lion">sshfs for OS X Lion</a></h1>
-                </header>
-                
-                <div class="entry-content">
-                <footer class="post-info">
-        <abbr class="published" title="2012-04-26T00:00:00">
-                Thu 26 April 2012
-        </abbr>
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/a-uvm-layer-for-pyhvl.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/a-uvm-layer-for-pyhvl.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/09.html" rel="tag">09</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/.html" class="selected"></a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
 
-                <address class="vcard author">
-                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
-        </address>
-        <p>In <a href="/category/converted.html">converted</a>. </p>
-<p>tags: <a href="/tag/.html"></a></p>
-</footer><!-- /.post-info -->                <p>Installed the latest version of fuse and sshfs, using <a href="http://mxcl.github.com/homebrew/">Homebrew</a>. I had been using FUSE for a while with previous versions of OS X, but haven't had much luck under Lion. Tried again today, using <a href="http://fuse4x.org/">Fuse4x</a>, rather than libFUSE and everything worked very transparently:</p>
+                <h4 class="date">Apr 26,  2012</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/sshfs-for-os-x-lion.html" rel="bookmark" title="Permanent Link to &quot;sshfs for OS X Lion&quot;">sshfs for OS X Lion</a>
+                    </h2>
+                    
+                    <p>Installed the latest version of fuse and sshfs, using <a href="http://mxcl.github.com/homebrew/">Homebrew</a>. I had been using FUSE for a while with previous versions of OS X, but haven't had much luck under Lion. Tried again today, using <a href="http://fuse4x.org/">Fuse4x</a>, rather than libFUSE and everything worked very transparently:</p>
 
 <pre>
 brew install fuse4x sshfs
 </pre>
 
-<p><strike>and ...</strike></p>
-                <a class="readmore" href="/sshfs-for-os-x-lion.html">read more</a>
-                                </div><!-- /.entry-content -->
-            </article></li>
-                            
+<p><strike>and that was it!</strike><strike><br /></strike> No, of course that wasn't true. First I had to re-update my Xcode command-line tools. This then removed autoreconf which Apple no longer provide as part of their <a href="http://brianpeddle.com/tag/autoreconf/">XCode tools bundle</a> [in neither the command line, or GUI release]. So, via Google, I find you have to install a different set of <a href="https://github.com/kennethreitz/osx-gcc-installer/downloads">gcc tools</a>, not shipped by Apple. Then, back to the brew install command line above, and things are a lot happier.<br />
+<strike>and that was it!</strike><strike><br /></strike> Well, except you really do need to read the installation message which says<br />
+<pre>
+==&gt; Caveats
+</pre>
+<pre>
+   Make sure to follow the directions given by <code>brew info fuse4x-kext</code>before trying to use a FUSE-based filesystem.<br />
+</pre><br />
+Then if you type<br />
+<pre>
+brew info fuse4x-kext
+</pre><br />
+You find you need to run the following two commands to get anything to actually work:<br />
+<pre>
+sudo cp -rfX /usr/local/Cellar/fuse4x-kext/0.8.14/Library/Extensions/fuse4x.kext /System/Library/Extensions 
+sudo chmod +s /System/Library/Extensions/fuse4x.kext/Support/load_fuse4x
+</pre>and that was it!<br />
+<br />
+No really, it was. Then I was able to mount remote directories, with the simple command:<br />
+<pre>
+sshfs &lt;remote_host&gt;:&lt;remote_path&gt; &lt;local_path&gt;
+</pre><br />
+and it actually worked!<br />
+To unmount a mounted partition, use the standard<br />
+<br />
+<pre>
+umount &lt;local_path&gt; 
+</pre>
+<pre>
+<br />
+</pre>
+<pre>
+<br />
+</pre></p>
+<div class="posttagsblock"><a href="http://technorati.com/tag/geekery" rel="tag">geekery</a>, <a href="http://technorati.com/tag/OSX" rel="tag">OSX</a></div>
 
-                 
-                        <li><article class="hentry">    
-                <header>
-                    <h1><a href="/systemverilog-support-in-pygments.html" rel="bookmark"
-                           title="Permalink to SystemVerilog support in Pygments">SystemVerilog support in Pygments</a></h1>
-                </header>
-                
-                <div class="entry-content">
-                <footer class="post-info">
-        <abbr class="published" title="2012-04-19T00:00:00">
-                Thu 19 April 2012
-        </abbr>
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/sshfs-for-os-x-lion.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/sshfs-for-os-x-lion.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/26.html" rel="tag">26</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/.html" class="selected"></a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
 
-                <address class="vcard author">
-                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
-        </address>
-        <p>In <a href="/category/converted.html">converted</a>. </p>
-<p>tags: <a href="/tag/.html"></a></p>
-</footer><!-- /.post-info -->                <p><a href="http://www.flickr.com/photos/mcgregorphoto/6949231074/" title="svforpygments by Gordon McGregor, on Flickr"><img alt="svforpygments" src="http://farm6.staticflickr.com/5454/6949231074_4dd2096121_c.jpg" width="720" /></a></p>
+                <h4 class="date">Apr 19,  2012</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/systemverilog-support-in-pygments.html" rel="bookmark" title="Permanent Link to &quot;SystemVerilog support in Pygments&quot;">SystemVerilog support in Pygments</a>
+                    </h2>
+                    
+                    <p><a href="http://www.flickr.com/photos/mcgregorphoto/6949231074/" title="svforpygments by Gordon McGregor, on Flickr"><img alt="svforpygments" src="http://farm6.staticflickr.com/5454/6949231074_4dd2096121_c.jpg" width="720" /></a></p>
 
-<p>I&#39;ve used <a href="http://pygments.org/">Pygments</a> in the past to do syntax highlighting of Python and C code to drop into documentation. I&#39;ve wanted SystemVerilog support for a while, but the tool didn&#39;t <a href="http://pygments.org/languages/">support the language</a>. I eventually got frustrated enough by this to go and add it myself. The ...</p>
-                <a class="readmore" href="/systemverilog-support-in-pygments.html">read more</a>
-                                </div><!-- /.entry-content -->
-            </article></li>
-                            
+<p>I&#39;ve used <a href="http://pygments.org/">Pygments</a> in the past to do syntax highlighting of Python and C code to drop into documentation. I&#39;ve wanted SystemVerilog support for a while, but the tool didn&#39;t <a href="http://pygments.org/languages/">support the language</a>. I eventually got frustrated enough by this to go and add it myself. The motivation was so that I could set up an internal <a href="http://paste.pocoo.org/about/">LodgeIt! pastebin</a> to allow colleagues to discuss snippets of code, without having to paste it into emails, or Yammer discussions, both of which always scramble formatting and make discussions harder than they should be. The pastebin that I decided to use, used Pygments as the backend, so I decided to add SystemVerilog support to that project.</p>
 
-                 
-                        <li><article class="hentry">    
-                <header>
-                    <h1><a href="/improving-sshfs-connections.html" rel="bookmark"
-                           title="Permalink to Improving sshfs connections">Improving sshfs connections</a></h1>
-                </header>
-                
-                <div class="entry-content">
-                <footer class="post-info">
-        <abbr class="published" title="2012-02-05T00:00:00">
-                Sun 05 February 2012
-        </abbr>
+<p>The main task was adding the <a href="https://twitter.com/#!/GordonMcGregor/status/104282867168845825">more than 220 keywords</a> in SystemVerilog into the format required for Pygments. I ended up cutting and pasting the keywords from the specification into a text file, then using a quick script to generate the <a href="https://bitbucket.org/birkenfeld/pygments-main/src/96e8b9cb83ef/pygments/lexers/hdl.py">appropriate structures</a> for Pygments. I found that generating it automatically was about the only way to avoid typos and saved quite a bit of time and typing.</p>
 
-                <address class="vcard author">
-                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
-        </address>
-        <p>In <a href="/category/converted.html">converted</a>. </p>
-<p>tags: <a href="/tag/.html"></a></p>
-</footer><!-- /.post-info -->                <p>I'm finding <a href="http://www.fivecomputers.com/2012/04/sshfs-for-os-x-lion.html">sshfs</a> to be excellent for remotely accessing drives over ssh. There's a couple of tweaks to the ssh config file that can make things even better. If you haven't used an ssh config file, it can be used to store general and connection specific information ...</p>
-                <a class="readmore" href="/improving-sshfs-connections.html">read more</a>
-                                </div><!-- /.entry-content -->
-            </article></li>
-                            
+<p>If you&#39;d like to try it out, installation is straightforward:</p>
 
-                 
-                        <li><article class="hentry">    
-                <header>
-                    <h1><a href="/pygmentize-files-and-paste-them-into-microsoft-word-in-os-x.html" rel="bookmark"
-                           title="Permalink to Pygmentize files and paste them into Microsoft Word in OS X">Pygmentize files and paste them into Microsoft Word in OS X</a></h1>
-                </header>
-                
-                <div class="entry-content">
-                <footer class="post-info">
-        <abbr class="published" title="2012-01-05T00:00:00">
-                Thu 05 January 2012
-        </abbr>
+<div class="highlight">
+<pre><span class="n">hg</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">bitbucket</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">birkenfeld</span><span class="o">/</span><span class="n">pygments</span><span class="o">-</span><span class="n">main</span> <span class="n">pygments</span>
+<span class="n">cd</span> <span class="n">pygments</span>
+<span class="n">sudo</span> <span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
+</pre>
+</div>
 
-                <address class="vcard author">
-                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
-        </address>
-        <p>In <a href="/category/converted.html">converted</a>. </p>
-<p>tags: <a href="/tag/.html"></a></p>
-</footer><!-- /.post-info -->                <p>Writing some documents using Microsoft Word and I wanted to be able to drop in syntax highlighted versions of the source code. Pygmentize will generate RTF format, which is great for pasting in to Word, but you have to get it there. The best way I've found is using ...</p>
-                <a class="readmore" href="/pygmentize-files-and-paste-them-into-microsoft-word-in-os-x.html">read more</a>
-                                </div><!-- /.entry-content -->
-            </article></li>
-                            
+<p>After that, you just run the &#39;pygmentize&#39; command to see formatted source code.</p>
 
-                 
-                        <li><article class="hentry">    
-                <header>
-                    <h1><a href="/a-real-working-time-machine.html" rel="bookmark"
-                           title="Permalink to a real, working time machine">a real, working time machine</a></h1>
-                </header>
-                
-                <div class="entry-content">
-                <footer class="post-info">
-        <abbr class="published" title="2009-05-08T00:00:00">
-                Fri 08 May 2009
-        </abbr>
+<pre>pygmentize hello_world.sv
+</pre>
 
-                <address class="vcard author">
-                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
-        </address>
-        <p>In <a href="/category/converted.html">converted</a>. </p>
-<p>tags: <a href="/tag/.html"></a></p>
-</footer><!-- /.post-info -->                <p>Was working on some files on my mac last night, editing photographs from a recent trip. It was getting late and I accidentally deleted a directory of images. Now my images are always backed up anyway, on a separate attached storage device, so this wasn't too big of a ...</p>
-                <a class="readmore" href="/a-real-working-time-machine.html">read more</a>
-                                </div><!-- /.entry-content -->
-            </article></li>
-                            
+<p>This sample below comes from the UVM source code &#39;hello_world.sv&#39; example.</p>
 
-                 
-                        <li><article class="hentry">    
-                <header>
-                    <h1><a href="/flock-together.html" rel="bookmark"
-                           title="Permalink to flock together">flock together</a></h1>
-                </header>
-                
-                <div class="entry-content">
-                <footer class="post-info">
-        <abbr class="published" title="2008-12-06T00:00:00">
-                Sat 06 December 2008
-        </abbr>
+<p><span style="font-family: monospace; white-space: pre;"><span style="color: #008000; font-weight: bold;">module</span> hello_world;</span></p>
 
-                <address class="vcard author">
-                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
-        </address>
-        <p>In <a href="/category/converted.html">converted</a>. </p>
-<p>tags: <a href="/tag/.html"></a></p>
-</footer><!-- /.post-info -->                <p><a title="flamingos by Gordon McGregor, on Flickr" href="http://www.flickr.com/photos/mcgregorphoto/1219954136/"><img alt="flamingos" src="http://farm2.static.flickr.com/1405/1219954136_fc45212560.jpg" /></a>
+<div class="highlight">
+<pre>  <span style="color: #008000; font-weight: bold;">import</span> <span style="color: #0000ff; font-weight: bold;">uvm_pkg::*</span>;
+  <span style="color: #880000;">`include</span> <span style="color: #ba2121;">&quot;uvm_macros.svh&quot;</span>
+
+  <span style="color: #880000;">`include</span> <span style="color: #ba2121;">&quot;packet.sv&quot;</span>
+  <span style="color: #880000;">`include</span> <span style="color: #ba2121;">&quot;producer.sv&quot;</span>
+  <span style="color: #880000;">`include</span> <span style="color: #ba2121;">&quot;consumer.sv&quot;</span>
+  <span style="color: #880000;">`include</span> <span style="color: #ba2121;">&quot;top.sv&quot;</span>
+
+  top mytop;
+
+  <span style="color: #008000; font-weight: bold;">initial</span> <span style="color: #008000; font-weight: bold;">begin</span>
+    <span>$</span>timeformat(<span style="color: #666666;">-9</span>,<span style="color: #666666;">0</span>,<span style="color: #ba2121;">&quot; ns&quot;</span>,<span style="color: #666666;">5</span>);
+    uvm_default_table_printer.knobs.name_width<span style="color: #666666;">=20</span>;
+    uvm_default_table_printer.knobs.type_width<span style="color: #666666;">=50</span>;
+    uvm_default_table_printer.knobs.size_width<span style="color: #666666;">=10</span>;
+    uvm_default_table_printer.knobs.value_width<span style="color: #666666;">=14</span>;
+    set_config_int(<span style="color: #ba2121;">&quot;top.producer1&quot;</span>,<span style="color: #ba2121;">&quot;num_packets&quot;</span>,<span style="color: #666666;">2</span>);
+    set_config_int(<span style="color: #ba2121;">&quot;top.producer2&quot;</span>,<span style="color: #ba2121;">&quot;num_packets&quot;</span>,<span style="color: #666666;">4</span>);
+    set_config_int(<span style="color: #ba2121;">&quot;*&quot;</span>,<span style="color: #ba2121;">&quot;recording_detail&quot;</span>,<span style="color: #880000;">UVM_LOW</span>);
+    <span style="color: #408080; font-style: italic;">//uvm_default_printer = uvm_default_tree_printer;</span>
+    uvm_default_printer.knobs.reference<span style="color: #666666;">=0</span>;
+    mytop <span style="color: #666666;">=</span> <span style="color: #008000; font-weight: bold;">new</span>(<span style="color: #ba2121;">&quot;top&quot;</span>); 
+    uvm_default_table_printer.knobs.type_width<span style="color: #666666;">=20</span>;
+    run_test();
+  <span style="color: #008000; font-weight: bold;">end</span>
+<span style="color: #008000; font-weight: bold;">endmodule</span>
+</pre>
+</div>
+
+<p>A further challenge is working out how to embed this sort of code snippet into a TypePad blog post. In general, Pygments generates html code with CSS styles and classes. This doesn&#39;t play well with TypePad which seems to consume or remove the CSS styles. You can however get Pygments to generate inline styles, which can then be pasted into TypePad. The syntax for this is:</p>
+
+<pre>pygmentize -f html -Ofull,noclasses hello_world.sv
+</pre>
+
+<p>And then the output html can be pasted straight into an HTML editor.</p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/systemverilog-support-in-pygments.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/systemverilog-support-in-pygments.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/19.html" rel="tag">19</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/.html" class="selected"></a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <h4 class="date">Feb  5,  2012</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/improving-sshfs-connections.html" rel="bookmark" title="Permanent Link to &quot;Improving sshfs connections&quot;">Improving sshfs connections</a>
+                    </h2>
+                    
+                    <p>I'm finding <a href="http://www.fivecomputers.com/2012/04/sshfs-for-os-x-lion.html">sshfs</a> to be excellent for remotely accessing drives over ssh. There's a couple of tweaks to the ssh config file that can make things even better. If you haven't used an ssh config file, it can be used to store general and connection specific information, to save you typing it every time. The file lives in <i>~/.ssh/config</i></p>
+
+<pre>
+Host &lt;hostname&gt;
+
+features
+
+Host &lt;otherhostname&gt;
+
+features
+</pre>
+
+<p>e.g.,
+<pre>
+Host short</p>
+<p>Hostname ssh.long_url_name.com</p>
+<p>Username myusername
+</pre>so, instead of typing <i>ssh myusername@ssh.long_url_name.com</i> I can instead run the following:
+<pre>
+ssh short
+</pre>To improve the sshfs you should add<br />
+<pre>
+ServerAliveInterval 15 
+</pre>to the Host that you connect over sshfs, which will make sshfs to a ssh keepalive ping every 15 seconds.</p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/improving-sshfs-connections.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/improving-sshfs-connections.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/02.html" rel="tag">02</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/.html" class="selected"></a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <h4 class="date">Jan  5,  2012</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/pygmentize-files-and-paste-them-into-microsoft-word-in-os-x.html" rel="bookmark" title="Permanent Link to &quot;Pygmentize files and paste them into Microsoft Word in OS X&quot;">Pygmentize files and paste them into Microsoft Word in OS X</a>
+                    </h2>
+                    
+                    <p>Writing some documents using Microsoft Word and I wanted to be able to drop in syntax highlighted versions of the source code. Pygmentize will generate RTF format, which is great for pasting in to Word, but you have to get it there. The best way I've found is using the OS X terminal (I like using <a href="http://www.iterm2.com/#/section/home">iTerm2</a>). I then use a feature of the command line <i>open</i> command, which makes it read from <i>stdin</i> and open the output in TextEdit. This text can then be cut and pasted directly in to Word, preserving all the formatting.</p>
+
+<p>Run the command:</p>
+
+<pre>
+pygmentize -f rtf &lt;file to highlight&gt; | open -f
+</pre>
+
+<p>Then in the TextEdit window, press</p>
+<div style="display: inline !important;">
+  <i><span style="font-style: normal;">⌘</span></i>
+</div>
+
+<p><i>a</i>,</p>
+<div style="display: inline !important;">
+  <i><span style="font-style: normal;">⌘</span></i>
+</div>
+
+<p><i>c</i> to select all and copy it. Switch to Word and hit</p>
+<div style="display: inline !important;">
+  <i><span style="font-style: normal;">⌘</span></i>
+</div>
+
+<p><i>v</i> to paste.</p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/pygmentize-files-and-paste-them-into-microsoft-word-in-os-x.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/pygmentize-files-and-paste-them-into-microsoft-word-in-os-x.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/01.html" rel="tag">01</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/.html" class="selected"></a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <h4 class="date">May  8,  2009</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/a-real-working-time-machine.html" rel="bookmark" title="Permanent Link to &quot;a real, working time machine&quot;">a real, working time machine</a>
+                    </h2>
+                    
+                    <p>Was working on some files on my mac last night, editing photographs from a recent trip. It was getting late and I accidentally deleted a directory of images. Now my images are always backed up anyway, on a separate attached storage device, so this wasn't too big of a mistake. There's another copy of the same images on some DVDs, too. But it still would have taken time to go and find them and recovery the images. I'd also have lost the various edits I'd done over the last few hours. Annoying, certainly, but not fatal. However, this is a mac, and I've been running time machine to do automatic backups, to a cheap, 1Tb USB drive I have attached to the machine. It took me about 30 seconds to unroll the damage using that, via the nifty graphical interface. I lost about 10 minutes of work in total. I was impressed by how well it works, much like the daily and hourly .snapshots you get with a much more expensive netapp filer. Seems to have been done right.</p>
+
+<div class="posttagsblock"><a href="http://technorati.com/tag/geekery" rel="tag">geekery</a>, <a href="http://technorati.com/tag/OSX" rel="tag">OSX</a>, <a href="http://technorati.com/tag/photography" rel="tag">photography</a></div>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/a-real-working-time-machine.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/a-real-working-time-machine.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/05.html" rel="tag">05</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/.html" class="selected"></a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <h4 class="date">Dec  6,  2008</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/flock-together.html" rel="bookmark" title="Permanent Link to &quot;flock together&quot;">flock together</a>
+                    </h2>
+                    
+                    <p><a title="flamingos by Gordon McGregor, on Flickr" href="http://www.flickr.com/photos/mcgregorphoto/1219954136/"><img alt="flamingos" src="http://farm2.static.flickr.com/1405/1219954136_fc45212560.jpg" /></a>
 
 </p>
 
-<p>Attended the <a href="http://www.coolverification.com/2008/03/blogging-birds.html">blogging Birds of Feather</a> session at DAC, last evening. I was quite amazed at the number of people who showed up. I had expected there to be half a dozen people and not much interest. Instead, more chairs had to be brought in and in the end about ...</p>
-                <a class="readmore" href="/flock-together.html">read more</a>
-                                </div><!-- /.entry-content -->
-            </article></li>
-                            
+<p>Attended the <a href="http://www.coolverification.com/2008/03/blogging-birds.html">blogging Birds of Feather</a> session at DAC, last evening. I was quite amazed at the number of people who showed up. I had expected there to be half a dozen people and not much interest. Instead, more chairs had to be brought in and in the end about 40 people showed up, with many traditional journalists and bloggers in attendance. The discussion was lively and spirited. </p>
 
-                 
-                        <li><article class="hentry">    
-                <header>
-                    <h1><a href="/conways-law.html" rel="bookmark"
-                           title="Permalink to Conway's law">Conway's law</a></h1>
-                </header>
-                
-                <div class="entry-content">
-                <footer class="post-info">
-        <abbr class="published" title="2008-06-14T00:00:00">
-                Sat 14 June 2008
-        </abbr>
+<p>One of the main themes was confusion over just what blogging is and how it should fit in to the more traditional roles of the press and marketing with the EDA world. Some of the discussion revolved around trying to classify just what a blog is or isn't and how it differs from columns, marketing or opinion pieces. To me this seems a mostly futile debate or perhaps one that stems from a lack of real understanding on what the medium is about. Really all a blog is is a way of having a somewhat one-sided or asymmetric conversation. The classification or editorial style then comes from the person who runs the blog. Columns, <a href="http://stephenfry.com/blog/">blessays</a>, technical paper sources, marketing fluff pieces, lunchable debates, it is all blogging and reflects the writer of the blog. At the lowest level, a blog is really just an easy mechanism to publish on-line. Everything else becomes an issue of personal approach, rather than definition over the technical nature of the communications medium.</p>
 
-                <address class="vcard author">
-                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
-        </address>
-        <p>In <a href="/category/converted.html">converted</a>. </p>
-<p>tags: <a href="/tag/.html"></a></p>
-</footer><!-- /.post-info -->                <p>http://www.melconway.com/research/committees.html</p>
-                <a class="readmore" href="/conways-law.html">read more</a>
-                                </div><!-- /.entry-content -->
-            </article></li>
-                            
+<p>There was also quite a bit of concern over editorial control and company influence. Certainly it is clear that one of the main differences that a blog has over what has gone before is the democratization of content creation. The barriers to entry have been stripped away and anyone with something to say can start saying it. It is analogous to the changes with the automated printing press and how that lowered the cost of entry to distribute ideas. But anyone being able to publish isn't always a good thing. Professional writers and editors perform a useful function, giving an expectation for a certain level of quality.&nbsp; </p>
 
-                 
-                        <li><article class="hentry">    
-                <header>
-                    <h1><a href="/its-not-about-the-tools-example-of-photography-with-jl.html" rel="bookmark"
-                           title="Permalink to Its not about the tools. Example of photography with JL">Its not about the tools. Example of photography with JL</a></h1>
-                </header>
-                
-                <div class="entry-content">
-                <footer class="post-info">
-        <abbr class="published" title="2008-06-14T00:00:00">
-                Sat 14 June 2008
-        </abbr>
+<p>Now, editorial control over the content is removed. But editors are valuable - they are a filter on the content. That filter finds interesting articles and also maintains quality. A blog removes that or shifts the onus onto the writer to be their own editor. EDA blogging isn't going to be immune to the wide range of quality and value that exists in the mainstream blogosphere. Some blogs will be terrible. Some will be great. The advantage is that my definition of what is great and interesting might be radically different to yours, so I'll be able to find the content that is valuable to me, rather than what an editor thinks I need to hear. </p>
 
-                <address class="vcard author">
-                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
-        </address>
-        <p>In <a href="/category/converted.html">converted</a>. </p>
-<p>tags: <a href="/tag/.html"></a></p>
-</footer><!-- /.post-info -->                <p>
-Its not about the tools. Example of photography with JL<br />
---</p>
-                <a class="readmore" href="/its-not-about-the-tools-example-of-photography-with-jl.html">read more</a>
-                                </div><!-- /.entry-content -->
-            </article></li>
-                            
+<p>Control and classification again was brought up when the issue of the 60+ EDA blogs was mentioned. The concern was that so many disparate sources of information need to be corralled and filtered, otherwise nobody could read them or keep up. Here again, I think this is a bit of a red herring. There will be a large number of EDA blogs that will appear, but I'll personally probably only care about the content of a small percentage of them. It is exactly the same as when I come to DAC. There might be 500 companies here, but I'm not interested in the products that many or even most of them have. I personally filter out all the low level layout, silicon process technology companies and concentrate on the ones relevant to me. EDA blogs will be the same - I'll find the 5 or 10 that cover my areas of interest and read those. The beauty is that you can also find the (no doubt very different) 5 or 10 that cover your area of interest and watch those. You have the control over the content you are exposed to, rather than having <a href="http://www.eetimes.com">EE Times</a> select across the whole EDA sphere, which then provides maybe one article per issue that actually covers part of the industry that I care about.</p>
 
-                 
-                        <li><article class="hentry">    
-                <header>
-                    <h1><a href="/powerpoint-and-presentations-of-information.html" rel="bookmark"
-                           title="Permalink to powerpoint and presentations of information">powerpoint and presentations of information</a></h1>
-                </header>
-                
-                <div class="entry-content">
-                <footer class="post-info">
-        <abbr class="published" title="2008-06-14T00:00:00">
-                Sat 14 June 2008
-        </abbr>
+<p>Along the same lines, there is no real reason that someone couldn't step up and start aggregating the content in useful ways, collecting and collating interesting content from other
+sources. Reputation tends to be the driver for this. If I find someone who writes interesting content I'll tend to follow their interests too. If they point to another article or blog, I'll read that. They then are providing the role of a more traditional editor to the content I read. The only real change is that there will be a lot more editors and authors, so we can all find the more personalised channel that suits our interest. </p>
 
-                <address class="vcard author">
-                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
-        </address>
-        <p>In <a href="/category/converted.html">converted</a>. </p>
-<p>tags: <a href="/tag/.html"></a></p>
-</footer><!-- /.post-info -->                <p>http://www.wired.com/wired/archive/11.09/ppt1.html</p>
+<p>My experiences aggregating content for SoFoBoMo (<a href="http://gordonmcgregor.blogspot.com/2008/01/sofobomo.html">Solo Photographic Book in a Month</a>) is illustrative for this. In a couple of months, we established a group of 200 people working an indivdual book project, all working on their own project, concurrently, in the same month. Many of the participants also blogged about their experiences creating their first (for those new to the process) or latest book. Everyone was working on a similar process, but on their own personal work. <a href="http://gordonmcgregor.blogspot.com/2008/04/pipes.html">I set up simple tools</a> that pulled from all of the participants blogs and provide one, very focused, feed specifically about this shared project. Those people may well have been blogging about what they had for lunch or where they went at the weekend, but only the relevant <a href="http://pipes.yahoo.com/gordonmcgregor/sofobomo">entries about SoFoBoMo</a> appeared in the feed. It would certainly be quite trivial to do something similar for hot EDA topics too. I could do that and publish it and become a hub for those conversations. There is a world of free tools out there just to do this task. A feed that combed all the EDA blogs for ESL topics or OVM or whatever buzzwords you are interested in is trivial to set up and would deliver customised content on a daily basis. Certainly not all readers will set this up, but it only takes one person to do it and share it for everyone to benefit.</p>
 
-<p>http://www.aaronsw.com/weblog/000931</p>
+<p><a href="http://www.vmmcentral.org/vmartialarts/">Janick Bergeron</a> raised some interesting concerns common to most bloggers, on how to maintain the flow of content. There have been <a href="http://writetodone.com/">a lot of articles</a> written on how to<a href="http://http://writetodone.com/2008/01/10/what-makes-great-blogwriting/"> feed the beast</a>, with <a href="http://www.problogger.net/archives/2006/02/14/blogging-for-beginners-2/">blogs devoted</a> to these sorts of topics. This isn't really an EDA blogging or even a blogging specific topic, but one common to anyone who writes. Passion has to be the driver, particularly for a personal outlet that isn't corporately funded or part of a job. I think it is hard to fake a blog - you have to want to do it, enjoy writing and have something to say. There are certainly mechanisms <a href="http://writetodone.com/2008/03/03/31-ways-to-find-inspiration-for-your-writing/">to help</a> discover content or processes you can put in place to make it more of a habit, but you have to want to do it at a fundamental level. My <a href="http://gordonmcgregor.blogspot.com">blog on photography</a> exists because I'm interested in discussing the topic. I want to share the ideas and learn from others following a similar path. I write it now because I can't stop writing it and I enjoy the process of ordering my thoughts. <a href="http://www.xuropa.com/ixuropa_home.php"><br /></a></p>
 
-<p>http://www.edwardtufte.com/tufte/books_pp</p>
+<p><a href="http://www.xuropa.com/ixuropa_home.php">James Colgan</a> and I had an interesting conversation on what topics make sense for blogging. I think there can be an initial fear that you have to be an expert in a particular topic to be able to talk about it. That can certainly be one approach. But there can be a lot of value to others in describing a learning process. You can become a guide for those who are following the same path if you point out the pitfalls that you fell into along the way. I used <a href="http://gordonmcgregor.blogspot.com/search/label/strangers">my experiences photographing strangers</a> as an example - 18 months ago I started blogging about my attempts to get better at taking pictures of people I didn't know. My early efforts were painful but I kept talking about how it improved over time. Some of those articles are amongst the more popular and valuable ones that I've written - because others who are earlier on that learning curve can see what I did over time. Similarly, in the EDA industry I could see that an expert on OVM blogging about use of the methodology would be fascinating. I could also see that a blog written about the frustrations of trying to learn to use the OVM for the first time would be of value. The expert has already probably forgotten the details that the new user might get hung up on and maybe wouldn't even know about the common mistakes that would be made. There is value to both and sharing that sort of experience.</p>
 
-<p><br /></p>
-<p>http://www.wired.com/wired/archive/11.09/ppt2.html</p>
+<p>Overall this was a really interesting and fun session. Kudos to JL for pushing to make it happen and to everyone who attended and made it such a lively discussion.</p>
 
-<p>http://www.som.tulane.edu/departments/scb/ZoomImage_web/ZoomImage-f.html</p>
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/flock-together.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/flock-together.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/12.html" rel="tag">12</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/.html" class="selected"></a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
 
-<p>http://contactsheet.org/articles/2003/08/28/the_cognitive_style_of_powerpoint ...</p>
-                <a class="readmore" href="/powerpoint-and-presentations-of-information.html">read more</a>
-                                </div><!-- /.entry-content -->
-            </article></li>
-                            </ol><!-- /#posts-list -->
-                            <p class="paginator">
-        Page 1 / 2
-            <a href="/tag/2.html">&raquo;</a>
-    </p>
-                        </section><!-- /#content -->
-                    <section id="extras" class="body">
-                        <div class="blogroll">
-                        <h2>blogroll</h2>
-                        <ul>
-                                                    <li><a href="http://getpelican.com/">Pelican</a></li>
-                                                    <li><a href="http://python.org/">Python.org</a></li>
-                                                    <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
-                                                    <li><a href="#">You can modify those links in your config file</a></li>
-                                                </ul>
-                </div><!-- /.blogroll -->
-                                <div class="social">
-                        <h2>social</h2>
-                        <ul>
-                            <li><a href="/None" type="application/atom+xml" rel="alternate">atom feed</a></li>
-                            
-                                                    <li><a href="#">You can add links in your config file</a></li>
-                                                    <li><a href="#">Another social link</a></li>
-                                                </ul>
-                </div><!-- /.social -->
-                </section><!-- /#extras -->
+                <h4 class="date">May 29,  2008</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/about-gordon-mcgregor.html" rel="bookmark" title="Permanent Link to &quot;About Gordon McGregor&quot;">About Gordon McGregor</a>
+                    </h2>
+                    
+                    <p>Gordon McGregor is a Verification Consultant at <a href="http://www.verilab.com">Verilab, Inc</a>, based in Austin, Texas.
 
-        <footer id="contentinfo" class="body">
-                <address id="about" class="vcard body">
-                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
-                </address><!-- /#about -->
+Prior to that, Gordon worked for <a href="http://www.freescale.com">Freescale Semiconductor</a>, <a href="http://www.motorola.com">Motorola</a> and Pilkington Microelectronics for 7 years through various buy-outs, take-overs and spin-offs, moving from Glasgow, Scotland, to Northwich in England and finally to Austin, Texas.
 
-                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
-        </footer><!-- /#contentinfo -->
+</p>
 
-</body>
+<p>He received a Bachelor's degree, Master's degree and PhD from the <a href="http://www.strath.ac.uk">University of Strathclyde</a>, Scotland, in 1993, 1994 and 2005. Mostly these were in electronics, with an end bias towards dynamic reconfiguration of Field Programmable Gate Arrays (FPGAs) and methodology improvements to make dynamic reconfiguration a practical, deployable reality.
+
+</p>
+
+<p>His particular areas of interest are in functional verification techniques and electronic system level design along with the application of the lessons learned in the field of software engineering to the world of hardware design.</p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/about-gordon-mcgregor.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/about-gordon-mcgregor.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/29.html" rel="tag">29</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/.html" class="selected"></a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <h4 class="date">Mar  8,  2008</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/large-hadron-collider.html" rel="bookmark" title="Permanent Link to &quot;large hadron collider&quot;">large hadron collider</a>
+                    </h2>
+                    
+                    <p><a href="http://www.flickr.com/photos/52043707@N00/2730301368/"><img src="http://farm4.static.flickr.com/3077/2730301368_3ce715dff6.jpg" height="222" width="360" alt="lhc" /></a></p>
+
+<p>Pretty isn't it? This is the <a href="http://cmsinfo.cern.ch/outreach/">Compact Muon Solenoid</a> (or big electro-magnet) experiment tracker outer barrel from the <a href="http://public.web.cern.ch/public/en/LHC/LHC-en.html">Large Hadron Collider</a>. They are getting close to firing this up, over on the border between Switzerland and France. CERN starts the first particle beam tests this month, with the first real particle collisions happening towards the end of the year. I keep having <a href="http://www.youtube.com/watch?v=cGqroT1FZ5Y">an REM song playing</a> in the back of my head when I <a href="http://www.boston.com/bigpicture/2008/08/the_large_hadron_collider.html">look at these pictures</a>.</p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/large-hadron-collider.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/large-hadron-collider.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/03.html" rel="tag">03</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/.html" class="selected"></a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <div class="clear"></div>
+                <div id="footer">
+                    <p>
+                    <a href="https://twitter.com/GordonMcGregor">Twitter @GordonMcGregor</a>
+                    &middot;
+                    <a class="atom" href="http://fivecomputers.com/feeds/all.atom.xml">RSS Feed</a>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+    <script type="text/javascript">
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+    try {
+        var pageTracker = _gat._getTracker("UA-42678190-1");
+    pageTracker._trackPageview();
+    } catch(err) {}</script>
+<script type="text/javascript">
+    var disqus_shortname = 'fivecomputers';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+    </body>
 </html>

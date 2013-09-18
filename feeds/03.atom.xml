@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Five Computers</title><link href="http://fivecomputers.com/" rel="alternate"></link><link href="http://fivecomputers.com/feeds/03.atom.xml" rel="self"></link><id>http://fivecomputers.com/</id><updated>2008-03-08T00:00:00-06:00</updated><entry><title>large hadron collider</title><link href="http://fivecomputers.com/large-hadron-collider.html" rel="alternate"></link><updated>2008-03-08T00:00:00-06:00</updated><author><name>GordonMcGregor</name></author><id>tag:fivecomputers.com,2008-03-08:large-hadron-collider.html</id><summary type="html">&lt;p&gt;&lt;a href="http://www.flickr.com/photos/52043707@N00/2730301368/"&gt;&lt;img src="http://farm4.static.flickr.com/3077/2730301368_3ce715dff6.jpg" height="222" width="360" alt="lhc" /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Pretty isn't it? This is the &lt;a href="http://cmsinfo.cern.ch/outreach/"&gt;Compact Muon Solenoid&lt;/a&gt; (or big electro-magnet) experiment tracker outer barrel from the &lt;a href="http://public.web.cern.ch/public/en/LHC/LHC-en.html"&gt;Large Hadron Collider&lt;/a&gt;. They are getting close to firing this up, over on the border between Switzerland and France. CERN starts the first particle beam tests this month, with the first real particle collisions happening towards the end of the year. I keep having &lt;a href="http://www.youtube.com/watch?v=cGqroT1FZ5Y"&gt;an REM song playing&lt;/a&gt; in the back of my head when I &lt;a href="http://www.boston.com/bigpicture/2008/08/the_large_hadron_collider.html"&gt;look at these pictures&lt;/a&gt;.&lt;/p&gt;</summary><category term=""></category></entry><entry><title>new companies at DAC</title><link href="http://fivecomputers.com/new-companies-at-dac.html" rel="alternate"></link><updated>2008-03-06T00:00:00-06:00</updated><author><name>GordonMcGregor</name></author><id>tag:fivecomputers.com,2008-03-06:new-companies-at-dac.html</id><summary type="html">&lt;p&gt;Based on the list of exhibitors and the scant information provided, these are some of new companies that appear to have a verification aspect to their products. I'll be finding out more next week on site. &lt;a href="http://www.chipdesignmag.com/bailey/"&gt;Brian Bailey&lt;/a&gt; has his take on DAC for Verification, over at &lt;a href="http://www.chipdesignmag.com/"&gt;Chip Design&lt;/a&gt; mag, that is worth a look if you are struggling to fill your schedule! There is quite an overwhelming amount of things packed in to next week.&lt;br /&gt;
+&lt;/p&gt;
+
+&lt;ul&gt;
+    &lt;li&gt;&lt;a href="http://www.dvteclipse.com/"&gt;Amiq Consulting S.R.L.1&lt;/a&gt; &lt;ul&gt;&lt;li&gt;RTL level verification &amp;amp; verification IP&lt;br /&gt;
+&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;
+
+&lt;ul&gt;&lt;li&gt;&lt;a href="http://www.axilica.com/"&gt;Axilica Ltd.&lt;/a&gt;&lt;ul&gt;&lt;li&gt;Tools for UML modeling/simulation of HW/SW designs&lt;br /&gt;
+&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;
+
+&lt;ul&gt;
+    &lt;li&gt;&lt;a href="http://www.duolog.com/"&gt;Duolog Technologies Ltd.&lt;/a&gt; &lt;ul&gt;&lt;li&gt;Intelligent testbench, ESL verification - Socrates design environment&lt;br /&gt;
+&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;
+
+&lt;ul&gt;
+    &lt;li&gt;&lt;a href="http://www.imera.com/"&gt;Imera Systems, Inc.&lt;/a&gt; &lt;ul&gt;&lt;li&gt;Network virtualisation, remote debugging and source code access&lt;br /&gt;
+&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;
+
+&lt;ul&gt;
+    &lt;li&gt;&lt;a href="http://www.paradigm-works.com/"&gt;Paradigm Works, Inc.&lt;/a&gt; &lt;ul&gt;&lt;li&gt;Verification services company. Selling SystemVerilog FrameWorks tools&lt;br /&gt;
+&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;
+
+&lt;ul&gt;
+    &lt;li&gt;&lt;a href="http://www.satin-ip.com/"&gt;SAS Satin IP Technologies&lt;/a&gt; &lt;ul&gt;&lt;li&gt;Design reuse management flows &amp;amp; technology. VIP lane product for IP deployment&lt;br /&gt;
+&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;
+
+&lt;ul&gt;
+    &lt;li&gt;&lt;a href="http://www.synapse-da.com/"&gt;Synapse Design Automation&lt;/a&gt; &lt;br /&gt;&lt;ul&gt;&lt;li&gt;Design &amp;amp; Verification services company&lt;br /&gt;
+&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;
+
+&lt;ul&gt;
+    &lt;li&gt;&lt;a href="http://www.winterlogic.com/"&gt;WinterLogic Inc.&lt;/a&gt; &lt;br /&gt;&lt;ul&gt;&lt;li&gt;Verilog fault simulator company: Fault Manager&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;</summary><category term="eda blogs"></category><category term="verification"></category></entry><entry><title>visualising complex datasets</title><link href="http://fivecomputers.com/visualising-complex-datasets.html" rel="alternate"></link><updated>2008-03-06T00:00:00-06:00</updated><author><name>GordonMcGregor</name></author><id>tag:fivecomputers.com,2008-03-06:visualising-complex-datasets.html</id><summary type="html">&lt;p&gt;A great example of the sort of insight that you can glean from a lot of data, with the right sort of visualisation.&lt;/p&gt;
+
+&lt;p&gt;&lt;object width="320" height="285" align="middle" id="VE_Player" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"&gt;&lt;param value="http://static.videoegg.com/ted/flash/loader.swf" name="movie" /&gt;&lt;param value="bgColor=FFFFFF&amp;amp;file=http://static.videoegg.com/ted/movies/HANSROSLING_high.flv&amp;amp;autoPlay=false&amp;amp;fullscreenURL=http://static.videoegg.com/ted/flash/fullscreen.html&amp;amp;forcePlay=false&amp;amp;logo=&amp;amp;allowFullscreen=true" name="FlashVars" /&gt;&lt;param value="high" name="quality" /&gt;&lt;param value="always" name="allowScriptAccess" /&gt;&lt;param value="#FFFFFF" name="bgcolor" /&gt;&lt;param value="noscale" name="scale" /&gt;&lt;param value="window" name="wmode" /&gt;&lt;embed width="320" height="285" align="middle" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" name="VE_Player" wmode="window" scale="noscale" bgcolor="#FFFFFF" allowscriptaccess="always" quality="high" flashvars="bgColor=FFFFFF&amp;amp;file=http://static.videoegg.com/ted/movies/HANSROSLING_high.flv&amp;amp;autoPlay=false&amp;amp;fullscreenURL=http://static.videoegg.com/ted/flash/fullscreen.html&amp;amp;forcePlay=false&amp;amp;logo=&amp;amp;allowFullscreen=true" src="http://static.videoegg.com/ted/flash/loader.swf"&gt;&lt;/embed&gt;&lt;/object&gt;&lt;/p&gt;</summary><category term="eda"></category><category term="software"></category><category term="verification"></category></entry></feed>

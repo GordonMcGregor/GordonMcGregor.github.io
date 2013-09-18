@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+        <title>Five Computers &middot; articles in the "" category</title>
+        <link rel="shortcut icon" href="http://fivecomputers.com/favicon.ico" />
+        <link href="http://fivecomputers.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Five Computers Atom Feed" />
+                
+        <link rel="stylesheet" href="http://fivecomputers.com/theme/css/screen.css" type="text/css" />
+        <link rel="stylesheet" href="http://fivecomputers.com/theme/css/pygments.css" type="text/css" />
+
+
+    </head>
+    <body>
+        <div id="header">
+            <ul id="nav">
+                <li class="ephemeral selected"><a href="http://fivecomputers.com/category/.html"></a></li>
+                <li><a href="http://fivecomputers.com">Home</a></li>
+                <li><a href="http://fivecomputers.com/pages/about-gordon.html">About Gordon</a></li>
+                <li><a href="http://fivecomputers.com/archives.html">Archives</a></li>
+            </ul>
+            <div class="header_box">
+                <h1><a href="http://fivecomputers.com">Five Computers</a></h1>
+            </div>
+        </div>
+        <div id="wrapper">
+            <div id="content">
+                <h4 class="date">Sep 18,  2013</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/uvm-report-servers.html" rel="bookmark" title="Permanent Link to &quot;UVM Report Servers&quot;">UVM Report Servers</a>
+                    </h2>
+                    
+                    <p>I'm a terrible procrastinator when it comes to writing things up or getting around to releasing finished work. As something of a <a href="http://en.wikipedia.org/wiki/Commitment_device">commitment device</a> to try and make me finish something, I submitted an abstract to the Austin Snyopsys Users group about some XML logging functionality I added to the UVM. The commitment device worked, my abstract was accepted and I finally got around to writing the paper, because of the looming submission deadline.</p>
+<p><a href="http://fivecomputers.com/static/images/papers/snug_custom_uvm_report_servers.pdf">Applications of Custom UVM Report Servers</a> describes a way to convert UVM logging from plain text into a more reuseable XML format. So many tools attempt to extract meaning from plain text files using regular expressions and other potentially fragile parsing methods. Instead, this approach records the log in a structured format that can be reconstructed more effectively, on demand. There is also an example XML parsing GUI that dynamically reformats and collapses log messages for simpler debug. The source code from the paper is <a href="https://bitbucket.org/verilab/uvm_structured_logs">available online.</a> </p>
+<p>This paper won the Technical Committee Award at the <a href="http://www.synopsys.com/Community/SNUG/Austin/Pages/default.aspx">Austin Synopsys User Group</a>.</p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/uvm-report-servers.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/uvm-report-servers.html">posted at 11:02 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/.html" rel="tag"></a>                                                
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <h4 class="date">Jul 31,  2013</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/playing-with-treemaps.html" rel="bookmark" title="Permanent Link to &quot;Playing with TreeMaps&quot;">Playing with TreeMaps</a>
+                    </h2>
+                    
+                    <p>Just started trying to implement a TreeMap visualization in Python, using Matplotlib. I found some <a href="http://wiki.scipy.org/Cookbook/Matplotlib/TreeMap">sample code</a> that got me started and led to some of the original <a href="http://hcil.cs.umd.edu/trs/91-03/91-03.html">academic papers</a> on the topic.   </p>
+<p>I've got the basics working, with a simple Tree class that I wrote to track nodes and leaves, along with weights and a place to store metadata. The Tree class just provides a wrapper around an array but helps in tracking parent/ child relationships and working out the relative weights of nodes.</p>
+<div class="highlight"><pre><span class="k">class</span> <span class="nc">Tree</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weight</span> <span class="o">=</span> <span class="n">weight</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">changed</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">add_child</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">child</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">changed</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">child</span>
+
+
+    <span class="k">def</span> <span class="nf">is_leaf</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+
+
+    <span class="k">def</span> <span class="nf">get_weight</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">recalculate</span> <span class="o">=</span> <span class="bp">False</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">recalculate</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">changed</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">weight</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">changed</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">weight</span> <span class="o">+=</span> <span class="n">child</span><span class="o">.</span><span class="n">get_weight</span><span class="p">(</span><span class="n">recalculate</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span>
+
+    <span class="k">def</span> <span class="nf">get_normalized_weight</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">weight</span><span class="p">)</span>
+</pre></div>
+
+
+<p>The actual drawing algorithm is straightforward too - for each level in the hierarchy, divide up the available space between all the nodes, weighted by their size and then flip between horizontal or vertical packing at each level of the hierarchy. Currently I'm putting the leaf node weight into the center of each rectangle as an annotation. This will probably need to change with additional nodes, as they will get too small to see. Mouseover tooltips or a <a href="https://github.com/joferkington/mpldatacursor">datacursor</a> that updates when a node is selected will probably be more useful.</p>
+<div class="highlight"><pre><span class="k">def</span> <span class="nf">add_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="p">[</span><span class="mf">0.005</span><span class="p">,</span><span class="mf">0.005</span><span class="p">],</span> <span class="n">upper</span><span class="o">=</span><span class="p">[</span><span class="mf">0.995</span><span class="p">,</span><span class="mf">0.995</span><span class="p">],</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+    <span class="n">axis</span> <span class="o">=</span> <span class="n">axis</span> <span class="o">%</span> <span class="mi">2</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">draw_rectangle</span><span class="p">(</span><span class="n">lower</span><span class="p">,</span> <span class="n">upper</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span>
+
+    <span class="n">width</span> <span class="o">=</span> <span class="n">upper</span><span class="p">[</span><span class="n">axis</span><span class="p">]</span> <span class="o">-</span> <span class="n">lower</span><span class="p">[</span><span class="n">axis</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">branch</span> <span class="ow">in</span> <span class="n">node</span><span class="p">:</span>
+        <span class="n">upper</span><span class="p">[</span><span class="n">axis</span><span class="p">]</span> <span class="o">=</span> <span class="n">lower</span><span class="p">[</span><span class="n">axis</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">width</span> <span class="o">*</span> <span class="nb">float</span><span class="p">(</span><span class="n">branch</span><span class="o">.</span><span class="n">get_weight</span><span class="p">()))</span> <span class="o">/</span> <span class="n">node</span><span class="o">.</span><span class="n">get_weight</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">branch</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">lower</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">upper</span><span class="p">),</span> <span class="n">axis</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lower</span><span class="p">[</span><span class="n">axis</span><span class="p">]</span> <span class="o">=</span> <span class="n">upper</span><span class="p">[</span><span class="n">axis</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">draw_rectangle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lower</span><span class="p">,</span> <span class="n">upper</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">Rectangle</span><span class="p">(</span><span class="n">lower</span><span class="p">,</span> <span class="n">upper</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">lower</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">upper</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">lower</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> 
+        <span class="n">edgecolor</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span>
+        <span class="n">facecolor</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">is_leaf</span><span class="p">():</span>
+        <span class="n">rx</span><span class="p">,</span> <span class="n">ry</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">get_xy</span><span class="p">()</span>
+        <span class="n">cx</span> <span class="o">=</span> <span class="n">rx</span> <span class="o">+</span> <span class="n">r</span><span class="o">.</span><span class="n">get_width</span><span class="p">()</span><span class="o">/</span><span class="mf">2.0</span>
+        <span class="n">cy</span> <span class="o">=</span> <span class="n">ry</span> <span class="o">+</span> <span class="n">r</span><span class="o">.</span><span class="n">get_height</span><span class="p">()</span><span class="o">/</span><span class="mf">2.0</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">set_facecolor</span><span class="p">(</span> <span class="n">node</span><span class="o">.</span><span class="n">get_colour</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">get_weight</span><span class="p">(),</span> <span class="p">(</span><span class="n">cx</span><span class="p">,</span> <span class="n">cy</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> 
+                         <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s">&#39;center&#39;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s">&#39;center&#39;</span><span class="p">)</span>
+        <span class="k">print</span> <span class="n">node</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">rx</span><span class="p">,</span> <span class="n">ry</span><span class="p">,</span> <span class="n">cx</span><span class="p">,</span> <span class="n">cy</span>
+</pre></div>
+
+
+<p>The full source is <a href="https://github.com/GordonMcGregor/treemap">available on github.</a> Trees can be implemented by creating all the nodes, one instance at a time.</p>
+<div class="highlight"><pre><span class="kn">from</span> <span class="nn">Tree</span> <span class="kn">import</span> <span class="n">HueTree</span> <span class="k">as</span> <span class="n">t</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="n">t</span><span class="p">()</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">e</span> <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;e&#39;</span><span class="p">)</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s">&#39;f&#39;</span><span class="p">)</span>
+
+<span class="n">c</span> <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="s">&#39;c&#39;</span><span class="p">)</span>
+
+<span class="n">d</span> <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<span class="n">j</span> <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;j&#39;</span><span class="p">)</span>
+<span class="n">k</span> <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;k&#39;</span><span class="p">)</span>
+<span class="n">h</span> <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s">&#39;h&#39;</span><span class="p">)</span>
+<span class="n">l</span> <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<span class="n">lprime</span> <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;l&#39;</span><span class="p">)</span>
+<span class="n">m</span> <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;m&#39;</span><span class="p">)</span>
+<span class="n">n</span> <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;n&#39;</span><span class="p">)</span>
+<span class="n">o</span> <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;o&#39;</span><span class="p">)</span>
+
+<span class="n">TreeMap</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+
+<p><img alt="Simple Treemap" src="http://fivecomputers.com/static/images/simple_treemap.png" /></p>
+<p>Here I'm using the relative weight of the node within a given point in the hierarchy to specify the Hue value from an Hue/Saturation/Value triplet that gets converted to an RGB colour. </p>
+<p>The long form way of instantiating a tree gets quite cumbersome, so it is also possible to define a tree just as a nested set of tuples, and then use a helper function, <code>make_tree</code> to construct the actual Tree objects.</p>
+<div class="highlight"><pre><span class="n">import</span> <span class="n">Tree</span>
+<span class="n">from</span> <span class="n">TreeMap</span> <span class="n">import</span> <span class="n">TreeMap</span>
+
+<span class="n">short_map</span> <span class="o">=</span> <span class="p">(((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="mi">3</span><span class="p">,</span> <span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">4</span><span class="p">,</span> <span class="p">((</span><span class="mi">32</span><span class="p">,</span><span class="mi">34</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> 
+                    <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,(</span><span class="mi">2</span><span class="p">,(</span><span class="mi">2</span><span class="p">,(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,(</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">12</span><span class="p">),</span><span class="mi">1</span><span class="p">)))))))))</span>
+
+<span class="n">x</span><span class="o">=</span><span class="n">Tree</span><span class="p">.</span><span class="n">make_tree</span><span class="p">(</span><span class="n">short_map</span><span class="p">,</span> <span class="n">TreeType</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">.</span><span class="n">Tree</span><span class="p">)</span>
+<span class="n">TreeMap</span><span class="p">(</span><span class="n">x</span><span class="p">).</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+
+<p>Things look good with a small number of nodes, but when you start adding more leaves, you find that skinny rectangles start to dominate the plot. In this case, I'm using the relative weight as a gray value, rather than varying the hue. <a href="http://www.win.tue.nl/~vanwijk/stm.pdf">Other algorithms</a> are available for how the space is subdivided that can tend to give a more <code>square</code> structure to the resulting map - I'm starting to investigate implementing the map using those algorithms to see how that looks.</p>
+<p><img alt="Skinny Treemap" src="http://fivecomputers.com/static/images/skinny_treemap.png" /></p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/playing-with-treemaps.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/playing-with-treemaps.html">posted at 11:26 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/.html" rel="tag"></a>                                                
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <div class="clear"></div>
+                <div id="footer">
+                    <p>
+                    <a href="https://twitter.com/GordonMcGregor">Twitter @GordonMcGregor</a>
+                    &middot;
+                    <a class="atom" href="http://fivecomputers.com/feeds/all.atom.xml">RSS Feed</a>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+    <script type="text/javascript">
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+    try {
+        var pageTracker = _gat._getTracker("UA-42678190-1");
+    pageTracker._trackPageview();
+    } catch(err) {}</script>
+<script type="text/javascript">
+    var disqus_shortname = 'fivecomputers';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+    </body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+        <title>Five Computers &middot; articles in the "09" category</title>
+        <link rel="shortcut icon" href="http://fivecomputers.com/favicon.ico" />
+        <link href="http://fivecomputers.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Five Computers Atom Feed" />
+                
+        <link rel="stylesheet" href="http://fivecomputers.com/theme/css/screen.css" type="text/css" />
+        <link rel="stylesheet" href="http://fivecomputers.com/theme/css/pygments.css" type="text/css" />
+
+
+    </head>
+    <body>
+        <div id="header">
+            <ul id="nav">
+                <li class="ephemeral selected"><a href="http://fivecomputers.com/category/09.html">09</a></li>
+                <li><a href="http://fivecomputers.com">Home</a></li>
+                <li><a href="http://fivecomputers.com/pages/about-gordon.html">About Gordon</a></li>
+                <li><a href="http://fivecomputers.com/archives.html">Archives</a></li>
+            </ul>
+            <div class="header_box">
+                <h1><a href="http://fivecomputers.com">Five Computers</a></h1>
+            </div>
+        </div>
+        <div id="wrapper">
+            <div id="content">
+                <h4 class="date">Sep  5,  2012</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/a-uvm-layer-for-pyhvl.html" rel="bookmark" title="Permanent Link to &quot;A UVM layer for PyHVL&quot;">A UVM layer for PyHVL</a>
+                    </h2>
+                    
+                    <p>Over the past few years I've been building verification environments in Python, hooked up to SystemVerilog and Verilog simulators. The glue is <a href="http://sourceforge.net/projects/pyhvl/">PyHVL</a>. But PyHVL is just the glue. It does open up the possibility of dynamic languages and scripting to talk to your test bench, but it isn't enough to implement a complete verification environment, quickly.</p>
+
+<p>To that end, I've started building analogues for most of the <a href="http://www.uvmworld.org/">UVM</a> classes, in Python/ PyHVL. Monitors, drivers, checkers, interfaces, scoreboards, all the standard sorts of pieces that you'd expect from a modern verification environment. With no compiling between iterations, and a command-line REPL to drop to for debug and interactive exploration. All backed with the batteries-included philosophy of Python. The sweet spot for this is probably somewhere within a fully fleshed out SystemVerilog testbench, leveraging the best features of SV (RTL/design, randomization with constraints, coverage, assertions) with the best features of Python for the higher level pieces of the testbench. At the same time, there is the potential to write the entire testbench in Python and the whole design in Verilog and use a free simulator such as <a href="http://iverilog.icarus.com/">Icarus</a> or <a href="http://sourceforge.net/projects/gplcver/">CVer</a>. Python brings a variety of useful features for testbench development; dynamic language, rapid development, rich set of libraries, fast iteration and a high level programming abstraction.</p>
+
+<p>I've been able to write models of processors that actually execute instructions and check the RTL, where the initial development time for a working CPU model was about 4 hours. There is effectively no recompile time cost - just re-run and the Python verification environment is re-interpreted as the simulation starts up.</p>
+
+<p>The main advantage of using Python for a testbench is writing less code. Less code means fewer bugs. The higher level language features of Python let you write more efficient code. As a quick example, here is the entire class definition for a PyHVL/ UVM interface, ready to hook up to RTL and monitor/drive signals in a DUT.</p>
+
+<div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%">
+<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">pluvm.uvm_package</span> <span style="color: #008000; font-weight: bold">import</span> <span style="color: #666666">*</span>
+
+HOST_BUS_SIGNALS<span style="color: #666666">=</span>(<span style="color: #BA2121">'reset'</span>, <span style="color: #BA2121">'clock'</span>, <span style="color: #BA2121">'cycle_count'</span>, <span style="color: #BA2121">'host_rdata'</span>, <span style="color: #BA2121">'host_ack'</span>,
+                  <span style="color: #BA2121">'host_err'</span>, <span style="color: #BA2121">'host_address'</span>, <span style="color: #BA2121">'host_valid'</span>, <span style="color: #BA2121">'host_wdata'</span>, 
+                  <span style="color: #BA2121">'host_strobe'</span>, <span style="color: #BA2121">'host_rwb'</span>)
+
+<span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">host_interface</span>(uvm_interface):
+
+        <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__init__</span>(<span style="color: #008000">self</span>, name, hierarchy):
+                uvm_interface<span style="color: #666666">.</span>__init__(<span style="color: #008000">self</span>, name, hierarchy)
+
+                <span style="color: #008000; font-weight: bold">for</span> signal <span style="color: #AA22FF; font-weight: bold">in</span> HOST_BUS_SIGNALS:
+                        <span style="color: #008000">self</span><span style="color: #666666">.</span>add_signal(signal)
+
+</pre>
+</div>
+
+<p>These classes can of course leverage the standard pyunit test frameworks and have unit tests in every class.</p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/a-uvm-layer-for-pyhvl.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/a-uvm-layer-for-pyhvl.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/09.html" rel="tag">09</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/.html"></a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <div class="clear"></div>
+                <div id="footer">
+                    <p>
+                    <a href="https://twitter.com/GordonMcGregor">Twitter @GordonMcGregor</a>
+                    &middot;
+                    <a class="atom" href="http://fivecomputers.com/feeds/all.atom.xml">RSS Feed</a>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+    <script type="text/javascript">
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+    try {
+        var pageTracker = _gat._getTracker("UA-42678190-1");
+    pageTracker._trackPageview();
+    } catch(err) {}</script>
+<script type="text/javascript">
+    var disqus_shortname = 'fivecomputers';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+    </body>
+</html>

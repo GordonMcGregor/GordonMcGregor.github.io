@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+        <title>Five Computers &middot; articles in the "28" category</title>
+        <link rel="shortcut icon" href="http://fivecomputers.com/favicon.ico" />
+        <link href="http://fivecomputers.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Five Computers Atom Feed" />
+                
+        <link rel="stylesheet" href="http://fivecomputers.com/theme/css/screen.css" type="text/css" />
+        <link rel="stylesheet" href="http://fivecomputers.com/theme/css/pygments.css" type="text/css" />
+
+
+    </head>
+    <body>
+        <div id="header">
+            <ul id="nav">
+                <li class="ephemeral selected"><a href="http://fivecomputers.com/category/28.html">28</a></li>
+                <li><a href="http://fivecomputers.com">Home</a></li>
+                <li><a href="http://fivecomputers.com/pages/about-gordon.html">About Gordon</a></li>
+                <li><a href="http://fivecomputers.com/archives.html">Archives</a></li>
+            </ul>
+            <div class="header_box">
+                <h1><a href="http://fivecomputers.com">Five Computers</a></h1>
+            </div>
+        </div>
+        <div id="wrapper">
+            <div id="content">
+                <h4 class="date">Aug 28,  2008</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/zerstreutheit-and-the-hardware-design-flow.html" rel="bookmark" title="Permanent Link to &quot;Zerstreutheit and the hardware design flow&quot;">Zerstreutheit and the hardware design flow</a>
+                    </h2>
+                    
+                    <div style="text-align: center;">
+  <a href="http://xkcd.com/303/"><img src="http://imgs.xkcd.com/comics/compiling.png" width="413" height="360" /></a><br />
+</div>
+
+<p>Recently I've been <a href="http://www-128.ibm.com/developerworks/java/library/j-ap09056/index.html">reading</a> about the various open-source Continuous Integration servers that are available. <a href="http://confluence.public.thoughtworks.org/display/CC/CI+Feature+Matrix">This chart</a> gives a good feature comparision of many of the systems that are out there. <a href="http://www.verilab.com" title="Verilab, Inc.">We've</a> been evaluating <a href="http://cruisecontrol.sourceforge.net/">Cruise Control</a> on some internal projects and generally trying to understand what the issues are with deploying a CI server on a hardware design project. One of the things I've been struggling with is the real, meaningful difference between continuous integration and the more typical <a href="http://www.joelonsoftware.com/articles/fog0000000023.html">daily build</a> and check-in smoke tests. Scheduled builds are often described as an <a href="http://www.ibm.com/developerworks/java/library/j-ap03048/index.html?S_TACT=105AGX02&amp;S_CMP=EDU">anti-pattern</a> when considering CI, but as far as I can tell the only practical difference is in the frequency of the builds. Certainly, you have the potential to find out about a broken build more quickly with CI, hence it has less chance to impact other users. Also, you are always doing <em>useful</em> work, rather than maybe re-running a version because no check-in has happened since the previous build. However, these distinctions of implementing CI are maybe more significant in the software world than for the typically longer build times found in hardware design projects. This then is the key point - build time is the significant factor in CI. The real benefit of using CI successfully is that you need to refine your processes to keep the build as quick as possible, striving for close to a <a href="http://www.martinfowler.com/articles/continuousIntegration.html">10 minute turnaround time</a>, to stop things getting backed up. The consequence of this is that the entire Checkout-Build-Test loop keeps being optimised and refined. This doesn't just help with automated processes but can significantly improve productivity for the developers who do these steps manually every day. That's great for the software world, but is it really practical for hardware design with the current compilers and the speed of typical RTL simulation? If not, is it worth even bothering with?</p>
+
+<p>The source control tools you choose can have a big impact on the first phase of the Checkout-Build-Test loop. When an update can take quarter an hour or longer, the source control system can become a significant productivity drain and stymie any chance of a quick turnaround. If merging changes, updating source and checking in a new revision takes hours, then there are real problems with the process and you certainly won't be doing multiple checkins per day (another fundamental CI process axiom is at minimum daily checkins for all developers, even more frequent is preferable). In <a href="http://www.fivecomputers.com/2008/06/git---version-c.html">Linus' talk about Git</a>, he describes being able to do a diff and merge on an entire kernel source tree (22k source files) in <a href="http://git.or.cz/gitwiki/LinusTalk200705Transcript">less than a second</a>. I've used other SCM environments with similar amounts of code, where an update might take 30 minutes. These sorts of differences can significantly change how you work. It isn't just a matter of the time that the particular automated task takes, but what the developer does while they are waiting, reading email, writing documentation, switching context to other distractions.</p>
+
+<p>Similarly, if the build takes half an hour or longer before it fails with a trivial syntax error, you'll have switched to something else and then have to try to mentally context switch back again to work on the problem. Each of these switches have an associated, measurable attention and productivity hit. Improving the build step can have a big impact on how you <a href="http://www.43folders.com/2008/06/13/zerstreutheit-and-attention-management-cure">manage your attention</a> and keep engaged with the development process. A faster turnaround can stave off the onset of <em><a href="http://www.43folders.com/comment/337830/literal-translation-Zerstreutheit">Zerstreutheit</a></em>.</p>
+
+<p>The final Test step is significantly slower for hardware design. Often this is used as a justification not to bother optimising the Checkout and Build phases, because they are comparatively much shorter. A multi-day or week long regression might fool you into thinking that an hour long build is relatively good. However, simulation &amp; testing is the one step where the developer can be more out of the loop, with less impact. Typically, the user is not so tightly coupled into the testing loop, once the initial bugs are ironed out. Automation can certainly help here too, re-running failing tests with waveform dumping enabled or increased logging, to present a useful working environment for debug when the developer does come back to look at the fails.</p>
+
+<p>The point really is that there is still a significant advantage to be had in spending effort to optimize the SCM and compile stages in a development flow, to maximise designer productivity and attention, even if the simulation time is large. Also a <a href="http://www.ibm.com/developerworks/java/library/j-ap11297/index.html?S_TACT=105AGX02&amp;S_CMP=EDU">build pipeline</a> can be used in the CI server to stage the build and testing feedback, to further mitigate the length of time that running tests takes. Deploying CI brings attention to how long these processes take and might help improve the entire development environment. Having fast enough tools can help the developers keep focused on what they are doing, without breaks for swordfights or reading email. Optimizing the build is still important, even in a hardware design environment, even when the runtime for regressions might be in terms of days or weeks. You might think the build process is only a comparatively small part of the overall runtime for a regression, but the designers spend most of their time looping through that comparatively small part.</p>
+
+<p>So what is the take away? Does CI have a place in a hardware design flow? I think that CI servers can certainly be used to manage running regressions and nightly builds. Smoke tests and scheduled build approaches can be controlled with most of the CI servers. However, the real continual building process required to move from scheduled builds to CI seems to be hard to map to hardware design, simply because of the length of time of the checkout/build/test loops. Tool improvements and generally faster hardware seems to be key to increasing the frequency of integration tests, at least for now. However, optimizing the interaction between the users and automated tools is a key and often overlooked part of developing an effective design flow, if you plan on using CI or not.</p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/zerstreutheit-and-the-hardware-design-flow.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/zerstreutheit-and-the-hardware-design-flow.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/28.html" rel="tag">28</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/eda.html">eda</a>
+                            <a href="http://fivecomputers.com/tag/software.html">software</a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <div class="clear"></div>
+                <div id="footer">
+                    <p>
+                    <a href="https://twitter.com/GordonMcGregor">Twitter @GordonMcGregor</a>
+                    &middot;
+                    <a class="atom" href="http://fivecomputers.com/feeds/all.atom.xml">RSS Feed</a>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+    <script type="text/javascript">
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+    try {
+        var pageTracker = _gat._getTracker("UA-42678190-1");
+    pageTracker._trackPageview();
+    } catch(err) {}</script>
+<script type="text/javascript">
+    var disqus_shortname = 'fivecomputers';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+    </body>
+</html>

@@ -1,45 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-        <meta charset="utf-8">
-        <title>sessions at DAC 2008</title>
-        <link rel="stylesheet" href="/theme/css/main.css">
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+        <title>Five Computers &middot; sessions at DAC 2008</title>
+        <link rel="shortcut icon" href="http://fivecomputers.com/favicon.ico" />
+        <link href="http://fivecomputers.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Five Computers Atom Feed" />
                 
-        <!--[if IE]>
-            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
-</head>
+        <link rel="stylesheet" href="http://fivecomputers.com/theme/css/screen.css" type="text/css" />
+        <link rel="stylesheet" href="http://fivecomputers.com/theme/css/pygments.css" type="text/css" />
 
-<body id="index" class="home">
-        <header id="banner" class="body">
-                <h1><a href="/">Five Computers </a></h1>
-                <nav><ul>
-                                                    <li><a href="/pages/about.html">About</a></li>
-                                                                    <li ><a href="/category/blogging.html">blogging</a></li>
-                                    <li class="active"><a href="/category/converted.html">converted</a></li>
-                                    <li ><a href="/category/python-eda.html">python, eda</a></li>
-                                                </ul></nav>
-        </header><!-- /#banner -->
-        <section id="content" class="body">
-  <article>
-    <header>
-      <h1 class="entry-title">
-        <a href="/sessions-at-dac-2008.html" rel="bookmark"
-           title="Permalink to sessions at DAC 2008">sessions at DAC 2008</a></h1>
-          </header>
 
-    <div class="entry-content">
-      <footer class="post-info">
-        <abbr class="published" title="2008-05-29T00:00:00">
-                Thu 29 May 2008
-        </abbr>
-
-                <address class="vcard author">
-                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
-        </address>
-        <p>In <a href="/category/converted.html">converted</a>. </p>
-<p>tags: <a href="/tag/verification.html">verification</a></p>
-</footer><!-- /.post-info -->      <p>I haven't been to the <a href="http://dac.com">Design Automation Conference</a> (DAC) for several years. Last time I was there, SystemC was the hot new language on the block, ready to revolutionise the design and verification world. In the intervening years, the hype has died down a bit and SystemC has settled into a comfortable niche as a solid option for doing higher level modeling, that previously was done in a roll your own C or C++ environment. The features for modeling parallelism and communication along with structure are good enough to mean you don't need to do it all from scratch. The speed is slowly getting better, but it isn't going to change the design world. It somewhat dropped the ball by being implemented as a set of library extensions to C++, rather than an enclosed language (which would have had the potential at least to be synthesisable - something SpecC got right).</p>
+    </head>
+    <body>
+        <div id="header">
+            <ul id="nav">
+                <li><a href="http://fivecomputers.com">Home</a></li>
+                <li><a href="http://fivecomputers.com/pages/about-gordon.html">About Gordon</a></li>
+                <li><a href="http://fivecomputers.com/archives.html">Archives</a></li>
+            </ul>
+            <div class="header_box">
+                <h1><a href="http://fivecomputers.com">Five Computers</a></h1>
+            </div>
+        </div>
+        <div id="wrapper">
+            <div id="content">
+                <h4 class="date">May 29,  2008</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/sessions-at-dac-2008.html" rel="bookmark" title="Permanent Link to &quot;sessions at DAC 2008&quot;">sessions at DAC 2008</a>
+                    </h2>
+                    
+                    <p>I haven't been to the <a href="http://dac.com">Design Automation Conference</a> (DAC) for several years. Last time I was there, SystemC was the hot new language on the block, ready to revolutionise the design and verification world. In the intervening years, the hype has died down a bit and SystemC has settled into a comfortable niche as a solid option for doing higher level modeling, that previously was done in a roll your own C or C++ environment. The features for modeling parallelism and communication along with structure are good enough to mean you don't need to do it all from scratch. The speed is slowly getting better, but it isn't going to change the design world. It somewhat dropped the ball by being implemented as a set of library extensions to C++, rather than an enclosed language (which would have had the potential at least to be synthesisable - something SpecC got right).</p>
 
 <p>Now several years later, the hot new language on the block, ready to revolutionise the design and verification world is SystemVerilog. Low level enough to write hardware. Feature rich enough to support verification. An IEEE standard (that nobody quite implements). All things to all people. Maybe. Or maybe 3 distinct languages that happen to run together on one simulator - which seems closer to the reality. A step in the right direction perhaps, and certainly the current flavour of the month. OVM and VMM (verification libraries built on top of SystemVerilog) are the thing that kept coming up time and again as I looked through the DAC sessions, with an eye towards verification and system-level design. With the news that the VMM is open source, along with the already freely available OVM, perhaps the opportunity to merge to one set of libraries across the big three has some potential, if we ignore all the legacy investment that will still need to be supported.</p>
 
@@ -66,38 +57,60 @@
 <a href="http://www.mentor.com/events/dac/schedule.cfm">Closing the Loop in Intelligent Testbench Automation</a><br />
 <a href="http://www.dac.com/events/eventdetails.aspx?id=77-111">Your Functional Verification Roadmap: OVM, VMM, or Roll Your Own?</a><br />
 <a href="http://www.dac.com/events/eventdetails.aspx?id=77-44">Formal Verification: Dude or Dud? Experiences from the Trenches</a></p>
-    </div><!-- /.entry-content -->
-    
-  </article>
-</section>
-        <section id="extras" class="body">
-                        <div class="blogroll">
-                        <h2>blogroll</h2>
-                        <ul>
-                                                    <li><a href="http://getpelican.com/">Pelican</a></li>
-                                                    <li><a href="http://python.org/">Python.org</a></li>
-                                                    <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
-                                                    <li><a href="#">You can modify those links in your config file</a></li>
-                                                </ul>
-                </div><!-- /.blogroll -->
-                                <div class="social">
-                        <h2>social</h2>
-                        <ul>
-                            <li><a href="/None" type="application/atom+xml" rel="alternate">atom feed</a></li>
-                            
-                                                    <li><a href="#">You can add links in your config file</a></li>
-                                                    <li><a href="#">Another social link</a></li>
-                                                </ul>
-                </div><!-- /.social -->
-                </section><!-- /#extras -->
 
-        <footer id="contentinfo" class="body">
-                <address id="about" class="vcard body">
-                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
-                </address><!-- /#about -->
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/sessions-at-dac-2008.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/sessions-at-dac-2008.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/29.html" rel="tag">29</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/verification.html">verification</a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
 
-                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
-        </footer><!-- /#contentinfo -->
+<!-- test -->
 
-</body>
+<div class="comments">
+  <h2>Comments !</h2>
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+    var disqus_identifier = "sessions-at-dac-2008.html";
+    var disqus_url = "http://fivecomputers.com/sessions-at-dac-2008.html";
+    (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = 'http://fivecomputers.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+</div>
+
+                <div class="clear"></div>
+                <div id="footer">
+                    <p>
+                    <a href="https://twitter.com/GordonMcGregor">Twitter @GordonMcGregor</a>
+                    &middot;
+                    <a class="atom" href="http://fivecomputers.com/feeds/all.atom.xml">RSS Feed</a>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+    <script type="text/javascript">
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+    try {
+        var pageTracker = _gat._getTracker("UA-42678190-1");
+    pageTracker._trackPageview();
+    } catch(err) {}</script>
+<script type="text/javascript">
+    var disqus_shortname = 'fivecomputers';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+    </body>
 </html>

@@ -1,326 +1,624 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-        <meta charset="utf-8">
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
         <title>Five Computers</title>
-        <link rel="stylesheet" href="/theme/css/main.css">
+        <link rel="shortcut icon" href="http://fivecomputers.com/favicon.ico" />
+        <link href="http://fivecomputers.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Five Computers Atom Feed" />
                 
-        <!--[if IE]>
-            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
-</head>
+        <link rel="stylesheet" href="http://fivecomputers.com/theme/css/screen.css" type="text/css" />
+        <link rel="stylesheet" href="http://fivecomputers.com/theme/css/pygments.css" type="text/css" />
 
-<body id="index" class="home">
-        <header id="banner" class="body">
-                <h1><a href="/">Five Computers </a></h1>
-                <nav><ul>
-                                                    <li><a href="/pages/about.html">About</a></li>
-                                                                    <li ><a href="/category/blogging.html">blogging</a></li>
-                                    <li ><a href="/category/converted.html">converted</a></li>
-                                    <li ><a href="/category/python-eda.html">python, eda</a></li>
-                                                </ul></nav>
-        </header><!-- /#banner -->
-                
-            
 
-                 
-                            <section id="content" class="body">
-                    <ol id="posts-list" class="hfeed" start="9">
-                        <li><article class="hentry">    
-                <header>
-                    <h1><a href="/simplified-vpi-iterators-using-pyhvl-generators.html" rel="bookmark"
-                           title="Permalink to Simplified VPI iterators using PyHVL generators">Simplified VPI iterators using PyHVL generators</a></h1>
-                </header>
-                
-                <div class="entry-content">
-                <footer class="post-info">
-        <abbr class="published" title="2012-01-05T00:00:00">
-                Thu 05 January 2012
-        </abbr>
+    </head>
+    <body>
+        <div id="header">
+            <ul id="nav">
+                <li class="selected"><a href="http://fivecomputers.com">Home</a></li>
+                <li><a href="http://fivecomputers.com/pages/about-gordon.html">About Gordon</a></li>
+                <li><a href="http://fivecomputers.com/archives.html">Archives</a></li>
+            </ul>
+            <div class="header_box">
+                <h1><a href="http://fivecomputers.com">Five Computers</a></h1>
+            </div>
+        </div>
+        <div id="wrapper">
+            <div id="content">
+                <h4 class="date">Dec 21,  2012</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/a-simple-turtle-graphics-domain-specific-language-dsl-parser.html" rel="bookmark" title="Permanent Link to &quot;A simple turtle graphics Domain Specific Language (DSL) parser&quot;">A simple turtle graphics Domain Specific Language (DSL) parser</a>
+                    </h2>
+                    
+                    <p>I&#39;ve been working through some of the exercises in &#39;<a href="http://pragprog.com/the-pragmatic-programmer" target="_self">The Pragmatic Programmer</a>&#39; while using it to mentor a colleague. &#0160;In particular, I spent a bit of time working on the Domain Specific Language section and considering creating little DSLs to provide flexible control. I&#39;ve painfully implemented DSLs in SystemVerilog/ UVM sequences in the past and thought about how I typically do this: build a parser, create tokens, then dispatch various execution functions to implement the commands. &#0160;Often, the pain of building all these pieces in a language like C or SV is enough of a barrier that I wouldn&#39;t even start. &#0160;</p>
 
-                <address class="vcard author">
-                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
-        </address>
-        <p>In <a href="/category/converted.html">converted</a>. </p>
-<p>tags: <a href="/tag/software-verification.html">software  verification</a></p>
-</footer><!-- /.post-info -->                <p>I've been using <a href="http://pyhvl.sourceforge.net/">PyHVL</a> for a variety of verification tasks in the past few years. PyHVL is an open source Python integration for Verilog and SystemVerilog simulators. To give a quick taste of what it can do for you, consider the following SystemVerilog VPI C code.</p>
+<p>The example in the book is a simple Logo/ Turtle control language. &#0160;Pen up, Pen down, draw, turn, etc. It tries to simplify things by using single letter command codes and only one optional argument.</p>
+
+<p><span style="font-family: &#39;courier new&#39;, courier;">P 2</span>
+</p>
+
+<p><span style="font-family: &#39;courier new&#39;, courier;">D</span></p>
+
+<p><span style="font-family: &#39;courier new&#39;, courier;">W 2</span></p>
+
+<p><span style="font-family: &#39;courier new&#39;, courier;">N 1</span></p>
+
+<p><span style="font-family: &#39;courier new&#39;, courier;">E 1&#0160;</span></p>
+
+<p><span style="font-family: &#39;courier new&#39;, courier;">S 1</span></p>
+
+<p><span style="font-family: &#39;courier new&#39;, courier;">U</span></p>
+
+<p>I know Python has a <a href="http://docs.python.org/2/library/turtle.html" target="_self">Logo/ Turtle engine built in</a>&#0160;so I decided to try to write a command parser/ dispatcher that would work with that, and let me write commands in a text file and have them execute Python Turtle commands.</p>
+
+<p>Here&#39;s an example script (you can see the results of this at the end of this post):</p>
+
+<pre><span style="font-family: &#39;courier new&#39;, courier;">color &quot;green&quot;</span><br /><span style="font-family: &#39;courier new&#39;, courier;">up</span><br /><span style="font-family: &#39;courier new&#39;, courier;">goto 0 -50 # comments are allowed</span><br /><span style="font-family: &#39;courier new&#39;, courier;">down</span><br /><span style="font-family: &#39;courier new&#39;, courier;">circle 50</span><br /><span style="font-family: &#39;courier new&#39;, courier;">up</span><br /><span style="font-family: &#39;courier new&#39;, courier;">color &quot;red&quot;</span><br /><span style="font-family: &#39;courier new&#39;, courier;">write &quot;Done!&quot;</span><br /><span style="font-family: &#39;courier new&#39;, courier;">sleep 2</span><br /><span style="font-family: &#39;courier new&#39;, courier;">exit</span></pre>
+
+<p>I thought initially about having to parse out all the commands and arguments, then writing a large switch/ case statement (<a href="http://bytebaker.com/2008/11/03/switch-case-statement-in-python/" target="_self">or the Python equivalent with a dictionary</a>). &#0160;After thinking about it a little longer I realised I didn&#39;t have to do that at all. &#0160;I could use the Introspection in Python to look up available methods and if they exist, call them. In fact, as not finding the method will just cause an exception, I can just try executing any command and if it fails, catch it and move on.</p>
+
+<p>So after parsing the input text stream (throw away comments, break up tokens using whitespace) then I just try to execute the command in the global namespace. &#0160;I&#39;ve pulled all the turtle functions into that namespace, so any turtle function is a valid command in my little parser. &#0160;The <span style="font-family: &#39;courier new&#39;, courier;">globals()[command[0]]</span> in the code below looks up the function in the global namespace and then calls it, using the other parts of the command (<span style="font-family: &#39;courier new&#39;, courier;">command[1:]</span>), after they&#39;ve each been processed through the Python <span style="font-family: &#39;courier new&#39;, courier;">eval</span> function to convert them from strings to whatever format they happen to be (numbers or strings mainly). &#0160;The final trick in this is using the * operator to take take a list and pass it as one argument after another to the function:</p>
+
+<pre>globals()[command[0]](*(map(eval, command[1:])))</pre>
+
+<p>
+<br />
+And that&#39;s all that&#39;s needed to implement a full Logo language parser and execution engine. The command syntax is fault tolerant and reports errors, with line numbers. &#0160;New commands can be added easily, by defining new functions. &#0160;They&#39;ll be automatically supported as they are added to the namespace. </p>
+
+<p>Being able to pull something like this together quickly means that writing little Domain Specific Languages is possible and quite a low bar. &#0160;Doing something similar in C is often more daunting and even worse in a language like SystemVerilog, with such a poor string and file handling library. &#0160;There&#39;s a real value in being able to program at such a high level, that can greatly enhance what&#39;s possible or likely to be attempted in a verification environment. You <em>could</em> do this in SystemVerilog, but how often would you even think to attempt it, without rejecting it as too much work?</p>
+
+<p>&#0160;</p>
+
+<div class="highlight" style="background: #f8f8f8;">
+<pre style="line-height: 125%;"><span style="color: #408080; font-style: italic;"># pull all the turtle commands into the global namespace, so they are valid commands</span>
+<span style="color: #008000; font-weight: bold;">from</span> <span style="color: #0000ff; font-weight: bold;">turtle</span> <span style="color: #008000; font-weight: bold;">import</span> <span style="color: #666666;">*</span>
+
+<span style="color: #408080; font-style: italic;"># Use these 3 lines to make &#39;sleep&#39; and &#39;exit&#39; useable commands</span>
+<span style="color: #008000; font-weight: bold;">from</span> <span style="color: #0000ff; font-weight: bold;">time</span> <span style="color: #008000; font-weight: bold;">import</span> sleep
+<span style="color: #008000; font-weight: bold;">from</span> <span style="color: #0000ff; font-weight: bold;">sys</span> <span style="color: #008000; font-weight: bold;">import</span> <span style="color: #008000;">exit</span>, argv
+
+<span style="color: #408080; font-style: italic;"># Given a handle to a series of strings of commands, do them</span>
+<span style="color: #008000; font-weight: bold;">def</span> <span style="color: #0000ff;">parse_and_draw</span>(commands):
+    <span style="color: #008000; font-weight: bold;">for</span> (line_number, line) <span style="color: #aa22ff; font-weight: bold;">in</span> <span style="color: #008000;">enumerate</span>(commands):
+        line <span style="color: #666666;">=</span> line<span style="color: #666666;">.</span>split(<span style="color: #ba2121;">&#39;#&#39;</span>)[<span style="color: #666666;">0</span>]  <span style="color: #408080; font-style: italic;"># throw away comments</span>
+
+        <span style="color: #008000; font-weight: bold;">if</span> line:  <span style="color: #408080; font-style: italic;"># if there is anything left after getting rid of comments</span>
+
+            command <span style="color: #666666;">=</span> line<span style="color: #666666;">.</span>strip()<span style="color: #666666;">.</span>split(<span style="color: #ba2121;">&#39; &#39;</span>)  <span style="color: #408080; font-style: italic;"># parse using spaces to delimit tokens  </span>
+                                               <span style="color: #408080; font-style: italic;"># a big limitation of this, we can&#39;t have strings with spaces</span>
+                                               <span style="color: #408080; font-style: italic;"># e.g.,  &quot;hello world&quot; won&#39;t work as it&#39;ll get split up</span>
+                                               <span style="color: #408080; font-style: italic;"># into [&#39;&quot;hello&#39;, &#39;world&quot;&#39;] neither of which bits are valid when eval&#39;ed</span>
+
+            <span style="color: #008000; font-weight: bold;">if</span> command[<span style="color: #666666;">0</span>]:  <span style="color: #408080; font-style: italic;"># if we have any command left </span>
+                            <span style="color: #408080; font-style: italic;"># (e.g., an indented comment would dissappear)</span>
+
+                <span style="color: #008000; font-weight: bold;">try</span>:
+                    <span style="color: #408080; font-style: italic;"># The meat of the dispatcher is the next line</span>
+                    <span style="color: #408080; font-style: italic;"># using a try/ except means we can always try to run any command</span>
+                    <span style="color: #408080; font-style: italic;"># and assume that it is valid and catch if it isn&#39;t.</span>
+                    <span style="color: #408080; font-style: italic;"># globals() returns a dictionary of every function defined in the global namespace</span>
+                    <span style="color: #408080; font-style: italic;"># including all the turtle commands because of the from turtle import *</span>
+                    <span style="color: #408080; font-style: italic;"># command[0] is used as a key to look up the function name</span>
+                    <span style="color: #408080; font-style: italic;"># we then pass all of the other tokens (command[1:]) through eval (using map)</span>
+                    <span style="color: #408080; font-style: italic;"># and pass them as arguments to the function we looked up</span>
+
+                    <span style="color: #008000;">globals</span>()[command[<span style="color: #666666;">0</span>]](<span style="color: #666666;">*</span>(<span style="color: #008000;">map</span>(<span style="color: #008000;">eval</span>, command[<span style="color: #666666;">1</span>:])))
+
+                    <span style="color: #408080; font-style: italic;"># a key error occurs if we don&#39;t find command[0] in the global namespace</span>
+                <span style="color: #008000; font-weight: bold;">except</span> <span style="color: #d2413a; font-weight: bold;">KeyError</span>:
+                    <span style="color: #008000; font-weight: bold;">print</span> <span style="color: #ba2121;">&#39;Unknown command&#39;</span>, command[<span style="color: #666666;">0</span>], <span style="color: #ba2121;">&#39;on line &#39;</span>, line_number
+
+                    <span style="color: #408080; font-style: italic;"># Some other error occurred (e.g., the called function raised an Exception)</span>
+                    <span style="color: #408080; font-style: italic;"># report it here and continue on (if we didn&#39;t catch it, the program would end)</span>
+                <span style="color: #008000; font-weight: bold;">except</span> <span style="color: #d2413a; font-weight: bold;">Exception</span> <span style="color: #008000; font-weight: bold;">as</span> e:
+                    <span style="color: #008000; font-weight: bold;">print</span> <span style="color: #ba2121;">&#39;Invalid command&#39;</span>, command[<span style="color: #666666;">0</span>], <span style="color: #ba2121;">&#39;on line &#39;</span>, line_number,  e
+
+
+<span style="color: #008000; font-weight: bold;">if</span> __name__ <span style="color: #666666;">==</span> <span style="color: #ba2121;">&#39;__main__&#39;</span>:
+    <span style="color: #408080; font-style: italic;"># open the first file on the command line, get commands from that and run them</span>
+    commands <span style="color: #666666;">=</span> <span style="color: #008000;">open</span>(argv[<span style="color: #666666;">1</span>])<span style="color: #666666;">.</span>xreadlines()
+
+    <span style="color: #408080; font-style: italic;"># note that the parse and draw routine works on a list of commands, it doesn&#39;t know about files</span>
+    <span style="color: #408080; font-style: italic;"># or anything else.  This seperation is is useful, as we can get commands from anywhere</span>
+    parse_and_draw(commands)
+</pre>
+</div>
+
+<p>&#0160;</p>
+
+<p>
+<a class="asset-img-link" href="http://fivecomputers.typepad.com/.a/6a00e54efca38e8834017c34da956e970b-pi" style="display: inline;"><img alt="12:21:12 10:37 AM" border="0" class="asset  asset-image at-xid-6a00e54efca38e8834017c34da956e970b image-full" src="http://fivecomputers.typepad.com/.a/6a00e54efca38e8834017c34da956e970b-800wi" title="12:21:12 10:37 AM" /></a><br /><br /></p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/a-simple-turtle-graphics-domain-specific-language-dsl-parser.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/a-simple-turtle-graphics-domain-specific-language-dsl-parser.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/21.html" rel="tag">21</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/books.html">books</a>
+                            <a href="http://fivecomputers.com/tag/eda.html">eda</a>
+                            <a href="http://fivecomputers.com/tag/verification.html">verification</a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <h4 class="date">Sep  5,  2012</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/a-uvm-layer-for-pyhvl.html" rel="bookmark" title="Permanent Link to &quot;A UVM layer for PyHVL&quot;">A UVM layer for PyHVL</a>
+                    </h2>
+                    
+                    <p>Over the past few years I've been building verification environments in Python, hooked up to SystemVerilog and Verilog simulators. The glue is <a href="http://sourceforge.net/projects/pyhvl/">PyHVL</a>. But PyHVL is just the glue. It does open up the possibility of dynamic languages and scripting to talk to your test bench, but it isn't enough to implement a complete verification environment, quickly.</p>
+
+<p>To that end, I've started building analogues for most of the <a href="http://www.uvmworld.org/">UVM</a> classes, in Python/ PyHVL. Monitors, drivers, checkers, interfaces, scoreboards, all the standard sorts of pieces that you'd expect from a modern verification environment. With no compiling between iterations, and a command-line REPL to drop to for debug and interactive exploration. All backed with the batteries-included philosophy of Python. The sweet spot for this is probably somewhere within a fully fleshed out SystemVerilog testbench, leveraging the best features of SV (RTL/design, randomization with constraints, coverage, assertions) with the best features of Python for the higher level pieces of the testbench. At the same time, there is the potential to write the entire testbench in Python and the whole design in Verilog and use a free simulator such as <a href="http://iverilog.icarus.com/">Icarus</a> or <a href="http://sourceforge.net/projects/gplcver/">CVer</a>. Python brings a variety of useful features for testbench development; dynamic language, rapid development, rich set of libraries, fast iteration and a high level programming abstraction.</p>
+
+<p>I've been able to write models of processors that actually execute instructions and check the RTL, where the initial development time for a working CPU model was about 4 hours. There is effectively no recompile time cost - just re-run and the Python verification environment is re-interpreted as the simulation starts up.</p>
+
+<p>The main advantage of using Python for a testbench is writing less code. Less code means fewer bugs. The higher level language features of Python let you write more efficient code. As a quick example, here is the entire class definition for a PyHVL/ UVM interface, ready to hook up to RTL and monitor/drive signals in a DUT.</p>
 
 <div class="highlight" style="background: #f8f8f8">
   <pre style="line-height: 125%">
-<span style="color: #B00040">void</span> display_nets(mod ...</pre></div>
-                <a class="readmore" href="/simplified-vpi-iterators-using-pyhvl-generators.html">read more</a>
-                                </div><!-- /.entry-content -->
-            </article></li>
-                            
+<span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">pluvm.uvm_package</span> <span style="color: #008000; font-weight: bold">import</span> <span style="color: #666666">*</span>
 
-                 
-                        <li><article class="hentry">    
-                <header>
-                    <h1><a href="/csv-the-easy-way.html" rel="bookmark"
-                           title="Permalink to csv the easy way">csv the easy way</a></h1>
-                </header>
-                
-                <div class="entry-content">
-                <footer class="post-info">
-        <abbr class="published" title="2011-01-23T00:00:00">
-                Sun 23 January 2011
-        </abbr>
+HOST_BUS_SIGNALS<span style="color: #666666">=</span>(<span style="color: #BA2121">'reset'</span>, <span style="color: #BA2121">'clock'</span>, <span style="color: #BA2121">'cycle_count'</span>, <span style="color: #BA2121">'host_rdata'</span>, <span style="color: #BA2121">'host_ack'</span>,
+                  <span style="color: #BA2121">'host_err'</span>, <span style="color: #BA2121">'host_address'</span>, <span style="color: #BA2121">'host_valid'</span>, <span style="color: #BA2121">'host_wdata'</span>, 
+                  <span style="color: #BA2121">'host_strobe'</span>, <span style="color: #BA2121">'host_rwb'</span>)
 
-                <address class="vcard author">
-                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
-        </address>
-        <p>In <a href="/category/converted.html">converted</a>. </p>
-<p>tags: <a href="/tag/software.html">software</a></p>
-</footer><!-- /.post-info -->                <p>I've recently started using <a href="http://fogcreek.com/">FogCreek's</a> <a href="http://www.fogcreek.com/FogBugz/">FogBugz</a> project hosting for a small personal project. It has a built-in Mercurial source repository, with some enhancements, called Kiln, and good task/ project tracking features. Quite similar to those you find in <a href="http://trac.edgewall.org/">Trac</a>. Rather than putting together the various servers to track ...</p>
-                <a class="readmore" href="/csv-the-easy-way.html">read more</a>
-                                </div><!-- /.entry-content -->
-            </article></li>
-                            
+<span style="color: #008000; font-weight: bold">class</span> <span style="color: #0000FF; font-weight: bold">host_interface</span>(uvm_interface):
 
-                 
-                        <li><article class="hentry">    
-                <header>
-                    <h1><a href="/creating-a-codeswarm-movie.html" rel="bookmark"
-                           title="Permalink to creating a codeswarm movie">creating a codeswarm movie</a></h1>
-                </header>
-                
-                <div class="entry-content">
-                <footer class="post-info">
-        <abbr class="published" title="2009-08-04T00:00:00">
-                Tue 04 August 2009
-        </abbr>
+        <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__init__</span>(<span style="color: #008000">self</span>, name, hierarchy):
+                uvm_interface<span style="color: #666666">.</span>__init__(<span style="color: #008000">self</span>, name, hierarchy)
 
-                <address class="vcard author">
-                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
-        </address>
-        <p>In <a href="/category/converted.html">converted</a>. </p>
-<p>tags: <a href="/tag/software-verification.html">software  verification</a></p>
-</footer><!-- /.post-info -->                <p style="text-align: center;"><a href="http://www.flickr.com/photos/52043707@N00/3423187687/"><img src="http://farm4.static.flickr.com/3631/3423187687_4a8a94a5bd.jpg" height="375" width="500" alt="code swarm frame" /></a></p>
+                <span style="color: #008000; font-weight: bold">for</span> signal <span style="color: #AA22FF; font-weight: bold">in</span> HOST_BUS_SIGNALS:
+                        <span style="color: #008000">self</span><span style="color: #666666">.</span>add_signal(signal)
 
-<p style="text-align: center;"><a href="http://www.mcgregorphoto.com/pub/svipcodeswarm.mpg">Download video (3Mb)</a></p>
-
-<p>A codeswarm is a visualization of the activity within a source code repository. The image and linked video above shows the lifetime of one of <a href="http://www.verilab.com" title="Verilab, Inc.">Verilab's</a> source repositories. You can see code being created, the check-ins as they happen and an indication of which users are ...</p>
-                <a class="readmore" href="/creating-a-codeswarm-movie.html">read more</a>
-                                </div><!-- /.entry-content -->
-            </article></li>
-                            
-
-                 
-                        <li><article class="hentry">    
-                <header>
-                    <h1><a href="/iphone-development.html" rel="bookmark"
-                           title="Permalink to iPhone development">iPhone development</a></h1>
-                </header>
-                
-                <div class="entry-content">
-                <footer class="post-info">
-        <abbr class="published" title="2009-08-04T00:00:00">
-                Tue 04 August 2009
-        </abbr>
-
-                <address class="vcard author">
-                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
-        </address>
-        <p>In <a href="/category/converted.html">converted</a>. </p>
-<p>tags: <a href="/tag/software-webtech.html">software  Web/Tech</a></p>
-</footer><!-- /.post-info -->                <p style="text-align: center;"><a href="http://www.flickr.com/photos/52043707@N00/3424097092/"><img src="http://farm4.static.flickr.com/3305/3424097092_1811e15916.jpg" height="500" width="266" alt="iPhone Simulator" /></a><br /></p>
-
-<p>Interested in learning about iPhone development? Want to study at Stanford? Don't want to pay the tuition fees? On <a href="http://deimos3.apple.com/WebObjects/Core.woa/Browse/itunes.stanford.edu.2024353965.02024353968">iTunesU</a> (the lecture streaming part of iTunes) you can follow along with <a href="http://www.stanford.edu/class/cs193p/cgi-bin/index.php">class cs193p</a> from Stanford, on iPhone Application Development. In addition to the good quality video of the lectures ...</p>
-                <a class="readmore" href="/iphone-development.html">read more</a>
-                                </div><!-- /.entry-content -->
-            </article></li>
-                            
-
-                 
-                        <li><article class="hentry">    
-                <header>
-                    <h1><a href="/learning-guitar-with-garageband.html" rel="bookmark"
-                           title="Permalink to learning guitar with Garageband">learning guitar with Garageband</a></h1>
-                </header>
-                
-                <div class="entry-content">
-                <footer class="post-info">
-        <abbr class="published" title="2009-07-11T00:00:00">
-                Sat 11 July 2009
-        </abbr>
-
-                <address class="vcard author">
-                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
-        </address>
-        <p>In <a href="/category/converted.html">converted</a>. </p>
-<p>tags: <a href="/tag/music.html">Music</a></p>
-</footer><!-- /.post-info -->                <p><img src="http://fivecomputers.typepad.com/.a/6a00e54efca38e88340128756200ad970c-pi" width="883" height="149" alt="rocky_racoon.band.jpg" style="margin-top:0px; margin-right:0px; margin-bottom:0px; margin-left:0px; padding-top:0px; padding-right:0px; padding-bottom:0px; padding-left:0px;" /><br />
-<p>I've just recently started trying to learn to play guitar. My early experiences with music would be best described as making a bad noise,on the recorder. Still, I've decided to give it another go. One thing I've found early on that playing along to a metronome ...</p></p>
-                <a class="readmore" href="/learning-guitar-with-garageband.html">read more</a>
-                                </div><!-- /.entry-content -->
-            </article></li>
-                            
-
-                 
-                        <li><article class="hentry">    
-                <header>
-                    <h1><a href="/a-real-working-time-machine.html" rel="bookmark"
-                           title="Permalink to a real, working time machine">a real, working time machine</a></h1>
-                </header>
-                
-                <div class="entry-content">
-                <footer class="post-info">
-        <abbr class="published" title="2009-05-08T00:00:00">
-                Fri 08 May 2009
-        </abbr>
-
-                <address class="vcard author">
-                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
-        </address>
-        <p>In <a href="/category/converted.html">converted</a>. </p>
-<p>tags: <a href="/tag/.html"></a></p>
-</footer><!-- /.post-info -->                <p>Was working on some files on my mac last night, editing photographs from a recent trip. It was getting late and I accidentally deleted a directory of images. Now my images are always backed up anyway, on a separate attached storage device, so this wasn't too big of a ...</p>
-                <a class="readmore" href="/a-real-working-time-machine.html">read more</a>
-                                </div><!-- /.entry-content -->
-            </article></li>
-                            
-
-                 
-                        <li><article class="hentry">    
-                <header>
-                    <h1><a href="/what-did-you-say.html" rel="bookmark"
-                           title="Permalink to what did you say?">what did you say?</a></h1>
-                </header>
-                
-                <div class="entry-content">
-                <footer class="post-info">
-        <abbr class="published" title="2009-04-30T00:00:00">
-                Thu 30 April 2009
-        </abbr>
-
-                <address class="vcard author">
-                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
-        </address>
-        <p>In <a href="/category/converted.html">converted</a>. </p>
-<p>tags: <a href="/tag/current-affairs-software.html">Current Affairs  software</a></p>
-</footer><!-- /.post-info -->                <div style="text-align: center;">
-  <a href="http://www.wordle.net/gallery/wrdl/799366/Gordon%27s_tweets" title="Wordle: Gordon's tweets"><img src="http://fivecomputers.typepad.com/.a/6a00e54efca38e883401156f6c5ebd970c-pi" width="700" height="319" alt="Wordle - Gordon_s tweets-1.jpg" /></a><br />
+</pre>
 </div>
 
-<p>I've been poking around at the <a href="http://apiwiki.twitter.com/Twitter-API-Documentation">Twitter API</a>, in part just out of curiosity about what features are exposed. I have an interest in writing some visualisation widgets based upon it. The iPhone development course is also using a Twitter client as something of a 'hello world' app, too ...</p>
-                <a class="readmore" href="/what-did-you-say.html">read more</a>
-                                </div><!-- /.entry-content -->
-            </article></li>
-                            
+<p>These classes can of course leverage the standard pyunit test frameworks and have unit tests in every class.</p>
 
-                 
-                        <li><article class="hentry">    
-                <header>
-                    <h1><a href="/dd-wrt.html" rel="bookmark"
-                           title="Permalink to dd-wrt">dd-wrt</a></h1>
-                </header>
-                
-                <div class="entry-content">
-                <footer class="post-info">
-        <abbr class="published" title="2009-04-26T00:00:00">
-                Sun 26 April 2009
-        </abbr>
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/a-uvm-layer-for-pyhvl.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/a-uvm-layer-for-pyhvl.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/09.html" rel="tag">09</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/.html"></a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
 
-                <address class="vcard author">
-                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
-        </address>
-        <p>In <a href="/category/converted.html">converted</a>. </p>
-<p>tags: <a href="/tag/current-affairs-thingumyjigs.html">Current Affairs  thingumyjigs</a></p>
-</footer><!-- /.post-info -->                <p><img src="http://farm4.static.flickr.com/3612/3476627038_8aab2a0db9.jpg" width="480" height="448" alt="dd-wrt" /></p>
+                <h4 class="date">Apr 26,  2012</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/sshfs-for-os-x-lion.html" rel="bookmark" title="Permanent Link to &quot;sshfs for OS X Lion&quot;">sshfs for OS X Lion</a>
+                    </h2>
+                    
+                    <p>Installed the latest version of fuse and sshfs, using <a href="http://mxcl.github.com/homebrew/">Homebrew</a>. I had been using FUSE for a while with previous versions of OS X, but haven't had much luck under Lion. Tried again today, using <a href="http://fuse4x.org/">Fuse4x</a>, rather than libFUSE and everything worked very transparently:</p>
 
-<p>Just installed <a href="http://www.dd-wrt.com/dd-wrtv3/index.php">dd-wrt</a> on my Linksys wrt54g wireless router. I'd been meaning to do this for a while - as an easy way to get a much more functional router than the default firmware shipped by Linksys. What finally motivated me to do it was the recent storm about Time ...</p>
-                <a class="readmore" href="/dd-wrt.html">read more</a>
-                                </div><!-- /.entry-content -->
-            </article></li>
-                            
+<pre>
+brew install fuse4x sshfs
+</pre>
 
-                 
-                        <li><article class="hentry">    
-                <header>
-                    <h1><a href="/the-death-of-books.html" rel="bookmark"
-                           title="Permalink to the death of books">the death of books</a></h1>
-                </header>
-                
-                <div class="entry-content">
-                <footer class="post-info">
-        <abbr class="published" title="2009-02-23T00:00:00">
-                Mon 23 February 2009
-        </abbr>
+<p><strike>and that was it!</strike><strike><br /></strike> No, of course that wasn't true. First I had to re-update my Xcode command-line tools. This then removed autoreconf which Apple no longer provide as part of their <a href="http://brianpeddle.com/tag/autoreconf/">XCode tools bundle</a> [in neither the command line, or GUI release]. So, via Google, I find you have to install a different set of <a href="https://github.com/kennethreitz/osx-gcc-installer/downloads">gcc tools</a>, not shipped by Apple. Then, back to the brew install command line above, and things are a lot happier.<br />
+<strike>and that was it!</strike><strike><br /></strike> Well, except you really do need to read the installation message which says<br />
+<pre>
+==&gt; Caveats
+</pre>
+<pre>
+   Make sure to follow the directions given by <code>brew info fuse4x-kext</code>before trying to use a FUSE-based filesystem.<br />
+</pre><br />
+Then if you type<br />
+<pre>
+brew info fuse4x-kext
+</pre><br />
+You find you need to run the following two commands to get anything to actually work:<br />
+<pre>
+sudo cp -rfX /usr/local/Cellar/fuse4x-kext/0.8.14/Library/Extensions/fuse4x.kext /System/Library/Extensions 
+sudo chmod +s /System/Library/Extensions/fuse4x.kext/Support/load_fuse4x
+</pre>and that was it!<br />
+<br />
+No really, it was. Then I was able to mount remote directories, with the simple command:<br />
+<pre>
+sshfs &lt;remote_host&gt;:&lt;remote_path&gt; &lt;local_path&gt;
+</pre><br />
+and it actually worked!<br />
+To unmount a mounted partition, use the standard<br />
+<br />
+<pre>
+umount &lt;local_path&gt; 
+</pre>
+<pre>
+<br />
+</pre>
+<pre>
+<br />
+</pre></p>
+<div class="posttagsblock"><a href="http://technorati.com/tag/geekery" rel="tag">geekery</a>, <a href="http://technorati.com/tag/OSX" rel="tag">OSX</a></div>
 
-                <address class="vcard author">
-                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
-        </address>
-        <p>In <a href="/category/converted.html">converted</a>. </p>
-<p>tags: <a href="/tag/books.html">Books</a></p>
-</footer><!-- /.post-info -->                <p><a href="http://www.flickr.com/photos/52043707@N00/2331801711/"><img src="http://farm3.static.flickr.com/2050/2331801711_07616a0808.jpg" height="500" width="429" alt="ghost rider" /></a><br />
-<blockquote>
-  <p style="text-align: center;"><em>The reports of my death are greatly exaggerated</em></p></p>
-<p><p style="text-align: right;"><span style="font-size: 10px;">- Mark Twain</span></p>
-</blockquote>It seems that <a href="http://www.npr.org/templates/story/story.php?storyId=99961163&amp;ft=1&amp;f=1003">some universities</a> are moving away from physical books, switching entirely to electronic textbooks. My initial reaction is that this is just a little bit crazy. Electronic reference materials have a place, but I have a real difficulty ...</p>
-                <a class="readmore" href="/the-death-of-books.html">read more</a>
-                                </div><!-- /.entry-content -->
-            </article></li>
-                            
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/sshfs-for-os-x-lion.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/sshfs-for-os-x-lion.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/26.html" rel="tag">26</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/.html"></a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
 
-                 
-                        <li><article class="hentry">    
-                <header>
-                    <h1><a href="/edward-tufte-and-presenting-data.html" rel="bookmark"
-                           title="Permalink to edward tufte and presenting data">edward tufte and presenting data</a></h1>
-                </header>
-                
-                <div class="entry-content">
-                <footer class="post-info">
-        <abbr class="published" title="2009-02-16T00:00:00">
-                Mon 16 February 2009
-        </abbr>
+                <h4 class="date">Apr 20,  2012</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/simple-web-server.html" rel="bookmark" title="Permanent Link to &quot;Simple web server&quot;">Simple web server</a>
+                    </h2>
+                    
+                    <p>Ever find you need to implement a web server or provide some web pages on a local network? Maybe you don't have an Apache server up and running or don't want to go to the trouble of configuring it. I've found this with <a href="http://www.naturaldocs.org/">Natural Docs</a> documentation, where the tools will generate a bunch of .html files that you can read locally if you are on the machine where they are generated. <a href="http://www.fivecomputers.com/2012/04/systemverilog-support-in-pygments.html">Pygments</a> also will generate html formatted files that you might want to serve. However, you might want to make them accessible to a small team. Here is a quick trick that can make this task very simple. Python ships with a basic HTTP server module. You can get it up and running, serving files from a given directory down with the following command:</p>
 
-                <address class="vcard author">
-                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
-        </address>
-        <p>In <a href="/category/converted.html">converted</a>. </p>
-<p>tags: <a href="/tag/books-software.html">Books  software</a></p>
-</footer><!-- /.post-info -->                <p style="text-align: center;"><a href="http://www.flickr.com/photos/52043707@N00/3171697571/"><img src="http://farm2.static.flickr.com/1065/3171697571_bf6e359fff.jpg" height="333" width="500" alt="me" /></a><br /></p>
+<pre>
+python -m SimpleHTTPServer
+</pre>
 
-<p>I was lucky enough to attend a seminar from <a href="http://www.edwardtufte.com/tufte/">Edward Tufte</a>, a couple of weeks ago, on the <a href="http://www.edwardtufte.com/tufte/courses">Presentation of Data and Information</a>. Edward Tufte is probably best known for the book '<em><a href="http://www.edwardtufte.com/tufte/books_vdqi">The Quantitative Display of Visual Information</a></em>' and was an engaging and entertaining presenter. He has a very different ...</p>
-                <a class="readmore" href="/edward-tufte-and-presenting-data.html">read more</a>
-                                </div><!-- /.entry-content -->
-            </article></li>
-                            </ol><!-- /#posts-list -->
-                            <p class="paginator">
-                        <a href="/index.html">&laquo;</a>
-                Page 2 / 6
-            <a href="/index3.html">&raquo;</a>
-    </p>
-                        </section><!-- /#content -->
-                    <section id="extras" class="body">
-                        <div class="blogroll">
-                        <h2>blogroll</h2>
-                        <ul>
-                                                    <li><a href="http://getpelican.com/">Pelican</a></li>
-                                                    <li><a href="http://python.org/">Python.org</a></li>
-                                                    <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
-                                                    <li><a href="#">You can modify those links in your config file</a></li>
-                                                </ul>
-                </div><!-- /.blogroll -->
-                                <div class="social">
-                        <h2>social</h2>
-                        <ul>
-                            <li><a href="/None" type="application/atom+xml" rel="alternate">atom feed</a></li>
-                            
-                                                    <li><a href="#">You can add links in your config file</a></li>
-                                                    <li><a href="#">Another social link</a></li>
-                                                </ul>
-                </div><!-- /.social -->
-                </section><!-- /#extras -->
+<p>and that's all there is to it! The default port will be 8000, but you can provide a different port on the command line (just add the port number after the SimpleHTTPServer - any number above reserved range of 0-1024 will work. The server will be accessible to any machines that can see that port on the machine it is running on. The server won't handle a high load and isn't particular secure, so I wouldn't make it available to the general public. But if you need to serve some pages quickly and simply, to a small number of users within a private network, this can be a really fast way to get to that point. If and when the load becomes an issue, or security concerns are important, then a heavyweight server like Apache is a much better choice.</p>
 
-        <footer id="contentinfo" class="body">
-                <address id="about" class="vcard body">
-                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
-                </address><!-- /#about -->
+<p>Once the server is up and running you access it via a web browser at http://machine_name:8000 File paths are all relative to the directory the server is running in. If there is an index.html in that directory, it will be loaded by default when you access the server at that URL.</p>
 
-                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
-        </footer><!-- /#contentinfo -->
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/simple-web-server.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/simple-web-server.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/20.html" rel="tag">20</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/software.html">software</a>
+                            <a href="http://fivecomputers.com/tag/thingumyjigs.html">thingumyjigs</a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
 
-</body>
+                <h4 class="date">Apr 19,  2012</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/systemverilog-support-in-pygments.html" rel="bookmark" title="Permanent Link to &quot;SystemVerilog support in Pygments&quot;">SystemVerilog support in Pygments</a>
+                    </h2>
+                    
+                    <p><a href="http://www.flickr.com/photos/mcgregorphoto/6949231074/" title="svforpygments by Gordon McGregor, on Flickr"><img alt="svforpygments" src="http://farm6.staticflickr.com/5454/6949231074_4dd2096121_c.jpg" width="720" /></a></p>
+
+<p>I&#39;ve used <a href="http://pygments.org/">Pygments</a> in the past to do syntax highlighting of Python and C code to drop into documentation. I&#39;ve wanted SystemVerilog support for a while, but the tool didn&#39;t <a href="http://pygments.org/languages/">support the language</a>. I eventually got frustrated enough by this to go and add it myself. The motivation was so that I could set up an internal <a href="http://paste.pocoo.org/about/">LodgeIt! pastebin</a> to allow colleagues to discuss snippets of code, without having to paste it into emails, or Yammer discussions, both of which always scramble formatting and make discussions harder than they should be. The pastebin that I decided to use, used Pygments as the backend, so I decided to add SystemVerilog support to that project.</p>
+
+<p>The main task was adding the <a href="https://twitter.com/#!/GordonMcGregor/status/104282867168845825">more than 220 keywords</a> in SystemVerilog into the format required for Pygments. I ended up cutting and pasting the keywords from the specification into a text file, then using a quick script to generate the <a href="https://bitbucket.org/birkenfeld/pygments-main/src/96e8b9cb83ef/pygments/lexers/hdl.py">appropriate structures</a> for Pygments. I found that generating it automatically was about the only way to avoid typos and saved quite a bit of time and typing.</p>
+
+<p>If you&#39;d like to try it out, installation is straightforward:</p>
+
+<div class="highlight">
+<pre><span class="n">hg</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">bitbucket</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">birkenfeld</span><span class="o">/</span><span class="n">pygments</span><span class="o">-</span><span class="n">main</span> <span class="n">pygments</span>
+<span class="n">cd</span> <span class="n">pygments</span>
+<span class="n">sudo</span> <span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
+</pre>
+</div>
+
+<p>After that, you just run the &#39;pygmentize&#39; command to see formatted source code.</p>
+
+<pre>pygmentize hello_world.sv
+</pre>
+
+<p>This sample below comes from the UVM source code &#39;hello_world.sv&#39; example.</p>
+
+<p><span style="font-family: monospace; white-space: pre;"><span style="color: #008000; font-weight: bold;">module</span> hello_world;</span></p>
+
+<div class="highlight">
+<pre>  <span style="color: #008000; font-weight: bold;">import</span> <span style="color: #0000ff; font-weight: bold;">uvm_pkg::*</span>;
+  <span style="color: #880000;">`include</span> <span style="color: #ba2121;">&quot;uvm_macros.svh&quot;</span>
+
+  <span style="color: #880000;">`include</span> <span style="color: #ba2121;">&quot;packet.sv&quot;</span>
+  <span style="color: #880000;">`include</span> <span style="color: #ba2121;">&quot;producer.sv&quot;</span>
+  <span style="color: #880000;">`include</span> <span style="color: #ba2121;">&quot;consumer.sv&quot;</span>
+  <span style="color: #880000;">`include</span> <span style="color: #ba2121;">&quot;top.sv&quot;</span>
+
+  top mytop;
+
+  <span style="color: #008000; font-weight: bold;">initial</span> <span style="color: #008000; font-weight: bold;">begin</span>
+    <span>$</span>timeformat(<span style="color: #666666;">-9</span>,<span style="color: #666666;">0</span>,<span style="color: #ba2121;">&quot; ns&quot;</span>,<span style="color: #666666;">5</span>);
+    uvm_default_table_printer.knobs.name_width<span style="color: #666666;">=20</span>;
+    uvm_default_table_printer.knobs.type_width<span style="color: #666666;">=50</span>;
+    uvm_default_table_printer.knobs.size_width<span style="color: #666666;">=10</span>;
+    uvm_default_table_printer.knobs.value_width<span style="color: #666666;">=14</span>;
+    set_config_int(<span style="color: #ba2121;">&quot;top.producer1&quot;</span>,<span style="color: #ba2121;">&quot;num_packets&quot;</span>,<span style="color: #666666;">2</span>);
+    set_config_int(<span style="color: #ba2121;">&quot;top.producer2&quot;</span>,<span style="color: #ba2121;">&quot;num_packets&quot;</span>,<span style="color: #666666;">4</span>);
+    set_config_int(<span style="color: #ba2121;">&quot;*&quot;</span>,<span style="color: #ba2121;">&quot;recording_detail&quot;</span>,<span style="color: #880000;">UVM_LOW</span>);
+    <span style="color: #408080; font-style: italic;">//uvm_default_printer = uvm_default_tree_printer;</span>
+    uvm_default_printer.knobs.reference<span style="color: #666666;">=0</span>;
+    mytop <span style="color: #666666;">=</span> <span style="color: #008000; font-weight: bold;">new</span>(<span style="color: #ba2121;">&quot;top&quot;</span>); 
+    uvm_default_table_printer.knobs.type_width<span style="color: #666666;">=20</span>;
+    run_test();
+  <span style="color: #008000; font-weight: bold;">end</span>
+<span style="color: #008000; font-weight: bold;">endmodule</span>
+</pre>
+</div>
+
+<p>A further challenge is working out how to embed this sort of code snippet into a TypePad blog post. In general, Pygments generates html code with CSS styles and classes. This doesn&#39;t play well with TypePad which seems to consume or remove the CSS styles. You can however get Pygments to generate inline styles, which can then be pasted into TypePad. The syntax for this is:</p>
+
+<pre>pygmentize -f html -Ofull,noclasses hello_world.sv
+</pre>
+
+<p>And then the output html can be pasted straight into an HTML editor.</p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/systemverilog-support-in-pygments.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/systemverilog-support-in-pygments.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/19.html" rel="tag">19</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/.html"></a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <h4 class="date">Feb  5,  2012</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/hobgoblins.html" rel="bookmark" title="Permanent Link to &quot;Hobgoblins&quot;">Hobgoblins</a>
+                    </h2>
+                    
+                    <p><center>
+  <p><span class="st"><i>A foolish consistency is the hobgoblin of little minds, adored by little statesmen and philosophers and divines</i></span></p></p>
+<p><p style="text-align: right;"><i>-</i> R. W. Emerson</p>
+</center>
+<p>Looking over the VPI iterator sample code I posted last night from PyHVL, I noticed something. I've defined the API as follows:</p>
+<div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%">
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">vpi_iterator</span>(handle, type<span style="color: #666666">=</span>vpiNet):
+</pre>
+</div>With the <i>handle</i> first and an optional <i>type</i> parameter second, taking the default value of <i>vpiNet</i>. Looking again at the C implementation, I see that the method signature is the reverse:<br />
+<div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%">
+itr <span style="color: #666666">=</span> vpi_iterate(vpiNet, mod);
+</pre>
+</div>Now, I'm faced with a decision. I could make the Python <i>vpi_iterator()</i> call consistent with the similar C API, and reverse the parameters, or I can keep it the same way. Keeping it the same way allows the use of the default argument for <i>vpiNet</i>. Optional arguments must follow required arguments, so I couldn't reverse it and keep the <i>type</i>=<i>vpiNet</i> as an option, it would have to become <i>(type, handle).</i> In this case, I don't think the default type is particularly intuitive from the name, so I would tend to think there is more value in reversing the arguments, so that it is consistent with the C API's similar function signature.<br />
+<div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%">
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">vpi_iterator</span>(type, handle):
+</pre>
+</div>Some people might think this is a totally arbitrary consideration. I believe this sort of detail is important. My favorite languages are internally consistent, so that when you start using a new library or part of the language, the structures and idioms are so familiar you can often code things correctly without having fully read the documentation. Most of the Python standard library is like that, you can pick up a new library and be productive, quickly, because there aren't jarring inconstancies. If I want people to use this <i>vpi_iterator</i> method, coming from C, it will help if it matches the general argument patterns used there. Less friction to getting code working first time.<br />
+Each of these is just a small thing that you have to remember, but each time it catches you out it is annoying and maybe knocks you off your train of thought to fix it. The details and consistency are important to people being productive in a language.<br />
+<br />
+I wish SystemVerilog had more of that consistency - semicolons to mark the end of a function definition, then a <i>begin/end</i> syntax for blocks, or <i>{}</i> for some parts of the language to define blocks. <i>end, endfunction, endtask</i>. Just extra details that get in the way of writing clean code the first time.<br />
+<br /></p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/hobgoblins.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/hobgoblins.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/02.html" rel="tag">02</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/verification.html">verification</a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/improving-sshfs-connections.html" rel="bookmark" title="Permanent Link to &quot;Improving sshfs connections&quot;">Improving sshfs connections</a>
+                    </h2>
+                    
+                    <p>I'm finding <a href="http://www.fivecomputers.com/2012/04/sshfs-for-os-x-lion.html">sshfs</a> to be excellent for remotely accessing drives over ssh. There's a couple of tweaks to the ssh config file that can make things even better. If you haven't used an ssh config file, it can be used to store general and connection specific information, to save you typing it every time. The file lives in <i>~/.ssh/config</i></p>
+
+<pre>
+Host &lt;hostname&gt;
+
+features
+
+Host &lt;otherhostname&gt;
+
+features
+</pre>
+
+<p>e.g.,
+<pre>
+Host short</p>
+<p>Hostname ssh.long_url_name.com</p>
+<p>Username myusername
+</pre>so, instead of typing <i>ssh myusername@ssh.long_url_name.com</i> I can instead run the following:
+<pre>
+ssh short
+</pre>To improve the sshfs you should add<br />
+<pre>
+ServerAliveInterval 15 
+</pre>to the Host that you connect over sshfs, which will make sshfs to a ssh keepalive ping every 15 seconds.</p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/improving-sshfs-connections.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/improving-sshfs-connections.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/02.html" rel="tag">02</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/.html"></a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <h4 class="date">Jan  5,  2012</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/pygmentize-files-and-paste-them-into-microsoft-word-in-os-x.html" rel="bookmark" title="Permanent Link to &quot;Pygmentize files and paste them into Microsoft Word in OS X&quot;">Pygmentize files and paste them into Microsoft Word in OS X</a>
+                    </h2>
+                    
+                    <p>Writing some documents using Microsoft Word and I wanted to be able to drop in syntax highlighted versions of the source code. Pygmentize will generate RTF format, which is great for pasting in to Word, but you have to get it there. The best way I've found is using the OS X terminal (I like using <a href="http://www.iterm2.com/#/section/home">iTerm2</a>). I then use a feature of the command line <i>open</i> command, which makes it read from <i>stdin</i> and open the output in TextEdit. This text can then be cut and pasted directly in to Word, preserving all the formatting.</p>
+
+<p>Run the command:</p>
+
+<pre>
+pygmentize -f rtf &lt;file to highlight&gt; | open -f
+</pre>
+
+<p>Then in the TextEdit window, press</p>
+<div style="display: inline !important;">
+  <i><span style="font-style: normal;">⌘</span></i>
+</div>
+
+<p><i>a</i>,</p>
+<div style="display: inline !important;">
+  <i><span style="font-style: normal;">⌘</span></i>
+</div>
+
+<p><i>c</i> to select all and copy it. Switch to Word and hit</p>
+<div style="display: inline !important;">
+  <i><span style="font-style: normal;">⌘</span></i>
+</div>
+
+<p><i>v</i> to paste.</p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/pygmentize-files-and-paste-them-into-microsoft-word-in-os-x.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/pygmentize-files-and-paste-them-into-microsoft-word-in-os-x.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/01.html" rel="tag">01</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/.html"></a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/simplified-vpi-iterators-using-pyhvl-generators.html" rel="bookmark" title="Permanent Link to &quot;Simplified VPI iterators using PyHVL generators&quot;">Simplified VPI iterators using PyHVL generators</a>
+                    </h2>
+                    
+                    <p>I've been using <a href="http://pyhvl.sourceforge.net/">PyHVL</a> for a variety of verification tasks in the past few years. PyHVL is an open source Python integration for Verilog and SystemVerilog simulators. To give a quick taste of what it can do for you, consider the following SystemVerilog VPI C code.</p>
+
+<div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%">
+<span style="color: #B00040">void</span> display_nets(mod)
+    vpiHandle mod;
+    {
+       vpiHandle net;
+       vpiHandle itr;
+       vpi_printf(<span style="color: #BA2121">"Nets declared in module %s</span><span style="color: #BB6622; font-weight: bold">\n</span><span style="color: #BA2121">"</span>,
+       vpi_get_str(vpiFullName, mod));
+</pre>
+  <pre style="line-height: 125%">
+       itr <span style="color: #666666">=</span> vpi_iterate(vpiNet, mod);
+</pre>
+  <pre style="line-height: 125%">
+
+       <span style="color: #008000; font-weight: bold">while</span> (net <span style="color: #666666">=</span> vpi_scan(itr))
+          {
+          vpi_printf(<span style="color: #BA2121">"</span><span style="color: #BB6622; font-weight: bold">\t</span><span style="color: #BA2121">%s"</span>, vpi_get_str(vpiName, net));
+          <span style="color: #008000; font-weight: bold">if</span> (vpi_get(vpiVector, net))
+          {
+             vpi_printf(<span style="color: #BA2121">" of size %d</span><span style="color: #BB6622; font-weight: bold">\n</span><span style="color: #BA2121">"</span>, vpi_get(vpiSize, net));
+          }
+          <span style="color: #008000; font-weight: bold">else</span> vpi_printf(<span style="color: #BA2121">"</span><span style="color: #BB6622; font-weight: bold">\n</span><span style="color: #BA2121">"</span>);
+       }
+    }
+</pre>
+</div>
+
+<p>Here is the equivalent VPI code, this time written in Python, using PyHVL.</p>
+
+<div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%">
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">display_nets</span>(module):
+</pre>
+  <pre style="line-height: 125%">
+    <span style="color: #008000; font-weight: bold">print</span> <span style="color: #BA2121">'Nets declared in module'</span>, get_str(vpiFullName, module) 
+</pre>
+  <pre style="line-height: 125%">
+    <span style="color: #008000; font-weight: bold">for</span> net <span style="color: #AA22FF; font-weight: bold">in</span> vpi_iterator(module, vpiNet):
+        <span style="color: #008000; font-weight: bold">print</span> <span style="color: #BA2121">'</span><span style="color: #BB6622; font-weight: bold">\t</span><span style="color: #BB6688; font-weight: bold">%s</span><span style="color: #BA2121"> </span><span style="color: #BB6688; font-weight: bold">%s</span><span style="color: #BA2121">'</span> <span style="color: #666666">%</span> ( get_str(vpiName, net), 
+                get(vpiVector, net) <span style="color: #AA22FF; font-weight: bold">and</span> <span style="color: #BA2121">'of size </span><span style="color: #BB6688; font-weight: bold">%d</span><span style="color: #BA2121">'</span> <span style="color: #666666">%</span> get(vpiSize, net) <span style="color: #AA22FF; font-weight: bold">or</span> <span style="color: #BA2121">''</span>)
+</pre>
+</div>
+
+<p>The magic happens in the implementation of the <i>vpi_iterator()</i> method, which uses a Python <i>yield</i> instruction to turn the method into a generator. <a href="http://wiki.python.org/moin/Generators">Generators</a> are much like functions, except they maintain a frozen stack frame, at the point where the <i>yield</i> occurs. All existing variables within the method maintain their state and execution picks up where it left off, just after the <i>yield</i>. The example also uses lazy evaluation of the result of <i>get(vpiVector, net)</i> to either call <i>get(vpiSize, net)</i> or not print the <i>'of size</i>' additional string.</p>
+
+<div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%">
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">vpi_iterator</span>(handle, <span style="color: #008000">type</span><span style="color: #666666">=</span>vpiNet):
+    iterator <span style="color: #666666">=</span> iterate(<span style="color: #008000">type</span>, handle)
+    <span style="color: #008000; font-weight: bold">if</span> iterator:
+        handle <span style="color: #666666">=</span> scan(iterator)
+        <span style="color: #008000; font-weight: bold">while</span> handle:
+            <span style="color: #008000; font-weight: bold">yield</span> handle
+            handle <span style="color: #666666">=</span> scan(iterator)
+
+</pre>
+</div>
+
+<p>This lets you write loops <i>inside out</i> as one of my colleagues aptly put it. The outcome is you can simplify the management of loops and indices and focus on the point of the loop. You write less code, you introduce fewer bugs. The code is easier to read and maintain as a result. This is just a very small example of some of the power of using a modern scripting language like Python, as an adjunct to a SystemVerilog simulator.</p>
+
+<p>If you spend much time writing VPI code, you should take a look at PyHVL. It could make your life much simpler, or get in touch and I can help you with it.</p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/simplified-vpi-iterators-using-pyhvl-generators.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/simplified-vpi-iterators-using-pyhvl-generators.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/01.html" rel="tag">01</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/software.html">software</a>
+                            <a href="http://fivecomputers.com/tag/verification.html">verification</a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <h4 class="date">Jan 23,  2011</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/csv-the-easy-way.html" rel="bookmark" title="Permanent Link to &quot;csv the easy way&quot;">csv the easy way</a>
+                    </h2>
+                    
+                    <p>I've recently started using <a href="http://fogcreek.com/">FogCreek's</a> <a href="http://www.fogcreek.com/FogBugz/">FogBugz</a> project hosting for a small personal project. It has a built-in Mercurial source repository, with some enhancements, called Kiln, and good task/ project tracking features. Quite similar to those you find in <a href="http://trac.edgewall.org/">Trac</a>. Rather than putting together the various servers to track my own project, I figured I might as well use what they give away for free, for small project teams. I had a list of tasks that I wanted to import into the FogBugz task list, from a CSV file. In fact, this was a CSV file I'd exported from a different FogBugz site, but it could well have been any list of comma seperated values holding task information. The trick was how to get that information from my computer onto the FogBugz site. They didn't have any obvious CSV import option, but they do publish an XML API. Luckily enough, there is also a set of <a href="https://our.fogbugz.com/default.asp?W1048">python bindings around the API</a>. Amazingly enough, I was able to open and read the CSV file, parse it, login in to my FogBugz account and upload the new tasks to the server with just this little snippet of code.</p>
+
+<p><br />
+<div class="highlight">
+  <pre>
+<span class="kn">from</span> <span class="nn">fogbugz</span> <span class="kn">import</span> <span class="n">FogBugz</span>
+<span class="kn">import</span> <span class="nn">csv</span>
+<span class="n">fb</span> <span class="o">=</span> <span class="n">FogBugz</span><span class="p">(</span><span class="s">'http://my_site.fogbugz.com/'</span><span class="p">)</span> <span class="c"># URL is to your FogBugz install</span>
+<span class="n">fb</span><span class="o">.</span><span class="n">logon</span><span class="p">(</span><span class="s">'my_login@my.site.com'</span><span class="p">,</span> <span class="s">'password'</span><span class="p">)</span></p>
+<p><span class="n">cases</span><span class="o">=</span><span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s">'Filter.csv'</span><span class="p">,</span><span class="s">'r'</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">case</span> <span class="ow">in</span> <span class="n">cases</span><span class="p">:</span>
+    <span class="k">print</span> <span class="n">case</span>
+    <span class="n">fb</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">sCategory</span><span class="o">=</span><span class="n">case</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sTitle</span><span class="o">=</span><span class="n">case</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">sPriority</span><span class="o">=</span><span class="n">case</span><span class="p">[</span><span class="mi">7</span><span class="p">])</span> </p>
+<p><span class="n">fb</span><span class="o">.</span><span class="n">logoff</span><span class="p">()</span>
+</pre>
+</div>Pretty cool if you ask me! Quick and dirty, throwaway code, but so powerful for so few lines.<br />
+<br /></p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/csv-the-easy-way.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/csv-the-easy-way.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/23.html" rel="tag">23</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/software.html">software</a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <div class="clear"></div>
+                <div class="pages">                
+                    <a href="http://fivecomputers.com/index.html" class="prev_page">&larr;&nbsp;Previous</a>
+                    <a href="http://fivecomputers.com/index3.html" class="next_page">Next&nbsp;&rarr;</a>
+                    <span>Page 2 of 6</span>
+                </div>
+
+                <div class="clear"></div>
+                <div id="footer">
+                    <p>
+                    <a href="https://twitter.com/GordonMcGregor">Twitter @GordonMcGregor</a>
+                    &middot;
+                    <a class="atom" href="http://fivecomputers.com/feeds/all.atom.xml">RSS Feed</a>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+    <script type="text/javascript">
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+    try {
+        var pageTracker = _gat._getTracker("UA-42678190-1");
+    pageTracker._trackPageview();
+    } catch(err) {}</script>
+<script type="text/javascript">
+    var disqus_shortname = 'fivecomputers';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+    </body>
 </html>

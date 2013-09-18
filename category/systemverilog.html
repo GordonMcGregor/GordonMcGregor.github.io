@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+        <title>Five Computers &middot; articles in the "systemverilog" category</title>
+        <link rel="shortcut icon" href="http://fivecomputers.com/favicon.ico" />
+        <link href="http://fivecomputers.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Five Computers Atom Feed" />
+                
+        <link rel="stylesheet" href="http://fivecomputers.com/theme/css/screen.css" type="text/css" />
+        <link rel="stylesheet" href="http://fivecomputers.com/theme/css/pygments.css" type="text/css" />
+
+
+    </head>
+    <body>
+        <div id="header">
+            <ul id="nav">
+                <li class="ephemeral selected"><a href="http://fivecomputers.com/category/systemverilog.html">systemverilog</a></li>
+                <li><a href="http://fivecomputers.com">Home</a></li>
+                <li><a href="http://fivecomputers.com/pages/about-gordon.html">About Gordon</a></li>
+                <li><a href="http://fivecomputers.com/archives.html">Archives</a></li>
+            </ul>
+            <div class="header_box">
+                <h1><a href="http://fivecomputers.com">Five Computers</a></h1>
+            </div>
+        </div>
+        <div id="wrapper">
+            <div id="content">
+                <h4 class="date">Aug 16,  2013</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/serving-local-web-pages.html" rel="bookmark" title="Permanent Link to &quot;Serving local web pages&quot;">Serving local web pages</a>
+                    </h2>
+                    
+                    <p>I've been trying to improve some SystemVerilog constraints, in Synopsys VCS. One useful approach is to use the profiling features of the constraint solver to explore particular constraints that might be burning lots of cycles or proving hard to solve. There's a VCS runtime switch to turn on constraint profiling:</p>
+<div class="highlight"><pre><span class="o">+</span><span class="n">ntb_solve_debug</span><span class="o">=</span><span class="n">profile</span>
+</pre></div>
+
+
+<p>This creates a profile report in the <code>simv.cst</code> directory, in <code>html/profile.xml</code> The documentation mentions that this file is viewable in Chrome and Firefox but doesn't work in IE. However, it now seems like it also isn't viewable in Chrome. Instead, it hits a security issue: </p>
+<div class="highlight"><pre><span class="n">Unsafe</span> <span class="n">attempt</span> <span class="n">to</span> <span class="n">load</span> <span class="n">URL</span> <span class="n">file</span><span class="o">:</span><span class="c1">///projects/simv.cst/html/cstrProf.xsl </span>
+<span class="n">from</span> <span class="n">frame</span> <span class="n">with</span> <span class="n">URL</span> <span class="n">file</span><span class="o">:</span><span class="c1">///projects/simv.cst/html/profile.xml. </span>
+<span class="n">Domains</span><span class="p">,</span> <span class="n">protocols</span> <span class="n">and</span> <span class="n">ports</span> <span class="n">must</span> <span class="n">match</span><span class="p">.</span>
+</pre></div>
+
+
+<p>Now, the file does load in Firefox, but I've been trying to avoid running multiple browsers. There is however a simple fix. You can run a web server and serve up the profile over html. That maybe sounds like a lot of work, but python ships with one in the standard library and it will run as a command-line loaded module. So, simply change directory to your build directory (or close to it - the server lets you navigate the file hierarchy too) and run</p>
+<div class="highlight"><pre><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">SimpleHTTPServer</span>
+</pre></div>
+
+
+<p>Then in a browser on the same machine, open http://localhost:8000  E.g., if you run the server in the directory with the profile, you can go directly to http://localhost:8000/profile.xml</p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/serving-local-web-pages.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/serving-local-web-pages.html">posted at  1:41 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/systemverilog.html" rel="tag">systemverilog</a>                                                
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <h4 class="date">Aug 12,  2013</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/language-specification-length.html" rel="bookmark" title="Permanent Link to &quot;Language Specification Length&quot;">Language Specification Length</a>
+                    </h2>
+                    
+                    <p><center>
+<img alt="Language Complexity" src="http://fivecomputers.com/static/images/language_complexity.png" />
+</center></p>
+<p>Now, just as <a href="https://twitter.com/GordonMcGregor/status/104282867168845825">number of keywords</a> isn't the sole indicator of the complexity of a language, the length of the specification doesn't tell the entire story. However, SystemVerilog in the new 2012 version clocks in at 1315 pages.</p>
+<p><center>
+<blockquote class="twitter-tweet"><p>Language Specification page count&#10;C++ 865&#10;Java 644&#10;C 540&#10;C# 511&#10;Ruby 311&#10;Smalltalk 303&#10;Erlang 31&#10;&#10;Well played Erlang. Well played.</p>&mdash; Jonas Elfström (@jonelf) <a href="https://twitter.com/jonelf/statuses/366854642774183936">August 12, 2013</a></blockquote>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script></center></p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/language-specification-length.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/language-specification-length.html">posted at  6:34 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/systemverilog.html" rel="tag">systemverilog</a>                                                
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <div class="clear"></div>
+                <div id="footer">
+                    <p>
+                    <a href="https://twitter.com/GordonMcGregor">Twitter @GordonMcGregor</a>
+                    &middot;
+                    <a class="atom" href="http://fivecomputers.com/feeds/all.atom.xml">RSS Feed</a>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+    <script type="text/javascript">
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+    try {
+        var pageTracker = _gat._getTracker("UA-42678190-1");
+    pageTracker._trackPageview();
+    } catch(err) {}</script>
+<script type="text/javascript">
+    var disqus_shortname = 'fivecomputers';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+    </body>
+</html>

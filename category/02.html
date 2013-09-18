@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+        <title>Five Computers &middot; articles in the "02" category</title>
+        <link rel="shortcut icon" href="http://fivecomputers.com/favicon.ico" />
+        <link href="http://fivecomputers.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Five Computers Atom Feed" />
+                
+        <link rel="stylesheet" href="http://fivecomputers.com/theme/css/screen.css" type="text/css" />
+        <link rel="stylesheet" href="http://fivecomputers.com/theme/css/pygments.css" type="text/css" />
+
+
+    </head>
+    <body>
+        <div id="header">
+            <ul id="nav">
+                <li class="ephemeral selected"><a href="http://fivecomputers.com/category/02.html">02</a></li>
+                <li><a href="http://fivecomputers.com">Home</a></li>
+                <li><a href="http://fivecomputers.com/pages/about-gordon.html">About Gordon</a></li>
+                <li><a href="http://fivecomputers.com/archives.html">Archives</a></li>
+            </ul>
+            <div class="header_box">
+                <h1><a href="http://fivecomputers.com">Five Computers</a></h1>
+            </div>
+        </div>
+        <div id="wrapper">
+            <div id="content">
+                <h4 class="date">Feb  5,  2012</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/hobgoblins.html" rel="bookmark" title="Permanent Link to &quot;Hobgoblins&quot;">Hobgoblins</a>
+                    </h2>
+                    
+                    <p><center>
+  <p><span class="st"><i>A foolish consistency is the hobgoblin of little minds, adored by little statesmen and philosophers and divines</i></span></p></p>
+<p><p style="text-align: right;"><i>-</i> R. W. Emerson</p>
+</center>
+<p>Looking over the VPI iterator sample code I posted last night from PyHVL, I noticed something. I've defined the API as follows:</p>
+<div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%">
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">vpi_iterator</span>(handle, type<span style="color: #666666">=</span>vpiNet):
+</pre>
+</div>With the <i>handle</i> first and an optional <i>type</i> parameter second, taking the default value of <i>vpiNet</i>. Looking again at the C implementation, I see that the method signature is the reverse:<br />
+<div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%">
+itr <span style="color: #666666">=</span> vpi_iterate(vpiNet, mod);
+</pre>
+</div>Now, I'm faced with a decision. I could make the Python <i>vpi_iterator()</i> call consistent with the similar C API, and reverse the parameters, or I can keep it the same way. Keeping it the same way allows the use of the default argument for <i>vpiNet</i>. Optional arguments must follow required arguments, so I couldn't reverse it and keep the <i>type</i>=<i>vpiNet</i> as an option, it would have to become <i>(type, handle).</i> In this case, I don't think the default type is particularly intuitive from the name, so I would tend to think there is more value in reversing the arguments, so that it is consistent with the C API's similar function signature.<br />
+<div class="highlight" style="background: #f8f8f8">
+  <pre style="line-height: 125%">
+<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">vpi_iterator</span>(type, handle):
+</pre>
+</div>Some people might think this is a totally arbitrary consideration. I believe this sort of detail is important. My favorite languages are internally consistent, so that when you start using a new library or part of the language, the structures and idioms are so familiar you can often code things correctly without having fully read the documentation. Most of the Python standard library is like that, you can pick up a new library and be productive, quickly, because there aren't jarring inconstancies. If I want people to use this <i>vpi_iterator</i> method, coming from C, it will help if it matches the general argument patterns used there. Less friction to getting code working first time.<br />
+Each of these is just a small thing that you have to remember, but each time it catches you out it is annoying and maybe knocks you off your train of thought to fix it. The details and consistency are important to people being productive in a language.<br />
+<br />
+I wish SystemVerilog had more of that consistency - semicolons to mark the end of a function definition, then a <i>begin/end</i> syntax for blocks, or <i>{}</i> for some parts of the language to define blocks. <i>end, endfunction, endtask</i>. Just extra details that get in the way of writing clean code the first time.<br />
+<br /></p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/hobgoblins.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/hobgoblins.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/02.html" rel="tag">02</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/verification.html">verification</a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/improving-sshfs-connections.html" rel="bookmark" title="Permanent Link to &quot;Improving sshfs connections&quot;">Improving sshfs connections</a>
+                    </h2>
+                    
+                    <p>I'm finding <a href="http://www.fivecomputers.com/2012/04/sshfs-for-os-x-lion.html">sshfs</a> to be excellent for remotely accessing drives over ssh. There's a couple of tweaks to the ssh config file that can make things even better. If you haven't used an ssh config file, it can be used to store general and connection specific information, to save you typing it every time. The file lives in <i>~/.ssh/config</i></p>
+
+<pre>
+Host &lt;hostname&gt;
+
+features
+
+Host &lt;otherhostname&gt;
+
+features
+</pre>
+
+<p>e.g.,
+<pre>
+Host short</p>
+<p>Hostname ssh.long_url_name.com</p>
+<p>Username myusername
+</pre>so, instead of typing <i>ssh myusername@ssh.long_url_name.com</i> I can instead run the following:
+<pre>
+ssh short
+</pre>To improve the sshfs you should add<br />
+<pre>
+ServerAliveInterval 15 
+</pre>to the Host that you connect over sshfs, which will make sshfs to a ssh keepalive ping every 15 seconds.</p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/improving-sshfs-connections.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/improving-sshfs-connections.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/02.html" rel="tag">02</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/.html"></a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <h4 class="date">Feb 12,  2008</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/complete.html" rel="bookmark" title="Permanent Link to &quot;complete&quot;">complete</a>
+                    </h2>
+                    
+                    <p>Finally! Now my Mac <a href="http://news.bbc.co.uk/2/hi/technology/7760344.stm">can do everything</a> my windows machine can do. I&#39;m so happy.</p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/complete.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/complete.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/02.html" rel="tag">02</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/software.html">software</a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <div class="clear"></div>
+                <div id="footer">
+                    <p>
+                    <a href="https://twitter.com/GordonMcGregor">Twitter @GordonMcGregor</a>
+                    &middot;
+                    <a class="atom" href="http://fivecomputers.com/feeds/all.atom.xml">RSS Feed</a>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+    <script type="text/javascript">
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+    try {
+        var pageTracker = _gat._getTracker("UA-42678190-1");
+    pageTracker._trackPageview();
+    } catch(err) {}</script>
+<script type="text/javascript">
+    var disqus_shortname = 'fivecomputers';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+    </body>
+</html>

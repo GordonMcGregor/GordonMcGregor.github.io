@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+        <title>Five Computers &middot; articles in the "23" category</title>
+        <link rel="shortcut icon" href="http://fivecomputers.com/favicon.ico" />
+        <link href="http://fivecomputers.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Five Computers Atom Feed" />
+                
+        <link rel="stylesheet" href="http://fivecomputers.com/theme/css/screen.css" type="text/css" />
+        <link rel="stylesheet" href="http://fivecomputers.com/theme/css/pygments.css" type="text/css" />
+
+
+    </head>
+    <body>
+        <div id="header">
+            <ul id="nav">
+                <li class="ephemeral selected"><a href="http://fivecomputers.com/category/23.html">23</a></li>
+                <li><a href="http://fivecomputers.com">Home</a></li>
+                <li><a href="http://fivecomputers.com/pages/about-gordon.html">About Gordon</a></li>
+                <li><a href="http://fivecomputers.com/archives.html">Archives</a></li>
+            </ul>
+            <div class="header_box">
+                <h1><a href="http://fivecomputers.com">Five Computers</a></h1>
+            </div>
+        </div>
+        <div id="wrapper">
+            <div id="content">
+                <h4 class="date">Jan 23,  2011</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/csv-the-easy-way.html" rel="bookmark" title="Permanent Link to &quot;csv the easy way&quot;">csv the easy way</a>
+                    </h2>
+                    
+                    <p>I've recently started using <a href="http://fogcreek.com/">FogCreek's</a> <a href="http://www.fogcreek.com/FogBugz/">FogBugz</a> project hosting for a small personal project. It has a built-in Mercurial source repository, with some enhancements, called Kiln, and good task/ project tracking features. Quite similar to those you find in <a href="http://trac.edgewall.org/">Trac</a>. Rather than putting together the various servers to track my own project, I figured I might as well use what they give away for free, for small project teams. I had a list of tasks that I wanted to import into the FogBugz task list, from a CSV file. In fact, this was a CSV file I'd exported from a different FogBugz site, but it could well have been any list of comma seperated values holding task information. The trick was how to get that information from my computer onto the FogBugz site. They didn't have any obvious CSV import option, but they do publish an XML API. Luckily enough, there is also a set of <a href="https://our.fogbugz.com/default.asp?W1048">python bindings around the API</a>. Amazingly enough, I was able to open and read the CSV file, parse it, login in to my FogBugz account and upload the new tasks to the server with just this little snippet of code.</p>
+
+<p><br />
+<div class="highlight">
+  <pre>
+<span class="kn">from</span> <span class="nn">fogbugz</span> <span class="kn">import</span> <span class="n">FogBugz</span>
+<span class="kn">import</span> <span class="nn">csv</span>
+<span class="n">fb</span> <span class="o">=</span> <span class="n">FogBugz</span><span class="p">(</span><span class="s">'http://my_site.fogbugz.com/'</span><span class="p">)</span> <span class="c"># URL is to your FogBugz install</span>
+<span class="n">fb</span><span class="o">.</span><span class="n">logon</span><span class="p">(</span><span class="s">'my_login@my.site.com'</span><span class="p">,</span> <span class="s">'password'</span><span class="p">)</span></p>
+<p><span class="n">cases</span><span class="o">=</span><span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s">'Filter.csv'</span><span class="p">,</span><span class="s">'r'</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">case</span> <span class="ow">in</span> <span class="n">cases</span><span class="p">:</span>
+    <span class="k">print</span> <span class="n">case</span>
+    <span class="n">fb</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">sCategory</span><span class="o">=</span><span class="n">case</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sTitle</span><span class="o">=</span><span class="n">case</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">sPriority</span><span class="o">=</span><span class="n">case</span><span class="p">[</span><span class="mi">7</span><span class="p">])</span> </p>
+<p><span class="n">fb</span><span class="o">.</span><span class="n">logoff</span><span class="p">()</span>
+</pre>
+</div>Pretty cool if you ask me! Quick and dirty, throwaway code, but so powerful for so few lines.<br />
+<br /></p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/csv-the-easy-way.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/csv-the-easy-way.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/23.html" rel="tag">23</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/software.html">software</a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <h4 class="date">Feb 23,  2009</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/the-death-of-books.html" rel="bookmark" title="Permanent Link to &quot;the death of books&quot;">the death of books</a>
+                    </h2>
+                    
+                    <p><a href="http://www.flickr.com/photos/52043707@N00/2331801711/"><img src="http://farm3.static.flickr.com/2050/2331801711_07616a0808.jpg" height="500" width="429" alt="ghost rider" /></a><br />
+<blockquote>
+  <p style="text-align: center;"><em>The reports of my death are greatly exaggerated</em></p></p>
+<p><p style="text-align: right;"><span style="font-size: 10px;">- Mark Twain</span></p>
+</blockquote>It seems that <a href="http://www.npr.org/templates/story/story.php?storyId=99961163&amp;ft=1&amp;f=1003">some universities</a> are moving away from physical books, switching entirely to electronic textbooks. My initial reaction is that this is just a little bit crazy. Electronic reference materials have a place, but I have a real difficulty with only electronic textbooks as being the best approach. Certainly there is a financial justification and a reduction in the physical weight the students have to carry. There is no doubt an advantage for the book stores, having to carry less physical inventory and ship it around the country.<br />
+<br />
+But none of this takes into account how you interact with a physical book. It just isn't the same having the material online or on a PDF in a laptop. A screen is harder to read (a good laptop screen is still less than 100dpi, books and print are 300dpi or more) and as it is a lower resolution than printed material, you can only see a small amount of the information at a time. Diagrams and accompanying text are often hard to see all in one place. This is part of the reason why reading on a screen can be so tiring. Also the backlit text is harder on the eyes than reading from a page. The second drawback is how you physically interact with a book - flicking quickly through pages, marking pages with a highlighter, inserting post-it notes, curling up in a chair to read a book, spreading several books and notes out across a table. All of these metaphors may eventually be replaced with digital analogues that are as powerful or more so, but it seems we are quite far from that time.<br />
+<br />
+The Amazon Kindle is probably about as good as this gets just now and from what I can tell, it still falls far below a good hunk of printed tree. The Kindle does have a higher resolution screen, which helps with reading for a long time, but the screen is small and the navigation feels clunky. Laptops are worse.<br />
+<br />
+I do find a lot of value in online reference books. I've had a subscription to <a href="http://my.safaribooksonline.com/">O'Reilly's Safari</a> for over a year now and have found it to be invaluable, particularly when traveling. I can have access to a variety of reference texts, easily searchable, almost always available (if you have an internet connection). However, I've never been able to read any of the books I <a href="http://my.safaribooksonline.com/">have on my Safari subscription</a>, for more than a few pages. It just doesn't seem to work for me. No doubt I'm destined to become a relic in my views on reading, but it seems that we <a href="http://www.jmcolberg.com/weblog/2009/02/is_providing_access_enough.html">approach reading on a screen</a> differently to a book. I'd love to have some sort of larger Kindle device, linked to a Safari subscription. Some way to really read those books on Safari, rather than just treating them as reference works. It always feels that this is just right around the corner, yet we never quite get there.</p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/the-death-of-books.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/the-death-of-books.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/23.html" rel="tag">23</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/books.html">books</a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <div class="clear"></div>
+                <div id="footer">
+                    <p>
+                    <a href="https://twitter.com/GordonMcGregor">Twitter @GordonMcGregor</a>
+                    &middot;
+                    <a class="atom" href="http://fivecomputers.com/feeds/all.atom.xml">RSS Feed</a>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+    <script type="text/javascript">
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+    try {
+        var pageTracker = _gat._getTracker("UA-42678190-1");
+    pageTracker._trackPageview();
+    } catch(err) {}</script>
+<script type="text/javascript">
+    var disqus_shortname = 'fivecomputers';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+    </body>
+</html>

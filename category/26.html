@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+        <title>Five Computers &middot; articles in the "26" category</title>
+        <link rel="shortcut icon" href="http://fivecomputers.com/favicon.ico" />
+        <link href="http://fivecomputers.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Five Computers Atom Feed" />
+                
+        <link rel="stylesheet" href="http://fivecomputers.com/theme/css/screen.css" type="text/css" />
+        <link rel="stylesheet" href="http://fivecomputers.com/theme/css/pygments.css" type="text/css" />
+
+
+    </head>
+    <body>
+        <div id="header">
+            <ul id="nav">
+                <li class="ephemeral selected"><a href="http://fivecomputers.com/category/26.html">26</a></li>
+                <li><a href="http://fivecomputers.com">Home</a></li>
+                <li><a href="http://fivecomputers.com/pages/about-gordon.html">About Gordon</a></li>
+                <li><a href="http://fivecomputers.com/archives.html">Archives</a></li>
+            </ul>
+            <div class="header_box">
+                <h1><a href="http://fivecomputers.com">Five Computers</a></h1>
+            </div>
+        </div>
+        <div id="wrapper">
+            <div id="content">
+                <h4 class="date">Apr 26,  2012</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/sshfs-for-os-x-lion.html" rel="bookmark" title="Permanent Link to &quot;sshfs for OS X Lion&quot;">sshfs for OS X Lion</a>
+                    </h2>
+                    
+                    <p>Installed the latest version of fuse and sshfs, using <a href="http://mxcl.github.com/homebrew/">Homebrew</a>. I had been using FUSE for a while with previous versions of OS X, but haven't had much luck under Lion. Tried again today, using <a href="http://fuse4x.org/">Fuse4x</a>, rather than libFUSE and everything worked very transparently:</p>
+
+<pre>
+brew install fuse4x sshfs
+</pre>
+
+<p><strike>and that was it!</strike><strike><br /></strike> No, of course that wasn't true. First I had to re-update my Xcode command-line tools. This then removed autoreconf which Apple no longer provide as part of their <a href="http://brianpeddle.com/tag/autoreconf/">XCode tools bundle</a> [in neither the command line, or GUI release]. So, via Google, I find you have to install a different set of <a href="https://github.com/kennethreitz/osx-gcc-installer/downloads">gcc tools</a>, not shipped by Apple. Then, back to the brew install command line above, and things are a lot happier.<br />
+<strike>and that was it!</strike><strike><br /></strike> Well, except you really do need to read the installation message which says<br />
+<pre>
+==&gt; Caveats
+</pre>
+<pre>
+   Make sure to follow the directions given by <code>brew info fuse4x-kext</code>before trying to use a FUSE-based filesystem.<br />
+</pre><br />
+Then if you type<br />
+<pre>
+brew info fuse4x-kext
+</pre><br />
+You find you need to run the following two commands to get anything to actually work:<br />
+<pre>
+sudo cp -rfX /usr/local/Cellar/fuse4x-kext/0.8.14/Library/Extensions/fuse4x.kext /System/Library/Extensions 
+sudo chmod +s /System/Library/Extensions/fuse4x.kext/Support/load_fuse4x
+</pre>and that was it!<br />
+<br />
+No really, it was. Then I was able to mount remote directories, with the simple command:<br />
+<pre>
+sshfs &lt;remote_host&gt;:&lt;remote_path&gt; &lt;local_path&gt;
+</pre><br />
+and it actually worked!<br />
+To unmount a mounted partition, use the standard<br />
+<br />
+<pre>
+umount &lt;local_path&gt; 
+</pre>
+<pre>
+<br />
+</pre>
+<pre>
+<br />
+</pre></p>
+<div class="posttagsblock"><a href="http://technorati.com/tag/geekery" rel="tag">geekery</a>, <a href="http://technorati.com/tag/OSX" rel="tag">OSX</a></div>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/sshfs-for-os-x-lion.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/sshfs-for-os-x-lion.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/26.html" rel="tag">26</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/.html"></a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <h4 class="date">Apr 26,  2009</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/dd-wrt.html" rel="bookmark" title="Permanent Link to &quot;dd-wrt&quot;">dd-wrt</a>
+                    </h2>
+                    
+                    <p><img src="http://farm4.static.flickr.com/3612/3476627038_8aab2a0db9.jpg" width="480" height="448" alt="dd-wrt" /></p>
+
+<p>Just installed <a href="http://www.dd-wrt.com/dd-wrtv3/index.php">dd-wrt</a> on my Linksys wrt54g wireless router. I'd been meaning to do this for a while - as an easy way to get a much more functional router than the default firmware shipped by Linksys. What finally motivated me to do it was the recent storm about Time Warner Cable introducing <a href="http://austinist.com/2009/04/16/time_warners_consumption_based_bill.php">bandwidth caps in Austin</a>. Although TWC seem to have backed down for the moment, they have also recently started <a href="http://tech.slashdot.org/article.pl?sid=09/04/25/1237215&amp;from=rss">disconnecting customers for 'using too much bandwidth'</a> on their infinite bandwidth contracts. The DD-WRT firmware gives me an independent way to monitor my usage and get an idea of how much I typically transmit &amp; receive.&nbsp;&nbsp;</p>
+
+<p>The DD-WRT firmware install wasn't quite as smooth as the documentation might make you believe. The first time I installed and then tried to update the firmware, I got a fairly unhelpful 'Error 2: Access violation' error from the tftp prompt and not much else. I went back through the management mode initial vxkiller upload and things seemed to work better the second time around. For a while I was worried that I had a brick of router.</p>
+
+<p>Once back up and running, the settings were very similar to the previous Linksys options, so it was quite quick to get the wireless settings and port forwarding, DMZ etc that I was using previously reconfigured. Now I have historical and realtime graphs of bandwidth usage available. Should be interesting to be able to monitor what's going on. If they are cutting people off for using 44GB per week and saying that is <em>“that is more than most people use in a year”</em> I am a little concerned at my 7.2GB in one day. That was a few <a href="http://www.stanford.edu/class/cs193p/cgi-bin/index.php">iPhone development videos from Stanford</a> and then we watched <a href="http://www.imdb.com/title/tt0830515/">Quantum of Solace</a> last night on the Xbox. Seems like Time Warner consider that aberrant behaviour.</p>
+
+<div class="posttagsblock"><a href="http://technorati.com/tag/thingumyjigs" rel="tag">thingumyjigs</a>, <a href="http://technorati.com/tag/visualisation" rel="tag">visualisation</a>, <a href="http://technorati.com/tag/geekery" rel="tag">geekery</a></div>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/dd-wrt.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/dd-wrt.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/26.html" rel="tag">26</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/current-affairs.html">current affairs</a>
+                            <a href="http://fivecomputers.com/tag/thingumyjigs.html">thingumyjigs</a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <h4 class="date">Jun 26,  2008</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/git-version-control-done-right.html" rel="bookmark" title="Permanent Link to &quot;Git - version control done right&quot;">Git - version control done right</a>
+                    </h2>
+                    
+                    <p><img width="500" height="334" src="http://farm3.static.flickr.com/2012/2573207802_7f55cbaab2.jpg" alt="concert hall" /></p>
+
+<p>As I've started working on this small CPU project, one of the first decisions I've been considering has been which version control system to use. I've been a user of subversion for most of my personal projects for several years now and am currently using it at a client. As a result I'm quite familiar with the ins and outs of using it on a variety of sizes of projects. I've become more aware of distributed systems, such as <a href="http://git.or.cz/">Git</a> and <a href="http://www.selenic.com/mercurial/wiki/">Mercurial</a> over the last year, but haven't really been able to get my head around the advantages of them. In particular, the quote below from Linus Torvalds has been in the back of my mind.</p>
+
+<p style="text-align: center;"><span style="font-size: 1.4em;"><em>"The slogan of Subversion for a while was 'CVS done right</em><em>', or something like that, and if you start with that kind of slogan, there's nowhere you can go. There is no way to do CVS right."</em></span></p>
+
+<p style="text-align: right; font-size: 10px;">- Linus Torvalds</p>
+
+<p>One of the main source control issues I've seen on several of the projects I've worked on has been the aversion to branches that most users have. Typically there is a big central source repository that everyone will check out from. You then develop in your own little world. When the particular piece of work is complete, you check it back in. Usually, there is a fairly high barrier or cost to those commits, with sets of test suites that you must pass before you can commit your code back to the central repository. The checks take hours to run and you can not check back in until your code passes all the tests. Otherwise everyone else is at risk. But I always found that if I was working on something non-trivial, I'd really like to make some progress and check point that half way, committing it in to just a local branch, then working on further. That would give me the confidence to make larger changes, safe in the knowledge I can revert back to a midway working point. That's what a branch would be for, after all, but not if they are hard to make and not if the commit cost is so high. So we never did that, working for days or weeks before committing any changes.</p>
+
+<p>The second common frustration I've seen with a centralized repository occurs when two people are working closely together on a piece of the system. This happens to characterise almost every verification endeavor, for example. By common definition, the verification and design work should be done by two different people, just to get extra eyes on the spec. This avoids duplicating erroneous assumptions about the design and is fundamental to the whole process. As a consequence, we are almost always faced with the situation where changes need to be made by two or more people, in distinct parts of the code (e.g., testbench and rtl) but cannot be checked in because of mutual dependencies. The changes depend on each other and all the commit checks will fail for either change on its own. Various ways around this exist, disabling affected checks in the commit scripts, copying files into each others workspaces and other hacks. All because fundamentally the centralised server approach, with costly branches and high commit costs, doesn't really let this sort of work proceed in an effective way.</p>
+
+<p>The third frustration is the general speed of the repository. Time to check things out, time to do merges, how long it takes to do a diff or an update. These operations can usually mean a break for coffee or a walk around while the tool fetches the changes, compares them and attempts to merge it all together. Compound that by working in remote sites or across multiple geographic locations.</p>
+
+<p>Git claims to solve these problems and be a whole lot faster at the same time.</p>
+
+<p>The key is in breaking away from a centralised server. The database is distributed to every developer. As a result, everyone works on their own branch by default. Making further branches is trivial, because they don't get sent to every other developer. Fewer issues with namespace collisions when naming a branch, no real concern about checking code in and someone else getting your partially finished work. Earlier today I'd listened to <a href="http://www.joelonsoftware.com/">Joel Spolsky</a> and <a href="http://www.codinghorror.com/">Jeff Atwood</a> <a href="http://itc.conversationsnetwork.org/shows/detail3710.html">talking</a> about the fact that Git makes branching trivial, but I didn't really understand why until I <a href="ttp://www.youtube.com/watch?v=4XpnKHJAok8">watched a really interesting presentation</a> from Linus Torvalds on the subject. It is supposed to be a talk about Git, but really he focuses almost exclusively on the advantages of a distributed repository. I'd initially thought the real advantage was the '<em>always available</em>' nature of a distributed repository, so that you could work on a plane or generally away from a network and still be able to check in, look at histories and all the things you normally need the central server access for. That's certainly part of the reason why it is interesting, but the branching and merging cost reduction that Git claims to offer is a much bigger deal.</p>
+
+<p><object width="425" height="344">
+  <param name="movie" value="http://www.youtube.com/v/4XpnKHJAok8&amp;hl=en" />
+  <embed width="425" height="344" src="http://www.youtube.com/v/4XpnKHJAok8&amp;hl=en" type="application/x-shockwave-flash" />
+</object></p>
+<p>For my second source of frustration above, Git also provides a solution. As there is no central repository, everyone can pull and push data to each other. The verification engineer and designer can exchange files more easily, through a tracked, version controlled system, rather than the usual sideband exchanges or hacks to the check-in scripts. Git also addresses that third issue, because all of the files are local and it has been designed for performance. Network overhead isn't an issue for a <em>diff</em> or history request as you have all the data locally. Merges are similarly less painful. The claimed performance is impressive and part of the reason why I want to try Git out.</p>
+<p>Now, the most glaring problem with all this is that it sounds like anarchy. There is no central organisation, check-ins can happen any time, so where did all the quality assurance go? Linus talks about the network of trust relationships in his presentation. But, you can still have acceptance tests on when you actually pull data from a particular user or set of users. You can require them to run a battery of tests before they are allowed to share their work with the rest of the project. The usual checks and balances can be put back in place for when the whole database gets reassembled, but the individual developers or groups of designers can work more efficiently in a sub-repository. Git also supports hierarchical projects that combine various blocks of code, in fact that seems to be the preferred use model. Each sub-system on a design would be a unique Git repository. It could be even broken down further and have each IP block in their own repository. The general approach that has been used in the past, with quality checks, can still be used with some changes, as a gate to when larger mergers take place. This probably requires some trusted people in the organisation to act as gatekeepers or guardians for each level, but the basic methodology shouldn't be too difficult to layer on top.</p>
+<p>You can read a lot more about Git on the <a href="http://git.or.cz/">homepage,</a> including conversion documents from other common source control systems and details on the actual commands to use. Looking through the <a href="http://git.or.cz/course/svn.html">SVN conversion document</a>, the git command syntax appears a bit cleaner and generally more intuitive to me. I also played around with the <em>merge</em> and <em>diff</em> tools and they seem powerful. It was very easy to create and populate a repository, for example. I plan on using it for the next few projects I work on to get a feel for how really useful it is and where the issues are hidden.</p>
+<p>Edit to add: I found this <a href="http://git.or.cz/gitwiki/GitSvnComparsion">draft version of the differences</a> between Git and Subversion quite useful.</p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/git-version-control-done-right.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/git-version-control-done-right.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/26.html" rel="tag">26</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/eda.html">eda</a>
+                            <a href="http://fivecomputers.com/tag/software.html">software</a>
+                            <a href="http://fivecomputers.com/tag/verification.html">verification</a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <div class="clear"></div>
+                <div id="footer">
+                    <p>
+                    <a href="https://twitter.com/GordonMcGregor">Twitter @GordonMcGregor</a>
+                    &middot;
+                    <a class="atom" href="http://fivecomputers.com/feeds/all.atom.xml">RSS Feed</a>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+    <script type="text/javascript">
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+    try {
+        var pageTracker = _gat._getTracker("UA-42678190-1");
+    pageTracker._trackPageview();
+    } catch(err) {}</script>
+<script type="text/javascript">
+    var disqus_shortname = 'fivecomputers';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+    </body>
+</html>

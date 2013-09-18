@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+        <title>Five Computers &middot; articles tagged "eda"</title>
+        <link rel="shortcut icon" href="http://fivecomputers.com/favicon.ico" />
+        <link href="http://fivecomputers.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Five Computers Atom Feed" />
+                
+        <link rel="stylesheet" href="http://fivecomputers.com/theme/css/screen.css" type="text/css" />
+        <link rel="stylesheet" href="http://fivecomputers.com/theme/css/pygments.css" type="text/css" />
+
+
+    </head>
+    <body>
+        <div id="header">
+            <ul id="nav">
+                <li class="ephemeral selected"><a href="http://fivecomputers.com/tag/eda.html">eda</a></li>
+                <li><a href="http://fivecomputers.com">Home</a></li>
+                <li><a href="http://fivecomputers.com/pages/about-gordon.html">About Gordon</a></li>
+                <li><a href="http://fivecomputers.com/archives.html">Archives</a></li>
+            </ul>
+            <div class="header_box">
+                <h1><a href="http://fivecomputers.com">Five Computers</a></h1>
+            </div>
+        </div>
+        <div id="wrapper">
+            <div id="content">
+                <h4 class="date">Dec 21,  2012</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/a-simple-turtle-graphics-domain-specific-language-dsl-parser.html" rel="bookmark" title="Permanent Link to &quot;A simple turtle graphics Domain Specific Language (DSL) parser&quot;">A simple turtle graphics Domain Specific Language (DSL) parser</a>
+                    </h2>
+                    
+                    <p>I&#39;ve been working through some of the exercises in &#39;<a href="http://pragprog.com/the-pragmatic-programmer" target="_self">The Pragmatic Programmer</a>&#39; while using it to mentor a colleague. &#0160;In particular, I spent a bit of time working on the Domain Specific Language section and considering creating little DSLs to provide flexible control. I&#39;ve painfully implemented DSLs in SystemVerilog/ UVM sequences in the past and thought about how I typically do this: build a parser, create tokens, then dispatch various execution functions to implement the commands. &#0160;Often, the pain of building all these pieces in a language like C or SV is enough of a barrier that I wouldn&#39;t even start. &#0160;</p>
+
+<p>The example in the book is a simple Logo/ Turtle control language. &#0160;Pen up, Pen down, draw, turn, etc. It tries to simplify things by using single letter command codes and only one optional argument.</p>
+
+<p><span style="font-family: &#39;courier new&#39;, courier;">P 2</span>
+</p>
+
+<p><span style="font-family: &#39;courier new&#39;, courier;">D</span></p>
+
+<p><span style="font-family: &#39;courier new&#39;, courier;">W 2</span></p>
+
+<p><span style="font-family: &#39;courier new&#39;, courier;">N 1</span></p>
+
+<p><span style="font-family: &#39;courier new&#39;, courier;">E 1&#0160;</span></p>
+
+<p><span style="font-family: &#39;courier new&#39;, courier;">S 1</span></p>
+
+<p><span style="font-family: &#39;courier new&#39;, courier;">U</span></p>
+
+<p>I know Python has a <a href="http://docs.python.org/2/library/turtle.html" target="_self">Logo/ Turtle engine built in</a>&#0160;so I decided to try to write a command parser/ dispatcher that would work with that, and let me write commands in a text file and have them execute Python Turtle commands.</p>
+
+<p>Here&#39;s an example script (you can see the results of this at the end of this post):</p>
+
+<pre><span style="font-family: &#39;courier new&#39;, courier;">color &quot;green&quot;</span><br /><span style="font-family: &#39;courier new&#39;, courier;">up</span><br /><span style="font-family: &#39;courier new&#39;, courier;">goto 0 -50 # comments are allowed</span><br /><span style="font-family: &#39;courier new&#39;, courier;">down</span><br /><span style="font-family: &#39;courier new&#39;, courier;">circle 50</span><br /><span style="font-family: &#39;courier new&#39;, courier;">up</span><br /><span style="font-family: &#39;courier new&#39;, courier;">color &quot;red&quot;</span><br /><span style="font-family: &#39;courier new&#39;, courier;">write &quot;Done!&quot;</span><br /><span style="font-family: &#39;courier new&#39;, courier;">sleep 2</span><br /><span style="font-family: &#39;courier new&#39;, courier;">exit</span></pre>
+
+<p>I thought initially about having to parse out all the commands and arguments, then writing a large switch/ case statement (<a href="http://bytebaker.com/2008/11/03/switch-case-statement-in-python/" target="_self">or the Python equivalent with a dictionary</a>). &#0160;After thinking about it a little longer I realised I didn&#39;t have to do that at all. &#0160;I could use the Introspection in Python to look up available methods and if they exist, call them. In fact, as not finding the method will just cause an exception, I can just try executing any command and if it fails, catch it and move on.</p>
+
+<p>So after parsing the input text stream (throw away comments, break up tokens using whitespace) then I just try to execute the command in the global namespace. &#0160;I&#39;ve pulled all the turtle functions into that namespace, so any turtle function is a valid command in my little parser. &#0160;The <span style="font-family: &#39;courier new&#39;, courier;">globals()[command[0]]</span> in the code below looks up the function in the global namespace and then calls it, using the other parts of the command (<span style="font-family: &#39;courier new&#39;, courier;">command[1:]</span>), after they&#39;ve each been processed through the Python <span style="font-family: &#39;courier new&#39;, courier;">eval</span> function to convert them from strings to whatever format they happen to be (numbers or strings mainly). &#0160;The final trick in this is using the * operator to take take a list and pass it as one argument after another to the function:</p>
+
+<pre>globals()[command[0]](*(map(eval, command[1:])))</pre>
+
+<p>
+<br />
+And that&#39;s all that&#39;s needed to implement a full Logo language parser and execution engine. The command syntax is fault tolerant and reports errors, with line numbers. &#0160;New commands can be added easily, by defining new functions. &#0160;They&#39;ll be automatically supported as they are added to the namespace. </p>
+
+<p>Being able to pull something like this together quickly means that writing little Domain Specific Languages is possible and quite a low bar. &#0160;Doing something similar in C is often more daunting and even worse in a language like SystemVerilog, with such a poor string and file handling library. &#0160;There&#39;s a real value in being able to program at such a high level, that can greatly enhance what&#39;s possible or likely to be attempted in a verification environment. You <em>could</em> do this in SystemVerilog, but how often would you even think to attempt it, without rejecting it as too much work?</p>
+
+<p>&#0160;</p>
+
+<div class="highlight" style="background: #f8f8f8;">
+<pre style="line-height: 125%;"><span style="color: #408080; font-style: italic;"># pull all the turtle commands into the global namespace, so they are valid commands</span>
+<span style="color: #008000; font-weight: bold;">from</span> <span style="color: #0000ff; font-weight: bold;">turtle</span> <span style="color: #008000; font-weight: bold;">import</span> <span style="color: #666666;">*</span>
+
+<span style="color: #408080; font-style: italic;"># Use these 3 lines to make &#39;sleep&#39; and &#39;exit&#39; useable commands</span>
+<span style="color: #008000; font-weight: bold;">from</span> <span style="color: #0000ff; font-weight: bold;">time</span> <span style="color: #008000; font-weight: bold;">import</span> sleep
+<span style="color: #008000; font-weight: bold;">from</span> <span style="color: #0000ff; font-weight: bold;">sys</span> <span style="color: #008000; font-weight: bold;">import</span> <span style="color: #008000;">exit</span>, argv
+
+<span style="color: #408080; font-style: italic;"># Given a handle to a series of strings of commands, do them</span>
+<span style="color: #008000; font-weight: bold;">def</span> <span style="color: #0000ff;">parse_and_draw</span>(commands):
+    <span style="color: #008000; font-weight: bold;">for</span> (line_number, line) <span style="color: #aa22ff; font-weight: bold;">in</span> <span style="color: #008000;">enumerate</span>(commands):
+        line <span style="color: #666666;">=</span> line<span style="color: #666666;">.</span>split(<span style="color: #ba2121;">&#39;#&#39;</span>)[<span style="color: #666666;">0</span>]  <span style="color: #408080; font-style: italic;"># throw away comments</span>
+
+        <span style="color: #008000; font-weight: bold;">if</span> line:  <span style="color: #408080; font-style: italic;"># if there is anything left after getting rid of comments</span>
+
+            command <span style="color: #666666;">=</span> line<span style="color: #666666;">.</span>strip()<span style="color: #666666;">.</span>split(<span style="color: #ba2121;">&#39; &#39;</span>)  <span style="color: #408080; font-style: italic;"># parse using spaces to delimit tokens  </span>
+                                               <span style="color: #408080; font-style: italic;"># a big limitation of this, we can&#39;t have strings with spaces</span>
+                                               <span style="color: #408080; font-style: italic;"># e.g.,  &quot;hello world&quot; won&#39;t work as it&#39;ll get split up</span>
+                                               <span style="color: #408080; font-style: italic;"># into [&#39;&quot;hello&#39;, &#39;world&quot;&#39;] neither of which bits are valid when eval&#39;ed</span>
+
+            <span style="color: #008000; font-weight: bold;">if</span> command[<span style="color: #666666;">0</span>]:  <span style="color: #408080; font-style: italic;"># if we have any command left </span>
+                            <span style="color: #408080; font-style: italic;"># (e.g., an indented comment would dissappear)</span>
+
+                <span style="color: #008000; font-weight: bold;">try</span>:
+                    <span style="color: #408080; font-style: italic;"># The meat of the dispatcher is the next line</span>
+                    <span style="color: #408080; font-style: italic;"># using a try/ except means we can always try to run any command</span>
+                    <span style="color: #408080; font-style: italic;"># and assume that it is valid and catch if it isn&#39;t.</span>
+                    <span style="color: #408080; font-style: italic;"># globals() returns a dictionary of every function defined in the global namespace</span>
+                    <span style="color: #408080; font-style: italic;"># including all the turtle commands because of the from turtle import *</span>
+                    <span style="color: #408080; font-style: italic;"># command[0] is used as a key to look up the function name</span>
+                    <span style="color: #408080; font-style: italic;"># we then pass all of the other tokens (command[1:]) through eval (using map)</span>
+                    <span style="color: #408080; font-style: italic;"># and pass them as arguments to the function we looked up</span>
+
+                    <span style="color: #008000;">globals</span>()[command[<span style="color: #666666;">0</span>]](<span style="color: #666666;">*</span>(<span style="color: #008000;">map</span>(<span style="color: #008000;">eval</span>, command[<span style="color: #666666;">1</span>:])))
+
+                    <span style="color: #408080; font-style: italic;"># a key error occurs if we don&#39;t find command[0] in the global namespace</span>
+                <span style="color: #008000; font-weight: bold;">except</span> <span style="color: #d2413a; font-weight: bold;">KeyError</span>:
+                    <span style="color: #008000; font-weight: bold;">print</span> <span style="color: #ba2121;">&#39;Unknown command&#39;</span>, command[<span style="color: #666666;">0</span>], <span style="color: #ba2121;">&#39;on line &#39;</span>, line_number
+
+                    <span style="color: #408080; font-style: italic;"># Some other error occurred (e.g., the called function raised an Exception)</span>
+                    <span style="color: #408080; font-style: italic;"># report it here and continue on (if we didn&#39;t catch it, the program would end)</span>
+                <span style="color: #008000; font-weight: bold;">except</span> <span style="color: #d2413a; font-weight: bold;">Exception</span> <span style="color: #008000; font-weight: bold;">as</span> e:
+                    <span style="color: #008000; font-weight: bold;">print</span> <span style="color: #ba2121;">&#39;Invalid command&#39;</span>, command[<span style="color: #666666;">0</span>], <span style="color: #ba2121;">&#39;on line &#39;</span>, line_number,  e
+
+
+<span style="color: #008000; font-weight: bold;">if</span> __name__ <span style="color: #666666;">==</span> <span style="color: #ba2121;">&#39;__main__&#39;</span>:
+    <span style="color: #408080; font-style: italic;"># open the first file on the command line, get commands from that and run them</span>
+    commands <span style="color: #666666;">=</span> <span style="color: #008000;">open</span>(argv[<span style="color: #666666;">1</span>])<span style="color: #666666;">.</span>xreadlines()
+
+    <span style="color: #408080; font-style: italic;"># note that the parse and draw routine works on a list of commands, it doesn&#39;t know about files</span>
+    <span style="color: #408080; font-style: italic;"># or anything else.  This seperation is is useful, as we can get commands from anywhere</span>
+    parse_and_draw(commands)
+</pre>
+</div>
+
+<p>&#0160;</p>
+
+<p>
+<a class="asset-img-link" href="http://fivecomputers.typepad.com/.a/6a00e54efca38e8834017c34da956e970b-pi" style="display: inline;"><img alt="12:21:12 10:37 AM" border="0" class="asset  asset-image at-xid-6a00e54efca38e8834017c34da956e970b image-full" src="http://fivecomputers.typepad.com/.a/6a00e54efca38e8834017c34da956e970b-800wi" title="12:21:12 10:37 AM" /></a><br /><br /></p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/a-simple-turtle-graphics-domain-specific-language-dsl-parser.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/a-simple-turtle-graphics-domain-specific-language-dsl-parser.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/21.html" rel="tag">21</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/books.html">books</a>
+                            <a href="http://fivecomputers.com/tag/eda.html" class="selected">eda</a>
+                            <a href="http://fivecomputers.com/tag/verification.html">verification</a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <h4 class="date">Jan  8,  2009</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/makers-schedule-managers-schedule.html" rel="bookmark" title="Permanent Link to &quot;maker's schedule, manager's schedule&quot;">maker's schedule, manager's schedule</a>
+                    </h2>
+                    
+                    <p>I've always had a dread of mid-afternoon status meetings. Now maybe I understand it a bit better, because of Paul Graham's excellent essay on the difference between <a href="http://www.paulgraham.com/makersschedule.html">being on a maker's schedule and being on a manager's schedule</a>. Seems to share a lot of ideas with Csikszentmihalyi and his ideas of creativity and flow states.</p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/makers-schedule-managers-schedule.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/makers-schedule-managers-schedule.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/01.html" rel="tag">01</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/eda.html" class="selected">eda</a>
+                            <a href="http://fivecomputers.com/tag/film.html">film</a>
+                            <a href="http://fivecomputers.com/tag/software.html">software</a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <h4 class="date">Dec  6,  2008</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/metrics.html" rel="bookmark" title="Permanent Link to &quot;metrics&quot;">metrics</a>
+                    </h2>
+                    
+                    <p><a href="http://flickr.com/photos/mcgregorphoto/2572384411/"><img border="0" alt="Metal" title="Metal" src="http://fivecomputers.typepad.com/photos/uncategorized/2008/06/12/metal.jpg" style="margin: 0px 5px 5px 0px; float: left;" /></a>
+Listened to <a href="http://www.chipdesignmag.com/bailey/">Brian Bailey</a> talking on the missing metrics for verification coverage at the <a href="http://www.certess.com/">Certess</a> booth on Wednesday. This was a really interesting talk discussing the standard code coverage and functional coverage metrics and pointing out that we don't really currently have a good metric to track when we are doing useful verification or not. Functional coverage is used for this, but care needs to be taken to ensure we are covering the right things.</p>
+
+<p>There's a danger that functional coverage, which was originally designed to track the quality of random stimulus, is used to only track that stimulus. In this way, we might not consider if the behaviour is actually checked or not. The same ideas are represented in David Robinson's verification planning presentation at DAC. Requirements and functional coverage without checkers is a waste of time and effort. It is possible to get 100% coverage, with lots of cover points and no enabled or implemented checkers in a design. Careful testbench design, or tools like <a href="http://www.certess.com/">Certess</a>, can be used to address these issues but only once you realise that functional coverage isn't a magic bullet. </p>
+
+<p>I also saw a demo of the Certess product, <a href="http://www.certess.com/product/">Certitude</a>. It randomly inserts errors into the device under test (DUT) to give a way to evaluate the quality of the testbench surrounding the DUT. The basic idea is that if the design is mutated in a particular way, the testbench is good if it can detect the error, or has a hole if this failure mode cannot be seen in the checkers. This artificial bug insertion is something I do on an ad-hoc way when developing a testbench and Certitude automates and expands on this commonly used approach.</p>
+
+<p>You can <a href="http://electronicsystemlevel.com/EDA-Cover-up.pdf">read a paper </a>from Brian on this topic.
+</p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/metrics.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/metrics.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/12.html" rel="tag">12</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/eda.html" class="selected">eda</a>
+                            <a href="http://fivecomputers.com/tag/software.html">software</a>
+                            <a href="http://fivecomputers.com/tag/verification.html">verification</a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <h4 class="date">Nov  6,  2008</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/where-are-they-now.html" rel="bookmark" title="Permanent Link to &quot;Where are they now?&quot;">Where are they now?</a>
+                    </h2>
+                    
+                    <p><a href="http://fivecomputers.typepad.com/photos/uncategorized/2008/06/11/_s3t8496.jpg"><img height="426" border="0" width="640" alt="_s3t8496" title="_s3t8496" src="http://www.fivecomputers.com/images/2008/06/11/_s3t8496.jpg" style="margin: 0px 5px 5px 0px; display: block;" /></a></p>
+
+<p>DAC started early with a Mentor sponsored breakfast at 7:30. Got to see a bit about some of their testbench automation tools that help steer coverage to more interesting parts of the design. There are a few other companies here that have similar products. The aim is to move beyond user driven constrained random testing and let the tools help in solving the problem.</p>
+
+<p>After that, I listened to Gary Smith on the state of the EDA industry. Highlights:</p>
+
+<ul><li>It's all about the software</li>
+
+<li>Threads are dead</li>
+
+<li>C is finished to be replaced by some useful concurrent language - brush up on Occam I say</li>
+
+<li>Verification is a solved problem and will be automated - don't bother being a verification engineer</li>
+
+<li>Almost 38% of companies roll their own EDA tools</li></ul>
+
+<p>His talk made for an interesting start to the day, at least.</p>
+
+<p>I spent the rest of the day attending various sessions and tool demos, which I'll write more about later. I've been surprised how low attendance is. There are a lot of people from the tool companies in their booths, but not many customers for them to talk to - and that was on Monday, the free attendance day when there aren't that many technical sessions or other distractions. </p>
+
+<p>The Open Verification Methodology(OVM) is a hot item this year, with many sessions discussing issues around use and interoperability. Many vendors are showing products or claiming compatibility with this new standard. SystemVerilog is the other dominant theme though SystemC still has some traction. The last time I was at DAC SystemC was the new kid on the block that everyone was expecting to take over the world, not so much any more and it has settled into a system level modeling niche. </p>
+
+<p>The disturbing thing I am seeing is how little progress has been made in the last decade in the ESL tool industry. Many years ago I was working on ARM926 designs that were not on the bleeding edge, even then. Today, many ESL companies are still just showing support for ARM9 or being excited about performance of their ARM7 models. That's at least 2 or 3 cycles behind the latest processor technologies and a huge leap in tool complexity to keep up. Synthesis capacities are rising much slower than the process technologies, tools companies are stalling out, reimplementing the same technologies to support systemC, systemVerilog or what ever the new hot language or methodology is, without apparently making any significant progress.</p>
+
+<p>The other problem that the ESL companies face is the lack of models for their particular product line. Many seem to be falling into the same trap - expecting customer demand to dictate which models to develop. But that isn't going to work - the systems designers need the models right around when they decide they need the models. There is no lead time. There certainly isn't the 6 months to 1 year lead time it takes to find the right ESL company, negotiate and convince them to start creating a model, get the team together and write and verify the model, then deliver it back to the system architect. When the architect wants the model, there might be a 1 week lead time. Maybe a month, before serious work needs to start. The whole investigation better be mostly finished in 6 months. ESL companies need to seed their model libraries in anticipation of customer need. If they wait for the customer, they'll always be too late to be any use at all and keep going round that loop. In spite of that glaring hole, ESL is another hot ticket at DAC this year. Software design and implementation continues to increase in cost and complexity and HW/SW co-design companies are proliferating as a result.</p>
+
+<p>With the apparent dearth of progress and lack of useful model or up-to-date models, I'm not too surprised that almost 40% of companies are looking inwards for their EDA tools. Might also explain where everyone is this year, too. </p>
+
+<p>The one bright light in the ESL space is that although many of the tools and methodologies haven't changed much in the last 5 years, they do seem to have moved on from being all smoke and mirrors and snake oil to perhaps actually working. So maybe things haven't changed, they've just become real.</p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/where-are-they-now.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/where-are-they-now.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/11.html" rel="tag">11</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/eda.html" class="selected">eda</a>
+                            <a href="http://fivecomputers.com/tag/esl.html">esl</a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <h4 class="date">Aug 28,  2008</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/zerstreutheit-and-the-hardware-design-flow.html" rel="bookmark" title="Permanent Link to &quot;Zerstreutheit and the hardware design flow&quot;">Zerstreutheit and the hardware design flow</a>
+                    </h2>
+                    
+                    <div style="text-align: center;">
+  <a href="http://xkcd.com/303/"><img src="http://imgs.xkcd.com/comics/compiling.png" width="413" height="360" /></a><br />
+</div>
+
+<p>Recently I've been <a href="http://www-128.ibm.com/developerworks/java/library/j-ap09056/index.html">reading</a> about the various open-source Continuous Integration servers that are available. <a href="http://confluence.public.thoughtworks.org/display/CC/CI+Feature+Matrix">This chart</a> gives a good feature comparision of many of the systems that are out there. <a href="http://www.verilab.com" title="Verilab, Inc.">We've</a> been evaluating <a href="http://cruisecontrol.sourceforge.net/">Cruise Control</a> on some internal projects and generally trying to understand what the issues are with deploying a CI server on a hardware design project. One of the things I've been struggling with is the real, meaningful difference between continuous integration and the more typical <a href="http://www.joelonsoftware.com/articles/fog0000000023.html">daily build</a> and check-in smoke tests. Scheduled builds are often described as an <a href="http://www.ibm.com/developerworks/java/library/j-ap03048/index.html?S_TACT=105AGX02&amp;S_CMP=EDU">anti-pattern</a> when considering CI, but as far as I can tell the only practical difference is in the frequency of the builds. Certainly, you have the potential to find out about a broken build more quickly with CI, hence it has less chance to impact other users. Also, you are always doing <em>useful</em> work, rather than maybe re-running a version because no check-in has happened since the previous build. However, these distinctions of implementing CI are maybe more significant in the software world than for the typically longer build times found in hardware design projects. This then is the key point - build time is the significant factor in CI. The real benefit of using CI successfully is that you need to refine your processes to keep the build as quick as possible, striving for close to a <a href="http://www.martinfowler.com/articles/continuousIntegration.html">10 minute turnaround time</a>, to stop things getting backed up. The consequence of this is that the entire Checkout-Build-Test loop keeps being optimised and refined. This doesn't just help with automated processes but can significantly improve productivity for the developers who do these steps manually every day. That's great for the software world, but is it really practical for hardware design with the current compilers and the speed of typical RTL simulation? If not, is it worth even bothering with?</p>
+
+<p>The source control tools you choose can have a big impact on the first phase of the Checkout-Build-Test loop. When an update can take quarter an hour or longer, the source control system can become a significant productivity drain and stymie any chance of a quick turnaround. If merging changes, updating source and checking in a new revision takes hours, then there are real problems with the process and you certainly won't be doing multiple checkins per day (another fundamental CI process axiom is at minimum daily checkins for all developers, even more frequent is preferable). In <a href="http://www.fivecomputers.com/2008/06/git---version-c.html">Linus' talk about Git</a>, he describes being able to do a diff and merge on an entire kernel source tree (22k source files) in <a href="http://git.or.cz/gitwiki/LinusTalk200705Transcript">less than a second</a>. I've used other SCM environments with similar amounts of code, where an update might take 30 minutes. These sorts of differences can significantly change how you work. It isn't just a matter of the time that the particular automated task takes, but what the developer does while they are waiting, reading email, writing documentation, switching context to other distractions.</p>
+
+<p>Similarly, if the build takes half an hour or longer before it fails with a trivial syntax error, you'll have switched to something else and then have to try to mentally context switch back again to work on the problem. Each of these switches have an associated, measurable attention and productivity hit. Improving the build step can have a big impact on how you <a href="http://www.43folders.com/2008/06/13/zerstreutheit-and-attention-management-cure">manage your attention</a> and keep engaged with the development process. A faster turnaround can stave off the onset of <em><a href="http://www.43folders.com/comment/337830/literal-translation-Zerstreutheit">Zerstreutheit</a></em>.</p>
+
+<p>The final Test step is significantly slower for hardware design. Often this is used as a justification not to bother optimising the Checkout and Build phases, because they are comparatively much shorter. A multi-day or week long regression might fool you into thinking that an hour long build is relatively good. However, simulation &amp; testing is the one step where the developer can be more out of the loop, with less impact. Typically, the user is not so tightly coupled into the testing loop, once the initial bugs are ironed out. Automation can certainly help here too, re-running failing tests with waveform dumping enabled or increased logging, to present a useful working environment for debug when the developer does come back to look at the fails.</p>
+
+<p>The point really is that there is still a significant advantage to be had in spending effort to optimize the SCM and compile stages in a development flow, to maximise designer productivity and attention, even if the simulation time is large. Also a <a href="http://www.ibm.com/developerworks/java/library/j-ap11297/index.html?S_TACT=105AGX02&amp;S_CMP=EDU">build pipeline</a> can be used in the CI server to stage the build and testing feedback, to further mitigate the length of time that running tests takes. Deploying CI brings attention to how long these processes take and might help improve the entire development environment. Having fast enough tools can help the developers keep focused on what they are doing, without breaks for swordfights or reading email. Optimizing the build is still important, even in a hardware design environment, even when the runtime for regressions might be in terms of days or weeks. You might think the build process is only a comparatively small part of the overall runtime for a regression, but the designers spend most of their time looping through that comparatively small part.</p>
+
+<p>So what is the take away? Does CI have a place in a hardware design flow? I think that CI servers can certainly be used to manage running regressions and nightly builds. Smoke tests and scheduled build approaches can be controlled with most of the CI servers. However, the real continual building process required to move from scheduled builds to CI seems to be hard to map to hardware design, simply because of the length of time of the checkout/build/test loops. Tool improvements and generally faster hardware seems to be key to increasing the frequency of integration tests, at least for now. However, optimizing the interaction between the users and automated tools is a key and often overlooked part of developing an effective design flow, if you plan on using CI or not.</p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/zerstreutheit-and-the-hardware-design-flow.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/zerstreutheit-and-the-hardware-design-flow.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/28.html" rel="tag">28</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/eda.html" class="selected">eda</a>
+                            <a href="http://fivecomputers.com/tag/software.html">software</a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <h4 class="date">Jun 26,  2008</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/git-version-control-done-right.html" rel="bookmark" title="Permanent Link to &quot;Git - version control done right&quot;">Git - version control done right</a>
+                    </h2>
+                    
+                    <p><img width="500" height="334" src="http://farm3.static.flickr.com/2012/2573207802_7f55cbaab2.jpg" alt="concert hall" /></p>
+
+<p>As I've started working on this small CPU project, one of the first decisions I've been considering has been which version control system to use. I've been a user of subversion for most of my personal projects for several years now and am currently using it at a client. As a result I'm quite familiar with the ins and outs of using it on a variety of sizes of projects. I've become more aware of distributed systems, such as <a href="http://git.or.cz/">Git</a> and <a href="http://www.selenic.com/mercurial/wiki/">Mercurial</a> over the last year, but haven't really been able to get my head around the advantages of them. In particular, the quote below from Linus Torvalds has been in the back of my mind.</p>
+
+<p style="text-align: center;"><span style="font-size: 1.4em;"><em>"The slogan of Subversion for a while was 'CVS done right</em><em>', or something like that, and if you start with that kind of slogan, there's nowhere you can go. There is no way to do CVS right."</em></span></p>
+
+<p style="text-align: right; font-size: 10px;">- Linus Torvalds</p>
+
+<p>One of the main source control issues I've seen on several of the projects I've worked on has been the aversion to branches that most users have. Typically there is a big central source repository that everyone will check out from. You then develop in your own little world. When the particular piece of work is complete, you check it back in. Usually, there is a fairly high barrier or cost to those commits, with sets of test suites that you must pass before you can commit your code back to the central repository. The checks take hours to run and you can not check back in until your code passes all the tests. Otherwise everyone else is at risk. But I always found that if I was working on something non-trivial, I'd really like to make some progress and check point that half way, committing it in to just a local branch, then working on further. That would give me the confidence to make larger changes, safe in the knowledge I can revert back to a midway working point. That's what a branch would be for, after all, but not if they are hard to make and not if the commit cost is so high. So we never did that, working for days or weeks before committing any changes.</p>
+
+<p>The second common frustration I've seen with a centralized repository occurs when two people are working closely together on a piece of the system. This happens to characterise almost every verification endeavor, for example. By common definition, the verification and design work should be done by two different people, just to get extra eyes on the spec. This avoids duplicating erroneous assumptions about the design and is fundamental to the whole process. As a consequence, we are almost always faced with the situation where changes need to be made by two or more people, in distinct parts of the code (e.g., testbench and rtl) but cannot be checked in because of mutual dependencies. The changes depend on each other and all the commit checks will fail for either change on its own. Various ways around this exist, disabling affected checks in the commit scripts, copying files into each others workspaces and other hacks. All because fundamentally the centralised server approach, with costly branches and high commit costs, doesn't really let this sort of work proceed in an effective way.</p>
+
+<p>The third frustration is the general speed of the repository. Time to check things out, time to do merges, how long it takes to do a diff or an update. These operations can usually mean a break for coffee or a walk around while the tool fetches the changes, compares them and attempts to merge it all together. Compound that by working in remote sites or across multiple geographic locations.</p>
+
+<p>Git claims to solve these problems and be a whole lot faster at the same time.</p>
+
+<p>The key is in breaking away from a centralised server. The database is distributed to every developer. As a result, everyone works on their own branch by default. Making further branches is trivial, because they don't get sent to every other developer. Fewer issues with namespace collisions when naming a branch, no real concern about checking code in and someone else getting your partially finished work. Earlier today I'd listened to <a href="http://www.joelonsoftware.com/">Joel Spolsky</a> and <a href="http://www.codinghorror.com/">Jeff Atwood</a> <a href="http://itc.conversationsnetwork.org/shows/detail3710.html">talking</a> about the fact that Git makes branching trivial, but I didn't really understand why until I <a href="ttp://www.youtube.com/watch?v=4XpnKHJAok8">watched a really interesting presentation</a> from Linus Torvalds on the subject. It is supposed to be a talk about Git, but really he focuses almost exclusively on the advantages of a distributed repository. I'd initially thought the real advantage was the '<em>always available</em>' nature of a distributed repository, so that you could work on a plane or generally away from a network and still be able to check in, look at histories and all the things you normally need the central server access for. That's certainly part of the reason why it is interesting, but the branching and merging cost reduction that Git claims to offer is a much bigger deal.</p>
+
+<p><object width="425" height="344">
+  <param name="movie" value="http://www.youtube.com/v/4XpnKHJAok8&amp;hl=en" />
+  <embed width="425" height="344" src="http://www.youtube.com/v/4XpnKHJAok8&amp;hl=en" type="application/x-shockwave-flash" />
+</object></p>
+<p>For my second source of frustration above, Git also provides a solution. As there is no central repository, everyone can pull and push data to each other. The verification engineer and designer can exchange files more easily, through a tracked, version controlled system, rather than the usual sideband exchanges or hacks to the check-in scripts. Git also addresses that third issue, because all of the files are local and it has been designed for performance. Network overhead isn't an issue for a <em>diff</em> or history request as you have all the data locally. Merges are similarly less painful. The claimed performance is impressive and part of the reason why I want to try Git out.</p>
+<p>Now, the most glaring problem with all this is that it sounds like anarchy. There is no central organisation, check-ins can happen any time, so where did all the quality assurance go? Linus talks about the network of trust relationships in his presentation. But, you can still have acceptance tests on when you actually pull data from a particular user or set of users. You can require them to run a battery of tests before they are allowed to share their work with the rest of the project. The usual checks and balances can be put back in place for when the whole database gets reassembled, but the individual developers or groups of designers can work more efficiently in a sub-repository. Git also supports hierarchical projects that combine various blocks of code, in fact that seems to be the preferred use model. Each sub-system on a design would be a unique Git repository. It could be even broken down further and have each IP block in their own repository. The general approach that has been used in the past, with quality checks, can still be used with some changes, as a gate to when larger mergers take place. This probably requires some trusted people in the organisation to act as gatekeepers or guardians for each level, but the basic methodology shouldn't be too difficult to layer on top.</p>
+<p>You can read a lot more about Git on the <a href="http://git.or.cz/">homepage,</a> including conversion documents from other common source control systems and details on the actual commands to use. Looking through the <a href="http://git.or.cz/course/svn.html">SVN conversion document</a>, the git command syntax appears a bit cleaner and generally more intuitive to me. I also played around with the <em>merge</em> and <em>diff</em> tools and they seem powerful. It was very easy to create and populate a repository, for example. I plan on using it for the next few projects I work on to get a feel for how really useful it is and where the issues are hidden.</p>
+<p>Edit to add: I found this <a href="http://git.or.cz/gitwiki/GitSvnComparsion">draft version of the differences</a> between Git and Subversion quite useful.</p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/git-version-control-done-right.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/git-version-control-done-right.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/26.html" rel="tag">26</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/eda.html" class="selected">eda</a>
+                            <a href="http://fivecomputers.com/tag/software.html">software</a>
+                            <a href="http://fivecomputers.com/tag/verification.html">verification</a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <h4 class="date">Jun 20,  2008</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/a-somewhat-crazy-notion.html" rel="bookmark" title="Permanent Link to &quot;a somewhat crazy notion&quot;">a somewhat crazy notion</a>
+                    </h2>
+                    
+                    <p><a title="Death Valley, after the storm by Gordon McGregor, on Flickr" href="http://www.flickr.com/photos/mcgregorphoto/358741765/"><img height="333" width="500" alt="Death Valley, after the storm" src="http://farm1.static.flickr.com/146/358741765_9ab4eeb321.jpg" /></a>
+
+</p>
+
+<p>Many ideas have been whirling around in my head since being at DAC. I've been inspired to learn some new things, starting with the <a href="http://www.ovmworld.org/">Open Verification Methodology</a> but also revisiting some of the Electronic System Level tools and flows that I've worked with in the past. I'm interested in exploring visualization techniques and tools and how they might be applied to verification and design. I'd also like to learn more about a few of the more interesting formal verification tools, like <a href="http://www.onespin-solutions.com">OneSpin 360 MV</a> and maybe explore what is possible with ESL tools like <a href="http://www.bluespec.com/products/index.htm">Bluespec's SystemVerilog</a> flow or the various other similar tools that are out there.</p>
+
+<p>I have a difficult time learning things just for the sake of it, tending to be more driven by necessity rather than idle curiosity. I've been doing some work based around a small CPU core and started getting frustrated with the way the CPU was architected. This led me to start considering designing my own CPU, just for fun. Partly as a motivation to crack open a Hennessy &amp; Patterson book that I've been meaning to read for a few years, partly to see if I can do it, partly as a vehicle to hang all those other ideas upon.</p>
+
+<p>I've been looking around the web, browsing on <a href="http://opencores.org/">OpenCores</a> and finding humbling projects, such as <a href="http://homebrewcpu.org/">HomebrewCPU,</a> which is a Minix-compatible CPU entirely constructed from discrete gates. You can even browse the web pages that it is serving or telnet in to it! To my way of thinking, that is slightly nuts - impressive, but nuts all the same - five wire-wrapped boards to debug. My <a href="http://www.informatik.uni-trier.de/~ley/db/indices/a-tree/m/McGregor:Gordon.html">background is in FPGAs</a> and that seems the perfect technology for this sort of exploration - I'm also thinking along the way that I might be able to play with synthesisable verification or FPGA enhanced verification/ emulation as well as possibly using this as a platform for a reconfigurable architecture. Lots of ideas, potential and possibilities. It will also give me a chance to re-engage with FPGA technologies and learn about more about the state of those tools. The various tools are getting to a fairly mature point and a simple pipelined CPU shouldn't require too much work but still be complex enough to do interesting things with.</p>
+
+<p>I've been looking at <a href="http://www.xilinx.com">Xilinx</a> and <a href="http://www.altera.com">Altera </a>to get an understanding of their current tool flows and trying to work out language support and maturity - which would be the best option for systemVerilog, where the best simulation options are and that kind of thing. No real conclusions yet, but both have trial versions of what appears to be a complete tool chain, so I will probably drive a small example through both flows as a pipe cleaner.</p>
+
+<p>Then of course there are the more fundamental religious issues - CISC or RISC, what ISA to use. Roll my own, pick up an already defined but open architecture, or something in between? I'm looking for suggestions in this respect - I know ARM are quite litigious when it comes to cloning their ISA, so I'll be avoiding that, but <a href="http://www.opensparc.net/">OpenSPARC</a> might well be a good option. Any other suggestions? I'm not sure if the early MIPS ISAs are cloneable without problems? Maybe I could go really back to my roots and implement a <a href="http://en.wikipedia.org/wiki/Zx81">Z80 architecture</a>. The advantage of picking on an existing ISA is that the tools come mostly for free. While porting gas and gcc to my own ISA could also be an interesting experiment and learning experience, it would probably be more of a distraction than I want.</p>
+
+<p>I am a fan of the Python language and tend to write most of my <a href="http://gordonmcgregor.blogspot.com/2008/03/flickr-set-parser-for-gpsvisualizer.html">personal projects</a> in it. As a result, I'm intrigued by the potential for writing the core in Python, using some of the available extensions and libraries. Two packages seem to already exist, <a href="http://myhdl.jandecaluwe.com/doku.php">MyHDL</a> and <a href="http://pyhvl.sourceforge.net/">PyHVL</a>. MyHDL is Python extension to let you express parallel behaviour that can then be automatically translated to verilog or VHDL. PyHVL provides the other piece of the Python puzzle, enabling high-level verification in Python. So potentially I could do the design and verification in Python then drive through into an FPGA flow for implementation. <a href="http://www.coolverification.com/2008/06/ovm-world-summi.html">JL</a> jokingly mentioned the potential for an OVM port to Python but maybe it isn't such a crazy notion. The thing that Python is fantastic for is expressing complex ideas quickly and without a lot of fuss or housekeeping. From the verification perspective it seems to be a perfect match as I can focus more on the testing, and less on the language. I'm a bit more skeptical about using it on the design side but I think it might be worth a look.</p>
+
+<p>To kick things off, I found the description for a <a href="http://www.csie.ntu.edu.tw/~b92029/data/EXP/mcpu-doc.pdf">minimal CPU</a> on opencores. This is a really basic 8-bit processor, 4 op codes, couple of registers and a very simple, small architecture, yet it can still do some useful function. This evening I wrote a Python ISS for it, just to prove out some ideas. Took about an hour to get a working cycle-based ISS together for the architecture. Of course, immediately the next thing you need is an assembler and that was fairly easy to put together in Python too. Nothing particularly complex, but a two pass assembler that supports labels and constants and generates code that runs on the core. I'm able to assemble and run the example greatest common divisor (Dijkstra's algorithm) described in the paper and it has given me a good indication of the direction to go. So far, my couple of hour project can assemble and execute the following code:</p>
+
+<blockquote><p><span style="font-size: 0.8em;">start:<br />&nbsp; &nbsp; NOR allone&nbsp; &nbsp;&nbsp; &nbsp;; akku == 0<br />&nbsp; &nbsp; NOR b<br />&nbsp; &nbsp; ADD one&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;; akku = -b<br /><br />&nbsp; &nbsp; ADD a&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; ; akku = a - b<br />&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; ; Carry set when akku &gt;= 0<br />&nbsp; &nbsp; JCC neg<br /><br />&nbsp; &nbsp; STA a<br /><br />&nbsp; &nbsp; ADD allone&nbsp; &nbsp;&nbsp; &nbsp;<br />&nbsp; &nbsp; JCC end&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;; A=0 ? -&gt; end, result in b<br /><br />&nbsp; &nbsp; JCC start<br /><br />neg:<br />&nbsp; &nbsp; NOR zero<br />&nbsp; &nbsp; ADD one&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;; Akku = -Akku<br /><br />&nbsp; &nbsp; STA b<br />&nbsp; &nbsp; JCC start&nbsp; &nbsp;&nbsp; &nbsp; ; carry not altered<br /><br />end:<br />&nbsp; &nbsp; JCC end<br /><br />a: 10&nbsp; ; a &amp; b are the two values to consider<br />b: 30<br /><br />allone: 0xff&nbsp; ; various constants<br />zero:&nbsp; &nbsp;0<br />one:&nbsp; &nbsp; 1</span></p></blockquote>
+
+<p>Next step is to describe this trivial core in a synthesisable form and see how I get on running it through one or two FPGA flows. A few tests and some verification could be useful too! For FPGAs I'm much more used to the general <em>suck it and see </em>style of testing that is the norm. Synthesize, place and route and see if it works. In the last several years I've been working on much larger ASICs so have certainly seen the value of more robust verification and I think FPGA technology has probably spent too much time as the wild frontier of design robustness and testing. As this project progresses I want to explore what the best balance is for testing and how the test environments can use the FPGA to accelerate testing along the way.</p>
+
+<p>So plenty of things up in the air but I think this could be fun.</p>
+
+<p><br /></p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/a-somewhat-crazy-notion.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/a-somewhat-crazy-notion.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/20.html" rel="tag">20</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/cpu.html">cpu</a>
+                            <a href="http://fivecomputers.com/tag/dac.html">dac</a>
+                            <a href="http://fivecomputers.com/tag/eda.html" class="selected">eda</a>
+                            <a href="http://fivecomputers.com/tag/esl.html">esl</a>
+                            <a href="http://fivecomputers.com/tag/software.html">software</a>
+                            <a href="http://fivecomputers.com/tag/verification.html">verification</a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <h4 class="date">Mar  6,  2008</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/visualising-complex-datasets.html" rel="bookmark" title="Permanent Link to &quot;visualising complex datasets&quot;">visualising complex datasets</a>
+                    </h2>
+                    
+                    <p>A great example of the sort of insight that you can glean from a lot of data, with the right sort of visualisation.</p>
+
+<p><object width="320" height="285" align="middle" id="VE_Player" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"><param value="http://static.videoegg.com/ted/flash/loader.swf" name="movie" /><param value="bgColor=FFFFFF&amp;file=http://static.videoegg.com/ted/movies/HANSROSLING_high.flv&amp;autoPlay=false&amp;fullscreenURL=http://static.videoegg.com/ted/flash/fullscreen.html&amp;forcePlay=false&amp;logo=&amp;allowFullscreen=true" name="FlashVars" /><param value="high" name="quality" /><param value="always" name="allowScriptAccess" /><param value="#FFFFFF" name="bgcolor" /><param value="noscale" name="scale" /><param value="window" name="wmode" /><embed width="320" height="285" align="middle" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" name="VE_Player" wmode="window" scale="noscale" bgcolor="#FFFFFF" allowscriptaccess="always" quality="high" flashvars="bgColor=FFFFFF&amp;file=http://static.videoegg.com/ted/movies/HANSROSLING_high.flv&amp;autoPlay=false&amp;fullscreenURL=http://static.videoegg.com/ted/flash/fullscreen.html&amp;forcePlay=false&amp;logo=&amp;allowFullscreen=true" src="http://static.videoegg.com/ted/flash/loader.swf"></embed></object></p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/visualising-complex-datasets.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/visualising-complex-datasets.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/03.html" rel="tag">03</a>                                                <div class="tags">
+                            <a href="http://fivecomputers.com/tag/eda.html" class="selected">eda</a>
+                            <a href="http://fivecomputers.com/tag/software.html">software</a>
+                            <a href="http://fivecomputers.com/tag/verification.html">verification</a>
+                        </div>                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <div class="clear"></div>
+                <div id="footer">
+                    <p>
+                    <a href="https://twitter.com/GordonMcGregor">Twitter @GordonMcGregor</a>
+                    &middot;
+                    <a class="atom" href="http://fivecomputers.com/feeds/all.atom.xml">RSS Feed</a>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+    <script type="text/javascript">
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+    try {
+        var pageTracker = _gat._getTracker("UA-42678190-1");
+    pageTracker._trackPageview();
+    } catch(err) {}</script>
+<script type="text/javascript">
+    var disqus_shortname = 'fivecomputers';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+    </body>
+</html>

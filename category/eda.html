@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+        <title>Five Computers &middot; articles in the "eda" category</title>
+        <link rel="shortcut icon" href="http://fivecomputers.com/favicon.ico" />
+        <link href="http://fivecomputers.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Five Computers Atom Feed" />
+                
+        <link rel="stylesheet" href="http://fivecomputers.com/theme/css/screen.css" type="text/css" />
+        <link rel="stylesheet" href="http://fivecomputers.com/theme/css/pygments.css" type="text/css" />
+
+
+    </head>
+    <body>
+        <div id="header">
+            <ul id="nav">
+                <li class="ephemeral selected"><a href="http://fivecomputers.com/category/eda.html">eda</a></li>
+                <li><a href="http://fivecomputers.com">Home</a></li>
+                <li><a href="http://fivecomputers.com/pages/about-gordon.html">About Gordon</a></li>
+                <li><a href="http://fivecomputers.com/archives.html">Archives</a></li>
+            </ul>
+            <div class="header_box">
+                <h1><a href="http://fivecomputers.com">Five Computers</a></h1>
+            </div>
+        </div>
+        <div id="wrapper">
+            <div id="content">
+                <h4 class="date">Jul 28,  2013</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/coverage-visualization.html" rel="bookmark" title="Permanent Link to &quot;Coverage Visualization&quot;">Coverage Visualization</a>
+                    </h2>
+                    
+                    <p>I've been thinking recently about better ways to visualize coverage results. The new <a href="http://www.accellera.org/downloads/standards/ucis">UCIS API</a> provides ways to access coverage data more easily in third-party tools. I've mostly finished wrapping this API in Python, using SWIG, to create <a href="https://bitbucket.org/verilab/pyucis">PyUCIS</a>. That Python layer provides iterators and other Pythonic idioms to let you use the UCIS more efficiently. So far I'm seeing about 66% less code for equivalent C functions. Also, a large part of the UCIS implementation is tied up in XML and the Python libraries for XML support are excellent. I've found it a useful way to write tools around coverage data, quickly. That efficiency and quick development is key to providing a flexible toolkit to analyze coverage data. Rather than building an all singing, all dancing tool, I'd rather have a toolkit of features that allow me to inspect and visualize the data, that can be tuned to the particular job at hand. <a href="http://matplotlib.org/">Matplotlib</a> and other visualization tools, such as <a href="http://networkx.github.io/">NetworkX</a>, are great, free libraries that become available, once you get the data into a Python environment. Trying to do similar visualizations in C is possible, but generally prohibitive in time and effort. </p>
+<p>So now that I have easy access to coverage data and a wide range of visualization tools available, I've been thinking about how I'd like to look at that coverage. Normally we just get some sort of traffic light view, typically in something that looks like a spreadsheet or tree view. These views might group the coverage model in terms of the implemented model hierarchy - rolling up percentages, flagging things in red if they are low numbers of hits, green for close to 100% coverage. This is useful, but it doesn't really show much about the scope of the coverage model. It would be very easy to write a functional coverage model with a few, easily reached bins and declare '100% coverage' and move on.</p>
+<p>The normal way to avoid that scenario is careful review of the coverage model, inspection of code and meetings to discuss what is in the spec that needs coverage. That is certainly a necessary part of planning for verification. I just think there might be additional metrics that could be used and visualised to give a better indication of what the current state of the design is. I started thinking about <em>coverage density</em>, in particular are there ways we could come up with a metric to show that a block has sufficient coverage - at least as a first order approximation. I think this could be useful for both simple code coverage - 100% on a small block is less interesting than 100% on a large block, for example, as well as for functional coverage. Again, a large, complex module with only a few functional coverage points and 100% coverage should be seen as worse result than a small block, with many functional coverage points, that is reporting 100%. We should be more worried about that large, mostly sparsely covered part of our design. I'd like the visualization of any coverage results to highlight those sorts of regions that are <em>completely covered</em> but only thinly.</p>
+<p>This then starts to lead to an idea of density, based on the size of a module and the amount of coverage collected. I haven't found any examples of metrics like this. The only reference to coverage density that I have seen is in Functional Verification Coverage Measurement and Analysis by Andrew Piziali. There though the <code>coverage density</code> refers to the number of coverage hits per simulation cycle and is a measure of efficiency of a given test.</p>
+<p><img alt="NetworkX sample" src="http://networkx.github.io/documentation/latest/_images/lanl_routes.png" /></p>
+<p>I think it might be reasonable to consider lines of code as a measure of the size of a module, although synthesized gate count would probably be a better indicator if that was available. Given that coverage data should be collected earlier in the process, before synthesis, I think the line count might be a good starting point. Similarly for the coverage model, we need a metric to estimate the 'size' or complexity of the coverage within a given block. Now a coverage model can span multiple parts of a design and be somewhat orthogonal to the implementation, but I think there is often a fairly direct mapping of some functional coverage to design blocks. When we have a reasonable metric for these, then we can come up with a view of the coverage density. I need to do some more investigation on what might be useful metrics here. It is quite straight-forward for code coverage but less of a one-to-one relationship for functional coverage.</p>
+<p>I think two dimensional graphs of that coverage data might become a useful way to see the coverage in a design, using <a href="http://www.cs.umd.edu/hcil/treemap-history/">treemaps</a> or network diagrams to allow a user to get a better feel for how the coverage closure is moving forward. Those could even be potentially animated over time to get a better view into the progress of the verification. This <a href="http://flare.prefuse.org/apps/package_map">sample treemap</a> shows a way of visualizing a source code repository, but the colour coding isn't really showing additional information. An display like this seems well suited to being extended to visualize coverage data. It could also be turned into a 3D visualization of the source code, with the density metric shown on the Z axis.</p>
+<p>In a similar way that code coverage is useful right until you get 100% coverage, then it is useless, these sorts of views won't really help in saying 'we have enough functional coverage'. But they might be useful in showing that there isn't enough coverage in particular areas of the design.</p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/coverage-visualization.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/coverage-visualization.html">posted at  7:12 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/eda.html" rel="tag">eda</a>                                                
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <div class="clear"></div>
+                <div id="footer">
+                    <p>
+                    <a href="https://twitter.com/GordonMcGregor">Twitter @GordonMcGregor</a>
+                    &middot;
+                    <a class="atom" href="http://fivecomputers.com/feeds/all.atom.xml">RSS Feed</a>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+    <script type="text/javascript">
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+    try {
+        var pageTracker = _gat._getTracker("UA-42678190-1");
+    pageTracker._trackPageview();
+    } catch(err) {}</script>
+<script type="text/javascript">
+    var disqus_shortname = 'fivecomputers';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+    </body>
+</html>

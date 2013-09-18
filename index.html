@@ -1,323 +1,502 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-        <meta charset="utf-8">
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
         <title>Five Computers</title>
-        <link rel="stylesheet" href="/theme/css/main.css">
+        <link rel="shortcut icon" href="http://fivecomputers.com/favicon.ico" />
+        <link href="http://fivecomputers.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Five Computers Atom Feed" />
                 
-        <!--[if IE]>
-            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
-</head>
+        <link rel="stylesheet" href="http://fivecomputers.com/theme/css/screen.css" type="text/css" />
+        <link rel="stylesheet" href="http://fivecomputers.com/theme/css/pygments.css" type="text/css" />
 
-<body id="index" class="home">
-        <header id="banner" class="body">
-                <h1><a href="/">Five Computers </a></h1>
-                <nav><ul>
-                                                    <li><a href="/pages/about.html">About</a></li>
-                                                                    <li ><a href="/category/blogging.html">blogging</a></li>
-                                    <li ><a href="/category/converted.html">converted</a></li>
-                                    <li ><a href="/category/python-eda.html">python, eda</a></li>
-                                                </ul></nav>
-        </header><!-- /#banner -->
-                
-            
 
-                            <aside id="featured" class="body">
-                <article>
-                    <h1 class="entry-title"><a href="/a-vcd-parser.html">A VCD Parser</a></h1> 
-                    <footer class="post-info">
-        <abbr class="published" title="2013-07-18T20:40:00">
-                Thu 18 July 2013
-        </abbr>
+    </head>
+    <body>
+        <div id="header">
+            <ul id="nav">
+                <li class="selected"><a href="http://fivecomputers.com">Home</a></li>
+                <li><a href="http://fivecomputers.com/pages/about-gordon.html">About Gordon</a></li>
+                <li><a href="http://fivecomputers.com/archives.html">Archives</a></li>
+            </ul>
+            <div class="header_box">
+                <h1><a href="http://fivecomputers.com">Five Computers</a></h1>
+            </div>
+        </div>
+        <div id="wrapper">
+            <div id="content">
+                <h4 class="date">Sep 18,  2013</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/uvm-report-servers.html" rel="bookmark" title="Permanent Link to &quot;UVM Report Servers&quot;">UVM Report Servers</a>
+                    </h2>
+                    
+                    <p>I'm a terrible procrastinator when it comes to writing things up or getting around to releasing finished work. As something of a <a href="http://en.wikipedia.org/wiki/Commitment_device">commitment device</a> to try and make me finish something, I submitted an abstract to the Austin Snyopsys Users group about some XML logging functionality I added to the UVM. The commitment device worked, my abstract was accepted and I finally got around to writing the paper, because of the looming submission deadline.</p>
+<p><a href="http://fivecomputers.com/static/images/papers/snug_custom_uvm_report_servers.pdf">Applications of Custom UVM Report Servers</a> describes a way to convert UVM logging from plain text into a more reuseable XML format. So many tools attempt to extract meaning from plain text files using regular expressions and other potentially fragile parsing methods. Instead, this approach records the log in a structured format that can be reconstructed more effectively, on demand. There is also an example XML parsing GUI that dynamically reformats and collapses log messages for simpler debug. The source code from the paper is <a href="https://bitbucket.org/verilab/uvm_structured_logs">available online.</a> </p>
+<p>This paper won the Technical Committee Award at the <a href="http://www.synopsys.com/Community/SNUG/Austin/Pages/default.aspx">Austin Synopsys User Group</a>.</p>
 
-                <address class="vcard author">
-                By <a class="url fn" href="/author/gordon-mcgregor.html">Gordon McGregor</a>
-        </address>
-        <p>In <a href="/category/python-eda.html">python, eda</a>. </p>
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/uvm-report-servers.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/uvm-report-servers.html">posted at 11:02 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/.html" rel="tag"></a>                                                
+                    </div>
+                    <div class="clear"></div>
+                </div>
 
-</footer><!-- /.post-info --><p>Someone mentioned that a generic VCD parser might be useful. <a href="https://github.com/GordonMcGregor/vcd_parser]">So I wrote one.</a></p>
-<p>It seems to be mostly functional, after a few tweaks and some valuable suggestions from collegues. </p>
-<p>The tokenizer got particular attention:</p>
+                <h4 class="date">Aug 18,  2013</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/serving-dynamic-charts-with-flask.html" rel="bookmark" title="Permanent Link to &quot;Serving dynamic charts with Flask&quot;">Serving dynamic charts with Flask</a>
+                    </h2>
+                    
+                    <p>I've written a little application to track FlexLM status. It's a script that runs as a cronjob and records the status of various FlexLM licenses to an SQLite database. In addition to logging the data, I've written a simple plotting application in matplotlib, but I really want to add some controls around it to select which license to plot, what date range to query from the database and other similarly straightforward features. The easiest way to do this seems to be setting up a basic web form and rendering the images as needed. </p>
+<p>Towards this end, I've been playing around with the <a href="http://flask.pocoo.org/">Flask web framework</a> which makes setting up a micro web application remarkably easy.  The code below is all that's required to set up a web server that will dynamically generate and serve images. The graph is rendered using matplotlib and then served up via Flask.</p>
+<div class="highlight"><pre><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">cStringIO</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+
+<span class="nd">@app.route</span><span class="p">(</span><span class="s">&#39;/plot&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">build_plot</span><span class="p">():</span>
+
+  <span class="c"># Generate the plot</span>
+  <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+  <span class="n">line</span><span class="p">,</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+
+  <span class="n">f</span> <span class="o">=</span> <span class="n">cStringIO</span><span class="o">.</span><span class="n">StringIO</span><span class="p">()</span>
+  <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;png&#39;</span><span class="p">)</span>
+
+  <span class="c"># Serve up the data</span>
+  <span class="n">header</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;Content-type&#39;</span><span class="p">:</span> <span class="s">&#39;image/png&#39;</span><span class="p">}</span>
+  <span class="n">f</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+  <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+  <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="n">header</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+  <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+
+
+<p>This just generates the same plot each time it is loaded, but it is quite easy to move beyond this to generating different views based on user selections.</p>
+<p><img alt="flask plot" src="http://fivecomputers.com/static/images/flask_plotting.png" /></p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/serving-dynamic-charts-with-flask.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/serving-dynamic-charts-with-flask.html">posted at  1:14 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/python-matplotlib.html" rel="tag">python matplotlib</a>                                                
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <h4 class="date">Aug 16,  2013</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/serving-local-web-pages.html" rel="bookmark" title="Permanent Link to &quot;Serving local web pages&quot;">Serving local web pages</a>
+                    </h2>
+                    
+                    <p>I've been trying to improve some SystemVerilog constraints, in Synopsys VCS. One useful approach is to use the profiling features of the constraint solver to explore particular constraints that might be burning lots of cycles or proving hard to solve. There's a VCS runtime switch to turn on constraint profiling:</p>
+<div class="highlight"><pre><span class="o">+</span><span class="n">ntb_solve_debug</span><span class="o">=</span><span class="n">profile</span>
+</pre></div>
+
+
+<p>This creates a profile report in the <code>simv.cst</code> directory, in <code>html/profile.xml</code> The documentation mentions that this file is viewable in Chrome and Firefox but doesn't work in IE. However, it now seems like it also isn't viewable in Chrome. Instead, it hits a security issue: </p>
+<div class="highlight"><pre><span class="n">Unsafe</span> <span class="n">attempt</span> <span class="n">to</span> <span class="n">load</span> <span class="n">URL</span> <span class="n">file</span><span class="o">:</span><span class="c1">///projects/simv.cst/html/cstrProf.xsl </span>
+<span class="n">from</span> <span class="n">frame</span> <span class="n">with</span> <span class="n">URL</span> <span class="n">file</span><span class="o">:</span><span class="c1">///projects/simv.cst/html/profile.xml. </span>
+<span class="n">Domains</span><span class="p">,</span> <span class="n">protocols</span> <span class="n">and</span> <span class="n">ports</span> <span class="n">must</span> <span class="n">match</span><span class="p">.</span>
+</pre></div>
+
+
+<p>Now, the file does load in Firefox, but I've been trying to avoid running multiple browsers. There is however a simple fix. You can run a web server and serve up the profile over html. That maybe sounds like a lot of work, but python ships with one in the standard library and it will run as a command-line loaded module. So, simply change directory to your build directory (or close to it - the server lets you navigate the file hierarchy too) and run</p>
+<div class="highlight"><pre><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">SimpleHTTPServer</span>
+</pre></div>
+
+
+<p>Then in a browser on the same machine, open http://localhost:8000  E.g., if you run the server in the directory with the profile, you can go directly to http://localhost:8000/profile.xml</p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/serving-local-web-pages.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/serving-local-web-pages.html">posted at  1:41 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/systemverilog.html" rel="tag">systemverilog</a>                                                
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <h4 class="date">Aug 12,  2013</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/language-specification-length.html" rel="bookmark" title="Permanent Link to &quot;Language Specification Length&quot;">Language Specification Length</a>
+                    </h2>
+                    
+                    <p><center>
+<img alt="Language Complexity" src="http://fivecomputers.com/static/images/language_complexity.png" />
+</center></p>
+<p>Now, just as <a href="https://twitter.com/GordonMcGregor/status/104282867168845825">number of keywords</a> isn't the sole indicator of the complexity of a language, the length of the specification doesn't tell the entire story. However, SystemVerilog in the new 2012 version clocks in at 1315 pages.</p>
+<p><center>
+<blockquote class="twitter-tweet"><p>Language Specification page count&#10;C++ 865&#10;Java 644&#10;C 540&#10;C# 511&#10;Ruby 311&#10;Smalltalk 303&#10;Erlang 31&#10;&#10;Well played Erlang. Well played.</p>&mdash; Jonas Elfström (@jonelf) <a href="https://twitter.com/jonelf/statuses/366854642774183936">August 12, 2013</a></blockquote>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script></center></p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/language-specification-length.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/language-specification-length.html">posted at  6:34 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/systemverilog.html" rel="tag">systemverilog</a>                                                
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <h4 class="date">Aug  7,  2013</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/dvt-eclipse-license-under-os-x.html" rel="bookmark" title="Permanent Link to &quot;DVT Eclipse License under OS X&quot;">DVT Eclipse License under OS X</a>
+                    </h2>
+                    
+                    <p>I find the <a href="http://www.dvteclipse.com">DVT Eclipse SystemVerilog editor</a> to be exceptionally useful when developing testbenches. One tricky thing to set up when installing these tools in OS X, is how to set an environment variable to point to the license file, for a GUI application.</p>
+<p>To set environment variables, they need to be defined before the GUI executes. In OS X this is achieved in the <code>/etc/launchd.conf</code> file (that you probably have to create)</p>
+<div class="highlight"><pre><span class="n">sudo</span> <span class="n">vim</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">launchd</span><span class="p">.</span><span class="n">conf</span>
+</pre></div>
+
+
+<p>In that file, set the environment variables using csh syntax. For the DVT license file, the environment variable is DVT_LICENSE_FILE</p>
+<div class="highlight"><pre><span class="n">setenv</span> <span class="n">DVT_LICENSE_FILE</span> <span class="o">/</span><span class="n">Path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">dvt</span><span class="p">.</span><span class="n">license</span>
+</pre></div>
+
+
+<p>Then, reboot your system and the environment variable should be set for all applications. You can check by opening a shell after the reboot and checking the environment variable:</p>
+<div class="highlight"><pre><span class="n">echo</span> <span class="err">$</span><span class="n">DVT_LICENSE_FILE</span>
+</pre></div>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/dvt-eclipse-license-under-os-x.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/dvt-eclipse-license-under-os-x.html">posted at  9:18 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/systemverilog-osx.html" rel="tag">systemverilog, osx</a>                                                
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <h4 class="date">Jul 31,  2013</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/playing-with-treemaps.html" rel="bookmark" title="Permanent Link to &quot;Playing with TreeMaps&quot;">Playing with TreeMaps</a>
+                    </h2>
+                    
+                    <p>Just started trying to implement a TreeMap visualization in Python, using Matplotlib. I found some <a href="http://wiki.scipy.org/Cookbook/Matplotlib/TreeMap">sample code</a> that got me started and led to some of the original <a href="http://hcil.cs.umd.edu/trs/91-03/91-03.html">academic papers</a> on the topic.   </p>
+<p>I've got the basics working, with a simple Tree class that I wrote to track nodes and leaves, along with weights and a place to store metadata. The Tree class just provides a wrapper around an array but helps in tracking parent/ child relationships and working out the relative weights of nodes.</p>
+<div class="highlight"><pre><span class="k">class</span> <span class="nc">Tree</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weight</span> <span class="o">=</span> <span class="n">weight</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">changed</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">add_child</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">child</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">changed</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">child</span>
+
+
+    <span class="k">def</span> <span class="nf">is_leaf</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+
+
+    <span class="k">def</span> <span class="nf">get_weight</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">recalculate</span> <span class="o">=</span> <span class="bp">False</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">recalculate</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">changed</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">weight</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">changed</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">weight</span> <span class="o">+=</span> <span class="n">child</span><span class="o">.</span><span class="n">get_weight</span><span class="p">(</span><span class="n">recalculate</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span>
+
+    <span class="k">def</span> <span class="nf">get_normalized_weight</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">weight</span><span class="p">)</span>
+</pre></div>
+
+
+<p>The actual drawing algorithm is straightforward too - for each level in the hierarchy, divide up the available space between all the nodes, weighted by their size and then flip between horizontal or vertical packing at each level of the hierarchy. Currently I'm putting the leaf node weight into the center of each rectangle as an annotation. This will probably need to change with additional nodes, as they will get too small to see. Mouseover tooltips or a <a href="https://github.com/joferkington/mpldatacursor">datacursor</a> that updates when a node is selected will probably be more useful.</p>
+<div class="highlight"><pre><span class="k">def</span> <span class="nf">add_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="p">[</span><span class="mf">0.005</span><span class="p">,</span><span class="mf">0.005</span><span class="p">],</span> <span class="n">upper</span><span class="o">=</span><span class="p">[</span><span class="mf">0.995</span><span class="p">,</span><span class="mf">0.995</span><span class="p">],</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+    <span class="n">axis</span> <span class="o">=</span> <span class="n">axis</span> <span class="o">%</span> <span class="mi">2</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">draw_rectangle</span><span class="p">(</span><span class="n">lower</span><span class="p">,</span> <span class="n">upper</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span>
+
+    <span class="n">width</span> <span class="o">=</span> <span class="n">upper</span><span class="p">[</span><span class="n">axis</span><span class="p">]</span> <span class="o">-</span> <span class="n">lower</span><span class="p">[</span><span class="n">axis</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">branch</span> <span class="ow">in</span> <span class="n">node</span><span class="p">:</span>
+        <span class="n">upper</span><span class="p">[</span><span class="n">axis</span><span class="p">]</span> <span class="o">=</span> <span class="n">lower</span><span class="p">[</span><span class="n">axis</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">width</span> <span class="o">*</span> <span class="nb">float</span><span class="p">(</span><span class="n">branch</span><span class="o">.</span><span class="n">get_weight</span><span class="p">()))</span> <span class="o">/</span> <span class="n">node</span><span class="o">.</span><span class="n">get_weight</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">branch</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">lower</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">upper</span><span class="p">),</span> <span class="n">axis</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lower</span><span class="p">[</span><span class="n">axis</span><span class="p">]</span> <span class="o">=</span> <span class="n">upper</span><span class="p">[</span><span class="n">axis</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">draw_rectangle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lower</span><span class="p">,</span> <span class="n">upper</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">Rectangle</span><span class="p">(</span><span class="n">lower</span><span class="p">,</span> <span class="n">upper</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">lower</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">upper</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">lower</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> 
+        <span class="n">edgecolor</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">,</span>
+        <span class="n">facecolor</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">is_leaf</span><span class="p">():</span>
+        <span class="n">rx</span><span class="p">,</span> <span class="n">ry</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">get_xy</span><span class="p">()</span>
+        <span class="n">cx</span> <span class="o">=</span> <span class="n">rx</span> <span class="o">+</span> <span class="n">r</span><span class="o">.</span><span class="n">get_width</span><span class="p">()</span><span class="o">/</span><span class="mf">2.0</span>
+        <span class="n">cy</span> <span class="o">=</span> <span class="n">ry</span> <span class="o">+</span> <span class="n">r</span><span class="o">.</span><span class="n">get_height</span><span class="p">()</span><span class="o">/</span><span class="mf">2.0</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">set_facecolor</span><span class="p">(</span> <span class="n">node</span><span class="o">.</span><span class="n">get_colour</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">get_weight</span><span class="p">(),</span> <span class="p">(</span><span class="n">cx</span><span class="p">,</span> <span class="n">cy</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> 
+                         <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s">&#39;center&#39;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s">&#39;center&#39;</span><span class="p">)</span>
+        <span class="k">print</span> <span class="n">node</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">rx</span><span class="p">,</span> <span class="n">ry</span><span class="p">,</span> <span class="n">cx</span><span class="p">,</span> <span class="n">cy</span>
+</pre></div>
+
+
+<p>The full source is <a href="https://github.com/GordonMcGregor/treemap">available on github.</a> Trees can be implemented by creating all the nodes, one instance at a time.</p>
+<div class="highlight"><pre><span class="kn">from</span> <span class="nn">Tree</span> <span class="kn">import</span> <span class="n">HueTree</span> <span class="k">as</span> <span class="n">t</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="n">t</span><span class="p">()</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">e</span> <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;e&#39;</span><span class="p">)</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s">&#39;f&#39;</span><span class="p">)</span>
+
+<span class="n">c</span> <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="s">&#39;c&#39;</span><span class="p">)</span>
+
+<span class="n">d</span> <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<span class="n">j</span> <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;j&#39;</span><span class="p">)</span>
+<span class="n">k</span> <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;k&#39;</span><span class="p">)</span>
+<span class="n">h</span> <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s">&#39;h&#39;</span><span class="p">)</span>
+<span class="n">l</span> <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<span class="n">lprime</span> <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;l&#39;</span><span class="p">)</span>
+<span class="n">m</span> <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;m&#39;</span><span class="p">)</span>
+<span class="n">n</span> <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;n&#39;</span><span class="p">)</span>
+<span class="n">o</span> <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;o&#39;</span><span class="p">)</span>
+
+<span class="n">TreeMap</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+
+<p><img alt="Simple Treemap" src="http://fivecomputers.com/static/images/simple_treemap.png" /></p>
+<p>Here I'm using the relative weight of the node within a given point in the hierarchy to specify the Hue value from an Hue/Saturation/Value triplet that gets converted to an RGB colour. </p>
+<p>The long form way of instantiating a tree gets quite cumbersome, so it is also possible to define a tree just as a nested set of tuples, and then use a helper function, <code>make_tree</code> to construct the actual Tree objects.</p>
+<div class="highlight"><pre><span class="n">import</span> <span class="n">Tree</span>
+<span class="n">from</span> <span class="n">TreeMap</span> <span class="n">import</span> <span class="n">TreeMap</span>
+
+<span class="n">short_map</span> <span class="o">=</span> <span class="p">(((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="mi">3</span><span class="p">,</span> <span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">4</span><span class="p">,</span> <span class="p">((</span><span class="mi">32</span><span class="p">,</span><span class="mi">34</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> 
+                    <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,(</span><span class="mi">2</span><span class="p">,(</span><span class="mi">2</span><span class="p">,(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,(</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">12</span><span class="p">),</span><span class="mi">1</span><span class="p">)))))))))</span>
+
+<span class="n">x</span><span class="o">=</span><span class="n">Tree</span><span class="p">.</span><span class="n">make_tree</span><span class="p">(</span><span class="n">short_map</span><span class="p">,</span> <span class="n">TreeType</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">.</span><span class="n">Tree</span><span class="p">)</span>
+<span class="n">TreeMap</span><span class="p">(</span><span class="n">x</span><span class="p">).</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+
+<p>Things look good with a small number of nodes, but when you start adding more leaves, you find that skinny rectangles start to dominate the plot. In this case, I'm using the relative weight as a gray value, rather than varying the hue. <a href="http://www.win.tue.nl/~vanwijk/stm.pdf">Other algorithms</a> are available for how the space is subdivided that can tend to give a more <code>square</code> structure to the resulting map - I'm starting to investigate implementing the map using those algorithms to see how that looks.</p>
+<p><img alt="Skinny Treemap" src="http://fivecomputers.com/static/images/skinny_treemap.png" /></p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/playing-with-treemaps.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/playing-with-treemaps.html">posted at 11:26 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/.html" rel="tag"></a>                                                
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <h4 class="date">Jul 28,  2013</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/coverage-visualization.html" rel="bookmark" title="Permanent Link to &quot;Coverage Visualization&quot;">Coverage Visualization</a>
+                    </h2>
+                    
+                    <p>I've been thinking recently about better ways to visualize coverage results. The new <a href="http://www.accellera.org/downloads/standards/ucis">UCIS API</a> provides ways to access coverage data more easily in third-party tools. I've mostly finished wrapping this API in Python, using SWIG, to create <a href="https://bitbucket.org/verilab/pyucis">PyUCIS</a>. That Python layer provides iterators and other Pythonic idioms to let you use the UCIS more efficiently. So far I'm seeing about 66% less code for equivalent C functions. Also, a large part of the UCIS implementation is tied up in XML and the Python libraries for XML support are excellent. I've found it a useful way to write tools around coverage data, quickly. That efficiency and quick development is key to providing a flexible toolkit to analyze coverage data. Rather than building an all singing, all dancing tool, I'd rather have a toolkit of features that allow me to inspect and visualize the data, that can be tuned to the particular job at hand. <a href="http://matplotlib.org/">Matplotlib</a> and other visualization tools, such as <a href="http://networkx.github.io/">NetworkX</a>, are great, free libraries that become available, once you get the data into a Python environment. Trying to do similar visualizations in C is possible, but generally prohibitive in time and effort. </p>
+<p>So now that I have easy access to coverage data and a wide range of visualization tools available, I've been thinking about how I'd like to look at that coverage. Normally we just get some sort of traffic light view, typically in something that looks like a spreadsheet or tree view. These views might group the coverage model in terms of the implemented model hierarchy - rolling up percentages, flagging things in red if they are low numbers of hits, green for close to 100% coverage. This is useful, but it doesn't really show much about the scope of the coverage model. It would be very easy to write a functional coverage model with a few, easily reached bins and declare '100% coverage' and move on.</p>
+<p>The normal way to avoid that scenario is careful review of the coverage model, inspection of code and meetings to discuss what is in the spec that needs coverage. That is certainly a necessary part of planning for verification. I just think there might be additional metrics that could be used and visualised to give a better indication of what the current state of the design is. I started thinking about <em>coverage density</em>, in particular are there ways we could come up with a metric to show that a block has sufficient coverage - at least as a first order approximation. I think this could be useful for both simple code coverage - 100% on a small block is less interesting than 100% on a large block, for example, as well as for functional coverage. Again, a large, complex module with only a few functional coverage points and 100% coverage should be seen as worse result than a small block, with many functional coverage points, that is reporting 100%. We should be more worried about that large, mostly sparsely covered part of our design. I'd like the visualization of any coverage results to highlight those sorts of regions that are <em>completely covered</em> but only thinly.</p>
+<p>This then starts to lead to an idea of density, based on the size of a module and the amount of coverage collected. I haven't found any examples of metrics like this. The only reference to coverage density that I have seen is in Functional Verification Coverage Measurement and Analysis by Andrew Piziali. There though the <code>coverage density</code> refers to the number of coverage hits per simulation cycle and is a measure of efficiency of a given test.</p>
+<p><img alt="NetworkX sample" src="http://networkx.github.io/documentation/latest/_images/lanl_routes.png" /></p>
+<p>I think it might be reasonable to consider lines of code as a measure of the size of a module, although synthesized gate count would probably be a better indicator if that was available. Given that coverage data should be collected earlier in the process, before synthesis, I think the line count might be a good starting point. Similarly for the coverage model, we need a metric to estimate the 'size' or complexity of the coverage within a given block. Now a coverage model can span multiple parts of a design and be somewhat orthogonal to the implementation, but I think there is often a fairly direct mapping of some functional coverage to design blocks. When we have a reasonable metric for these, then we can come up with a view of the coverage density. I need to do some more investigation on what might be useful metrics here. It is quite straight-forward for code coverage but less of a one-to-one relationship for functional coverage.</p>
+<p>I think two dimensional graphs of that coverage data might become a useful way to see the coverage in a design, using <a href="http://www.cs.umd.edu/hcil/treemap-history/">treemaps</a> or network diagrams to allow a user to get a better feel for how the coverage closure is moving forward. Those could even be potentially animated over time to get a better view into the progress of the verification. This <a href="http://flare.prefuse.org/apps/package_map">sample treemap</a> shows a way of visualizing a source code repository, but the colour coding isn't really showing additional information. An display like this seems well suited to being extended to visualize coverage data. It could also be turned into a 3D visualization of the source code, with the density metric shown on the Z axis.</p>
+<p>In a similar way that code coverage is useful right until you get 100% coverage, then it is useless, these sorts of views won't really help in saying 'we have enough functional coverage'. But they might be useful in showing that there isn't enough coverage in particular areas of the design.</p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/coverage-visualization.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/coverage-visualization.html">posted at  7:12 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/eda.html" rel="tag">eda</a>                                                
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <h4 class="date">Jul 23,  2013</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/much-ado-about-nothing.html" rel="bookmark" title="Permanent Link to &quot;Much ado about nothing&quot;">Much ado about nothing</a>
+                    </h2>
+                    
+                    <p>Having wasted a few hours debugging a UVM issue with <code>`uvm_do</code> macros and a <code>pre_do</code> task in a parent class, I decided to dig in to starting sequences without using the macro implementations. Some of the main EDA companies recommend this approach and there was a <a href="http://events.dvcon.org/2011/proceedings/papers/09_1.pdf">good paper at DVCon</a> discussing the pros and cons of the various UVM macros.</p>
+<p>So while several people recommend using the methods directly and avoiding the macros, I didn't find a great deal of clear information that described the correct set of method calls to use for a sequence_item and sequence. The examples in Adam's paper above are somewhat confusing, mixing sequence_items and sequences within the same code in some cases and suffering from some typos in other samples. After I worked out the information below, I took another look at the paper and the examples are correct (ignoring the typos), but the interleaving of the sequence and sequence_item start makes the operations more complex than it needs to be.</p>
+<p>Luckily enough the UVM source code is all available and I found the simplest way to resolve this was just to go and look at the implementation. In particular, two files are useful: the macro implementations themselves in src/macros/uvm_sequence_defines.svh and the class definitions for sequences and sequence_item in src/seq/uvm_sequence_base.svh</p>
+<p>My first confusion stemmed from the class inheritance. </p>
+<p><center></p>
+<div class="highlight"><pre><span class="n">uvm_transaction</span>
+<span class="n">V</span>
+<span class="n">uvm_sequence_item</span>
+<span class="n">V</span>
+<span class="n">uvm_sequence_base</span>
+<span class="n">V</span>
+<span class="n">uvm_sequence</span>
+</pre></div>
+
+
+<p></center></p>
+<p>At first glance, this tends to imply that a <code>uvm_sequence</code> is just another type of <code>uvm_sequence_item</code> and they can be treated as interchangeable. However, it fairly quickly becomes apparent that this is only very superficially true. The reality is that sequences ( <code>uvm_sequence</code>) have a distinct API from sequence items (<code>uvm_sequence_item</code>) and only share a few common features.</p>
+<p>In particular, sequences runs on a sequencer, without any arbitration controlling their execution. Multiple sequences can be launched on a sequencer and will execute in parallel. In contrast, sequence_items are subject to arbitration to control access to the sequencer's downstream port. A multi-step arbitration handshake is done, but only for sequence items - not sequences. This is the fundamental difference in the API and the reason for the different methods used to start items and sequences.</p>
+<p>Sequences and sequence items can both be launched using the various uvm_do macros, so the common base does help provide this abstraction to a single interface, but it really just hides the multiple APIs that are being used behind the scenes. I agree with the view that it is better to just understand what is going on and use the function calls directly. That way you will tend not to be surprised by the various hooks provided for callbacks within the macro invocations. </p>
+<p>From <code>uvm_sequence_defines.svh</code>, the methods used to start a sequence item are:</p>
+<div class="highlight"><pre>   <span class="no">`uvm_create</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+   <span class="n">sequencer</span><span class="p">.</span><span class="n">wait_for_grant</span><span class="p">(</span><span class="n">prior</span><span class="p">);</span>                           
+   <span class="k">this</span><span class="p">.</span><span class="n">pre_do</span><span class="p">(</span><span class="mh">1</span><span class="p">);</span>
+   <span class="n">item</span><span class="p">.</span><span class="n">randomize</span><span class="p">();</span>
+   <span class="k">this</span><span class="p">.</span><span class="n">mid_do</span><span class="p">(</span><span class="n">item</span><span class="p">);</span>
+   <span class="n">sequencer</span><span class="p">.</span><span class="n">send_request</span><span class="p">(</span><span class="n">item</span><span class="p">);</span>
+   <span class="n">sequencer</span><span class="p">.</span><span class="n">wait_for_item_done</span><span class="p">();</span>
+   <span class="k">this</span><span class="p">.</span><span class="n">post_do</span><span class="p">(</span><span class="n">item</span><span class="p">);</span>
+</pre></div>
+
+
+<p>A sequence however, is launched with:</p>
+<div class="highlight"><pre>     <span class="no">`uvm_create</span><span class="p">(</span><span class="n">sub_seq</span><span class="p">)</span>                             
+     <span class="n">sub_seq</span><span class="p">.</span><span class="n">randomize</span><span class="p">();</span>
+     <span class="n">sub_seq</span><span class="p">.</span><span class="n">pre_start</span><span class="p">();</span>        
+     <span class="k">this</span><span class="p">.</span><span class="n">pre_do</span><span class="p">(</span><span class="mh">0</span><span class="p">);</span>             
+     <span class="k">this</span><span class="p">.</span><span class="n">mid_do</span><span class="p">(</span><span class="n">sub_seq</span><span class="p">);</span>       
+     <span class="n">sub_seq</span><span class="p">.</span><span class="n">body</span><span class="p">();</span>             
+     <span class="k">this</span><span class="p">.</span><span class="n">post_do</span><span class="p">(</span><span class="n">sub_seq</span><span class="p">);</span>      
+     <span class="n">sub_seq</span><span class="p">.</span><span class="n">post_start</span><span class="p">();</span>
+</pre></div>
+
+
+<p>Now, the <code>`uvm_create</code> macro call can be replaced with a direct call to the <code>factory::create</code> method, for both the sequence_item and sequence, something like this for a sequence_item,</p>
+<div class="highlight"><pre>    <span class="n">item</span> <span class="o">=</span> <span class="n">custom_sequence_item</span><span class="o">::</span><span class="n">type_id</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;item&quot;</span><span class="p">,,</span> <span class="n">get_full_name</span><span class="p">());</span>
+</pre></div>
+
+
+<p>or this for a sequence</p>
+<div class="highlight"><pre>    <span class="n">seq</span> <span class="o">=</span> <span class="n">custom_sequence</span><span class="o">::</span><span class="n">type_id</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;seq&quot;</span><span class="p">,,</span> <span class="n">get_full_name</span><span class="p">());</span>
+</pre></div>
+
+
+<p>In the sequence_item startup, the various calls after the create can be replaced by two functions that encapsulate the arbitration for the driver port, to actually launch a transaction.</p>
+<div class="highlight"><pre>   <span class="n">item</span> <span class="o">=</span> <span class="n">custom_sequence_item</span><span class="o">::</span><span class="n">type_id</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;item&quot;</span><span class="p">,</span> <span class="p">,</span> <span class="n">get_full_name</span><span class="p">());</span>
+   <span class="n">start_item</span><span class="p">(</span><span class="n">item</span><span class="p">);</span>                             
+   <span class="n">item</span><span class="p">.</span><span class="n">randomize</span><span class="p">();</span>
+   <span class="n">finish_item</span><span class="p">(</span><span class="n">item</span><span class="p">);</span>
+</pre></div>
+
+
+<p>Breaking up the <code>uvm_do</code> in this way provides more control over the randomization of the item - you can disable constraints, assign values after start_item, rather than trying to insert code in pre_do.  One fundamental problem with trying to use pre_do to modify constraints is there isn't a clear indication which call to <code>uvm_do</code> in the sequence body has triggered the callback to <code>pre_do</code>. The only indication in the pre_do API is if it is being called before a sequence_item is started or a sequence [via the is_item flag]. If you have multiple calls to <code>`uvm_do</code> (or start_item) in your sequence body, there isn't a reliable way to differentiate which call has triggered the callback (other than maybe looking at the existence of a member variable, if it has been created or not, but this fails with loops or threads of execution in the body)</p>
+<p>Similarly to start a sequence, there is a simpler API that encapsulates the various calls to pre_start, pre_do etc:</p>
+<div class="highlight"><pre>    <span class="n">seq</span> <span class="o">=</span> <span class="n">custom_sequence</span><span class="o">::</span><span class="n">type_id</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;seq&quot;</span><span class="p">,,</span> <span class="n">get_full_name</span><span class="p">());</span>
+    <span class="n">seq</span><span class="p">.</span><span class="n">randomize</span><span class="p">();</span>
+    <span class="n">seq</span><span class="p">.</span><span class="n">start</span><span class="p">(</span><span class="n">target_sequencer</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+</pre></div>
+
+
+<p>These 4 calls for a sequence_item and 3 calls for a sequence can then be further enhanced using control over constraints, randomize with {} constructs and also using the prioritization arguments to the tasks, or providing a different target sequencer. The end result is much more flexible than the 18 flavours of <code>`uvm_do</code> macros and easier to work out the flow of execution. </p>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/much-ado-about-nothing.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/much-ado-about-nothing.html">posted at  9:30 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/sv-eda.html" rel="tag">sv, eda</a>                                                
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <h4 class="date">Jul 21,  2013</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/a-sample-of-sv.html" rel="bookmark" title="Permanent Link to &quot;A sample of SV&quot;">A sample of SV</a>
+                    </h2>
+                    
+                    <p>I've recently migrated my blog from Typepad to <a href="http://getpelican.com">Pelican</a>, hosted on GitHub. One nice feature of that is that I can write simple posts in Markdown syntax and it uses the Pygments syntax highlighting engine.  <a href="systemverilog-support-in-pygments.html">A while ago</a> I added SystemVerilog support to Pygments and looking below, it seems to be working!</p>
+<div class="highlight"><pre><span class="k">module</span> <span class="n">top</span><span class="p">;</span>
+    <span class="kn">import</span> <span class="nn">user_pkg::*</span><span class="p">;</span>
+    <span class="kn">import</span> <span class="nn">uvm_pkg::*</span><span class="p">;</span>
+    <span class="n">env</span> <span class="n">e</span><span class="p">;</span>
+
+    <span class="k">initial</span> <span class="k">begin</span>
+        <span class="no">`uvm_info</span><span class="p">(</span><span class="s">&quot;top&quot;</span><span class="p">,</span><span class="s">&quot;In top initial block&quot;</span><span class="p">,</span><span class="no">UVM_MEDIUM</span><span class="p">)</span>
+        <span class="n">e</span> <span class="o">=</span> <span class="k">new</span><span class="p">(</span><span class="s">&quot;env&quot;</span><span class="p">,</span> <span class="k">null</span><span class="p">);</span>
+        <span class="n">run_test</span><span class="p">();</span>
+    <span class="k">end</span>
+<span class="k">endmodule</span>
+</pre></div>
+
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/a-sample-of-sv.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/a-sample-of-sv.html">posted at 12:00 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/python-eda.html" rel="tag">python, eda</a>                                                
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <h4 class="date">Jul 18,  2013</h4>
+                <div class="post">
+                    <h2 class="title">
+                        <a href="http://fivecomputers.com/a-vcd-parser.html" rel="bookmark" title="Permanent Link to &quot;A VCD Parser&quot;">A VCD Parser</a>
+                    </h2>
+                    
+                    <p>A co-worker mentioned that a generic VCD parser might be useful. <a href="https://github.com/GordonMcGregor/vcd_parser">So I wrote one</a>. It is mostly functional, after a few tweaks and some valuable suggestions from colleagues. </p>
+<p>The tokenizer got particular attention, due to the rather neat generator expression, assigned to <code>tokeniser</code></p>
 <div class="highlight"><pre><span class="k">def</span> <span class="nf">extract</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fh</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;Tokenize and parse the VCD file&#39;&#39;&#39;</span>
     <span class="c"># open the VCD file and create a token generator</span>
     <span class="n">tokeniser</span> <span class="o">=</span> <span class="p">(</span><span class="n">word</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">fh</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span> <span class="k">if</span> <span class="n">word</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">count</span><span class="p">,</span> <span class="n">token</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tokeniser</span><span class="p">):</span>
-</pre></div>                </article>
-                            </aside><!-- /#featured -->
-                            <section id="content" class="body">
-                    <h1>Other articles</h1>
-                    <hr />
-                    <ol id="posts-list" class="hfeed">
-                                                
+</pre></div>
 
-                 
-                        <li><article class="hentry">    
-                <header>
-                    <h1><a href="/first-post.html" rel="bookmark"
-                           title="Permalink to First post!">First post!</a></h1>
-                </header>
-                
-                <div class="entry-content">
-                <footer class="post-info">
-        <abbr class="published" title="2013-07-18T20:38:00">
-                Thu 18 July 2013
-        </abbr>
+                    <div class="clear"></div>
+                    <p>There are <a href="http://fivecomputers.com/a-vcd-parser.html#disqus_thread">comments</a>.</p>
+                    <div class="info">
+                        <a href="http://fivecomputers.com/a-vcd-parser.html">posted at  8:40 P</a>&nbsp;&middot;&nbsp;<a href="http://fivecomputers.com/category/python-eda.html" rel="tag">python, eda</a>                                                
+                    </div>
+                    <div class="clear"></div>
+                </div>
 
-                <address class="vcard author">
-                By <a class="url fn" href="/author/gordon-mcgregor.html">Gordon McGregor</a>
-        </address>
-        <p>In <a href="/category/blogging.html">blogging</a>. </p>
+                <div class="clear"></div>
+                <div class="pages">
+                    <a href="http://fivecomputers.com/index2.html" class="next_page">Next&nbsp;&rarr;</a>
+                    <span>Page 1 of 6</span>
+                </div>
 
-</footer><!-- /.post-info -->                <p>First Post!</p>
-                <a class="readmore" href="/first-post.html">read more</a>
-                                </div><!-- /.entry-content -->
-            </article></li>
-                            
-
-                 
-                        <li><article class="hentry">    
-                <header>
-                    <h1><a href="/a-simple-turtle-graphics-domain-specific-language-dsl-parser.html" rel="bookmark"
-                           title="Permalink to A simple turtle graphics Domain Specific Language (DSL) parser">A simple turtle graphics Domain Specific Language (DSL) parser</a></h1>
-                </header>
-                
-                <div class="entry-content">
-                <footer class="post-info">
-        <abbr class="published" title="2012-12-21T00:00:00">
-                Fri 21 December 2012
-        </abbr>
-
-                <address class="vcard author">
-                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
-        </address>
-        <p>In <a href="/category/converted.html">converted</a>. </p>
-<p>tags: <a href="/tag/books-eda-verification.html">Books  EDA  verification</a></p>
-</footer><!-- /.post-info -->                <p>I&#39;ve been working through some of the exercises in &#39;<a href="http://pragprog.com/the-pragmatic-programmer" target="_self">The Pragmatic Programmer</a>&#39; while using it to mentor a colleague. &#0160;In particular, I spent a bit of time working on the Domain Specific Language section and considering creating little DSLs to provide flexible control. I&#39;ve painfully implemented DSLs in ...</p>
-                <a class="readmore" href="/a-simple-turtle-graphics-domain-specific-language-dsl-parser.html">read more</a>
-                                </div><!-- /.entry-content -->
-            </article></li>
-                            
-
-                 
-                        <li><article class="hentry">    
-                <header>
-                    <h1><a href="/a-uvm-layer-for-pyhvl.html" rel="bookmark"
-                           title="Permalink to A UVM layer for PyHVL">A UVM layer for PyHVL</a></h1>
-                </header>
-                
-                <div class="entry-content">
-                <footer class="post-info">
-        <abbr class="published" title="2012-09-05T00:00:00">
-                Wed 05 September 2012
-        </abbr>
-
-                <address class="vcard author">
-                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
-        </address>
-        <p>In <a href="/category/converted.html">converted</a>. </p>
-<p>tags: <a href="/tag/.html"></a></p>
-</footer><!-- /.post-info -->                <p>Over the past few years I've been building verification environments in Python, hooked up to SystemVerilog and Verilog simulators. The glue is <a href="http://sourceforge.net/projects/pyhvl/">PyHVL</a>. But PyHVL is just the glue. It does open up the possibility of dynamic languages and scripting to talk to your test bench, but it isn ...</p>
-                <a class="readmore" href="/a-uvm-layer-for-pyhvl.html">read more</a>
-                                </div><!-- /.entry-content -->
-            </article></li>
-                            
-
-                 
-                        <li><article class="hentry">    
-                <header>
-                    <h1><a href="/sshfs-for-os-x-lion.html" rel="bookmark"
-                           title="Permalink to sshfs for OS X Lion">sshfs for OS X Lion</a></h1>
-                </header>
-                
-                <div class="entry-content">
-                <footer class="post-info">
-        <abbr class="published" title="2012-04-26T00:00:00">
-                Thu 26 April 2012
-        </abbr>
-
-                <address class="vcard author">
-                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
-        </address>
-        <p>In <a href="/category/converted.html">converted</a>. </p>
-<p>tags: <a href="/tag/.html"></a></p>
-</footer><!-- /.post-info -->                <p>Installed the latest version of fuse and sshfs, using <a href="http://mxcl.github.com/homebrew/">Homebrew</a>. I had been using FUSE for a while with previous versions of OS X, but haven't had much luck under Lion. Tried again today, using <a href="http://fuse4x.org/">Fuse4x</a>, rather than libFUSE and everything worked very transparently:</p>
-
-<pre>
-brew install fuse4x sshfs
-</pre>
-
-<p><strike>and ...</strike></p>
-                <a class="readmore" href="/sshfs-for-os-x-lion.html">read more</a>
-                                </div><!-- /.entry-content -->
-            </article></li>
-                            
-
-                 
-                        <li><article class="hentry">    
-                <header>
-                    <h1><a href="/simple-web-server.html" rel="bookmark"
-                           title="Permalink to Simple web server">Simple web server</a></h1>
-                </header>
-                
-                <div class="entry-content">
-                <footer class="post-info">
-        <abbr class="published" title="2012-04-20T00:00:00">
-                Fri 20 April 2012
-        </abbr>
-
-                <address class="vcard author">
-                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
-        </address>
-        <p>In <a href="/category/converted.html">converted</a>. </p>
-<p>tags: <a href="/tag/software-thingumyjigs.html">software  thingumyjigs</a></p>
-</footer><!-- /.post-info -->                <p>Ever find you need to implement a web server or provide some web pages on a local network? Maybe you don't have an Apache server up and running or don't want to go to the trouble of configuring it. I've found this with <a href="http://www.naturaldocs.org/">Natural Docs</a> documentation, where ...</p>
-                <a class="readmore" href="/simple-web-server.html">read more</a>
-                                </div><!-- /.entry-content -->
-            </article></li>
-                            
-
-                 
-                        <li><article class="hentry">    
-                <header>
-                    <h1><a href="/systemverilog-support-in-pygments.html" rel="bookmark"
-                           title="Permalink to SystemVerilog support in Pygments">SystemVerilog support in Pygments</a></h1>
-                </header>
-                
-                <div class="entry-content">
-                <footer class="post-info">
-        <abbr class="published" title="2012-04-19T00:00:00">
-                Thu 19 April 2012
-        </abbr>
-
-                <address class="vcard author">
-                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
-        </address>
-        <p>In <a href="/category/converted.html">converted</a>. </p>
-<p>tags: <a href="/tag/.html"></a></p>
-</footer><!-- /.post-info -->                <p><a href="http://www.flickr.com/photos/mcgregorphoto/6949231074/" title="svforpygments by Gordon McGregor, on Flickr"><img alt="svforpygments" src="http://farm6.staticflickr.com/5454/6949231074_4dd2096121_c.jpg" width="720" /></a></p>
-
-<p>I&#39;ve used <a href="http://pygments.org/">Pygments</a> in the past to do syntax highlighting of Python and C code to drop into documentation. I&#39;ve wanted SystemVerilog support for a while, but the tool didn&#39;t <a href="http://pygments.org/languages/">support the language</a>. I eventually got frustrated enough by this to go and add it myself. The ...</p>
-                <a class="readmore" href="/systemverilog-support-in-pygments.html">read more</a>
-                                </div><!-- /.entry-content -->
-            </article></li>
-                            
-
-                 
-                        <li><article class="hentry">    
-                <header>
-                    <h1><a href="/hobgoblins.html" rel="bookmark"
-                           title="Permalink to Hobgoblins">Hobgoblins</a></h1>
-                </header>
-                
-                <div class="entry-content">
-                <footer class="post-info">
-        <abbr class="published" title="2012-02-05T00:00:00">
-                Sun 05 February 2012
-        </abbr>
-
-                <address class="vcard author">
-                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
-        </address>
-        <p>In <a href="/category/converted.html">converted</a>. </p>
-<p>tags: <a href="/tag/verification.html">verification</a></p>
-</footer><!-- /.post-info -->                <p><center>
-  <p><span class="st"><i>A foolish consistency is the hobgoblin of little minds, adored by little statesmen and philosophers and divines</i></span></p></p>
-<p><p style="text-align: right;"><i>-</i> R. W. Emerson</p>
-</center>
-<p>Looking over the VPI iterator sample code I posted last night from PyHVL, I noticed something. I've defined the API as follows:</p>
-<div class="highlight" style="background: #f8f8f8">
-  <pre style="line-height: 125%">
-<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">vpi_iterator</span>(handle, type<span style="color: #666666">=</span>vpiNet):
-</pre>
-</div>With the ...</p>
-                <a class="readmore" href="/hobgoblins.html">read more</a>
-                                </div><!-- /.entry-content -->
-            </article></li>
-                            
-
-                 
-                        <li><article class="hentry">    
-                <header>
-                    <h1><a href="/improving-sshfs-connections.html" rel="bookmark"
-                           title="Permalink to Improving sshfs connections">Improving sshfs connections</a></h1>
-                </header>
-                
-                <div class="entry-content">
-                <footer class="post-info">
-        <abbr class="published" title="2012-02-05T00:00:00">
-                Sun 05 February 2012
-        </abbr>
-
-                <address class="vcard author">
-                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
-        </address>
-        <p>In <a href="/category/converted.html">converted</a>. </p>
-<p>tags: <a href="/tag/.html"></a></p>
-</footer><!-- /.post-info -->                <p>I'm finding <a href="http://www.fivecomputers.com/2012/04/sshfs-for-os-x-lion.html">sshfs</a> to be excellent for remotely accessing drives over ssh. There's a couple of tweaks to the ssh config file that can make things even better. If you haven't used an ssh config file, it can be used to store general and connection specific information ...</p>
-                <a class="readmore" href="/improving-sshfs-connections.html">read more</a>
-                                </div><!-- /.entry-content -->
-            </article></li>
-                            
-
-                 
-                        <li><article class="hentry">    
-                <header>
-                    <h1><a href="/pygmentize-files-and-paste-them-into-microsoft-word-in-os-x.html" rel="bookmark"
-                           title="Permalink to Pygmentize files and paste them into Microsoft Word in OS X">Pygmentize files and paste them into Microsoft Word in OS X</a></h1>
-                </header>
-                
-                <div class="entry-content">
-                <footer class="post-info">
-        <abbr class="published" title="2012-01-05T00:00:00">
-                Thu 05 January 2012
-        </abbr>
-
-                <address class="vcard author">
-                By <a class="url fn" href="/author/gordonmcgregor.html">GordonMcGregor</a>
-        </address>
-        <p>In <a href="/category/converted.html">converted</a>. </p>
-<p>tags: <a href="/tag/.html"></a></p>
-</footer><!-- /.post-info -->                <p>Writing some documents using Microsoft Word and I wanted to be able to drop in syntax highlighted versions of the source code. Pygmentize will generate RTF format, which is great for pasting in to Word, but you have to get it there. The best way I've found is using ...</p>
-                <a class="readmore" href="/pygmentize-files-and-paste-them-into-microsoft-word-in-os-x.html">read more</a>
-                                </div><!-- /.entry-content -->
-            </article></li>
-                            </ol><!-- /#posts-list -->
-                            <p class="paginator">
-        Page 1 / 6
-            <a href="/index2.html">&raquo;</a>
-    </p>
-                        </section><!-- /#content -->
-                    <section id="extras" class="body">
-                        <div class="blogroll">
-                        <h2>blogroll</h2>
-                        <ul>
-                                                    <li><a href="http://getpelican.com/">Pelican</a></li>
-                                                    <li><a href="http://python.org/">Python.org</a></li>
-                                                    <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
-                                                    <li><a href="#">You can modify those links in your config file</a></li>
-                                                </ul>
-                </div><!-- /.blogroll -->
-                                <div class="social">
-                        <h2>social</h2>
-                        <ul>
-                            <li><a href="/None" type="application/atom+xml" rel="alternate">atom feed</a></li>
-                            
-                                                    <li><a href="#">You can add links in your config file</a></li>
-                                                    <li><a href="#">Another social link</a></li>
-                                                </ul>
-                </div><!-- /.social -->
-                </section><!-- /#extras -->
-
-        <footer id="contentinfo" class="body">
-                <address id="about" class="vcard body">
-                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
-                </address><!-- /#about -->
-
-                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
-        </footer><!-- /#contentinfo -->
-
-</body>
+                <div class="clear"></div>
+                <div id="footer">
+                    <p>
+                    <a href="https://twitter.com/GordonMcGregor">Twitter @GordonMcGregor</a>
+                    &middot;
+                    <a class="atom" href="http://fivecomputers.com/feeds/all.atom.xml">RSS Feed</a>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+    <script type="text/javascript">
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+    try {
+        var pageTracker = _gat._getTracker("UA-42678190-1");
+    pageTracker._trackPageview();
+    } catch(err) {}</script>
+<script type="text/javascript">
+    var disqus_shortname = 'fivecomputers';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+    </body>
 </html>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Five Computers</title><link href="http://fivecomputers.com/" rel="alternate"></link><link href="http://fivecomputers.com/feeds/19.atom.xml" rel="self"></link><id>http://fivecomputers.com/</id><updated>2012-04-19T00:00:00-05:00</updated><entry><title>SystemVerilog support in Pygments</title><link href="http://fivecomputers.com/systemverilog-support-in-pygments.html" rel="alternate"></link><updated>2012-04-19T00:00:00-05:00</updated><author><name>GordonMcGregor</name></author><id>tag:fivecomputers.com,2012-04-19:systemverilog-support-in-pygments.html</id><summary type="html">&lt;p&gt;&lt;a href="http://www.flickr.com/photos/mcgregorphoto/6949231074/" title="svforpygments by Gordon McGregor, on Flickr"&gt;&lt;img alt="svforpygments" src="http://farm6.staticflickr.com/5454/6949231074_4dd2096121_c.jpg" width="720" /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;I&amp;#39;ve used &lt;a href="http://pygments.org/"&gt;Pygments&lt;/a&gt; in the past to do syntax highlighting of Python and C code to drop into documentation. I&amp;#39;ve wanted SystemVerilog support for a while, but the tool didn&amp;#39;t &lt;a href="http://pygments.org/languages/"&gt;support the language&lt;/a&gt;. I eventually got frustrated enough by this to go and add it myself. The motivation was so that I could set up an internal &lt;a href="http://paste.pocoo.org/about/"&gt;LodgeIt! pastebin&lt;/a&gt; to allow colleagues to discuss snippets of code, without having to paste it into emails, or Yammer discussions, both of which always scramble formatting and make discussions harder than they should be. The pastebin that I decided to use, used Pygments as the backend, so I decided to add SystemVerilog support to that project.&lt;/p&gt;
+
+&lt;p&gt;The main task was adding the &lt;a href="https://twitter.com/#!/GordonMcGregor/status/104282867168845825"&gt;more than 220 keywords&lt;/a&gt; in SystemVerilog into the format required for Pygments. I ended up cutting and pasting the keywords from the specification into a text file, then using a quick script to generate the &lt;a href="https://bitbucket.org/birkenfeld/pygments-main/src/96e8b9cb83ef/pygments/lexers/hdl.py"&gt;appropriate structures&lt;/a&gt; for Pygments. I found that generating it automatically was about the only way to avoid typos and saved quite a bit of time and typing.&lt;/p&gt;
+
+&lt;p&gt;If you&amp;#39;d like to try it out, installation is straightforward:&lt;/p&gt;
+
+&lt;div class="highlight"&gt;
+&lt;pre&gt;&lt;span class="n"&gt;hg&lt;/span&gt; &lt;span class="n"&gt;clone&lt;/span&gt; &lt;span class="n"&gt;https&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="o"&gt;//&lt;/span&gt;&lt;span class="n"&gt;bitbucket&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;org&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;birkenfeld&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;pygments&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;main&lt;/span&gt; &lt;span class="n"&gt;pygments&lt;/span&gt;
+&lt;span class="n"&gt;cd&lt;/span&gt; &lt;span class="n"&gt;pygments&lt;/span&gt;
+&lt;span class="n"&gt;sudo&lt;/span&gt; &lt;span class="n"&gt;python&lt;/span&gt; &lt;span class="n"&gt;setup&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;py&lt;/span&gt; &lt;span class="n"&gt;install&lt;/span&gt;
+&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;After that, you just run the &amp;#39;pygmentize&amp;#39; command to see formatted source code.&lt;/p&gt;
+
+&lt;pre&gt;pygmentize hello_world.sv
+&lt;/pre&gt;
+
+&lt;p&gt;This sample below comes from the UVM source code &amp;#39;hello_world.sv&amp;#39; example.&lt;/p&gt;
+
+&lt;p&gt;&lt;span style="font-family: monospace; white-space: pre;"&gt;&lt;span style="color: #008000; font-weight: bold;"&gt;module&lt;/span&gt; hello_world;&lt;/span&gt;&lt;/p&gt;
+
+&lt;div class="highlight"&gt;
+&lt;pre&gt;  &lt;span style="color: #008000; font-weight: bold;"&gt;import&lt;/span&gt; &lt;span style="color: #0000ff; font-weight: bold;"&gt;uvm_pkg::*&lt;/span&gt;;
+  &lt;span style="color: #880000;"&gt;`include&lt;/span&gt; &lt;span style="color: #ba2121;"&gt;&amp;quot;uvm_macros.svh&amp;quot;&lt;/span&gt;
+
+  &lt;span style="color: #880000;"&gt;`include&lt;/span&gt; &lt;span style="color: #ba2121;"&gt;&amp;quot;packet.sv&amp;quot;&lt;/span&gt;
+  &lt;span style="color: #880000;"&gt;`include&lt;/span&gt; &lt;span style="color: #ba2121;"&gt;&amp;quot;producer.sv&amp;quot;&lt;/span&gt;
+  &lt;span style="color: #880000;"&gt;`include&lt;/span&gt; &lt;span style="color: #ba2121;"&gt;&amp;quot;consumer.sv&amp;quot;&lt;/span&gt;
+  &lt;span style="color: #880000;"&gt;`include&lt;/span&gt; &lt;span style="color: #ba2121;"&gt;&amp;quot;top.sv&amp;quot;&lt;/span&gt;
+
+  top mytop;
+
+  &lt;span style="color: #008000; font-weight: bold;"&gt;initial&lt;/span&gt; &lt;span style="color: #008000; font-weight: bold;"&gt;begin&lt;/span&gt;
+    &lt;span&gt;$&lt;/span&gt;timeformat(&lt;span style="color: #666666;"&gt;-9&lt;/span&gt;,&lt;span style="color: #666666;"&gt;0&lt;/span&gt;,&lt;span style="color: #ba2121;"&gt;&amp;quot; ns&amp;quot;&lt;/span&gt;,&lt;span style="color: #666666;"&gt;5&lt;/span&gt;);
+    uvm_default_table_printer.knobs.name_width&lt;span style="color: #666666;"&gt;=20&lt;/span&gt;;
+    uvm_default_table_printer.knobs.type_width&lt;span style="color: #666666;"&gt;=50&lt;/span&gt;;
+    uvm_default_table_printer.knobs.size_width&lt;span style="color: #666666;"&gt;=10&lt;/span&gt;;
+    uvm_default_table_printer.knobs.value_width&lt;span style="color: #666666;"&gt;=14&lt;/span&gt;;
+    set_config_int(&lt;span style="color: #ba2121;"&gt;&amp;quot;top.producer1&amp;quot;&lt;/span&gt;,&lt;span style="color: #ba2121;"&gt;&amp;quot;num_packets&amp;quot;&lt;/span&gt;,&lt;span style="color: #666666;"&gt;2&lt;/span&gt;);
+    set_config_int(&lt;span style="color: #ba2121;"&gt;&amp;quot;top.producer2&amp;quot;&lt;/span&gt;,&lt;span style="color: #ba2121;"&gt;&amp;quot;num_packets&amp;quot;&lt;/span&gt;,&lt;span style="color: #666666;"&gt;4&lt;/span&gt;);
+    set_config_int(&lt;span style="color: #ba2121;"&gt;&amp;quot;*&amp;quot;&lt;/span&gt;,&lt;span style="color: #ba2121;"&gt;&amp;quot;recording_detail&amp;quot;&lt;/span&gt;,&lt;span style="color: #880000;"&gt;UVM_LOW&lt;/span&gt;);
+    &lt;span style="color: #408080; font-style: italic;"&gt;//uvm_default_printer = uvm_default_tree_printer;&lt;/span&gt;
+    uvm_default_printer.knobs.reference&lt;span style="color: #666666;"&gt;=0&lt;/span&gt;;
+    mytop &lt;span style="color: #666666;"&gt;=&lt;/span&gt; &lt;span style="color: #008000; font-weight: bold;"&gt;new&lt;/span&gt;(&lt;span style="color: #ba2121;"&gt;&amp;quot;top&amp;quot;&lt;/span&gt;); 
+    uvm_default_table_printer.knobs.type_width&lt;span style="color: #666666;"&gt;=20&lt;/span&gt;;
+    run_test();
+  &lt;span style="color: #008000; font-weight: bold;"&gt;end&lt;/span&gt;
+&lt;span style="color: #008000; font-weight: bold;"&gt;endmodule&lt;/span&gt;
+&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;A further challenge is working out how to embed this sort of code snippet into a TypePad blog post. In general, Pygments generates html code with CSS styles and classes. This doesn&amp;#39;t play well with TypePad which seems to consume or remove the CSS styles. You can however get Pygments to generate inline styles, which can then be pasted into TypePad. The syntax for this is:&lt;/p&gt;
+
+&lt;pre&gt;pygmentize -f html -Ofull,noclasses hello_world.sv
+&lt;/pre&gt;
+
+&lt;p&gt;And then the output html can be pasted straight into an HTML editor.&lt;/p&gt;</summary><category term=""></category></entry></feed>

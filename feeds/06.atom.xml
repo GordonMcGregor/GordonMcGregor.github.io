@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Five Computers</title><link href="http://fivecomputers.com/" rel="alternate"></link><link href="http://fivecomputers.com/feeds/06.atom.xml" rel="self"></link><id>http://fivecomputers.com/</id><updated>2008-06-06T00:00:00-05:00</updated><entry><title>DAC for verification</title><link href="http://fivecomputers.com/dac-for-verification.html" rel="alternate"></link><updated>2008-06-06T00:00:00-05:00</updated><author><name>GordonMcGregor</name></author><id>tag:fivecomputers.com,2008-06-06:dac-for-verification.html</id><summary type="html">&lt;p&gt;Each year, John Cooley does a great job &lt;a href="http://www.deepchip.com/gadfly/gad060608.html"&gt;previewing the companies &lt;/a&gt;at DAC. From that list, here's the ones that sound interesting to me.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;OneSpin&lt;/strong&gt;'s 360MV tool does something called "gap-detection" plus timing diagrams on your design's System Verilog Assertions. (booth 625)&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Real Intent Meridian CDC&lt;/strong&gt; for clock domain crossing verification.  Formal analysis and interfaces to simulation.&lt;br /&gt;
+(booth 2540)&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;NuSym DeNibulator&lt;/strong&gt;'s intelligent testbench"   It hunts down your hard to find coverage points and automatically tweaks your TB to reach them.  It's next gen constrained random.  (booth 379)&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Certess Certitude&lt;/strong&gt; testbench error injection.(booth 324)&lt;/p&gt;
+
+&lt;p&gt;Another "intelligent testbench" is &lt;strong&gt;Mentor inFact&lt;/strong&gt; - graphical tool that generates, grades, and then upgrades TBs.  It&lt;br /&gt;
+now drives existing e, Vera, SV, or C/C++ TBs.  Does OVM &amp;amp; VMM.(booth 2301)&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;CebaTech&lt;/strong&gt; is showing their C2R Compiler,which takes untimed ANSI C and outputs Verilog RTL. (booth 760)&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Forte Cynthesizer v3.4&lt;/strong&gt; (SystemC design) adds support for Power Compiler for "best-in-class area, performance, and now power results" and "management of ECOs by graphically mapping RTL back to the original SystemC design" and inter-block interfaces.(booth 1645)&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Mentor 's &lt;/strong&gt;&lt;strong&gt;Catapult C &lt;/strong&gt;synth &amp;amp; Vista ESL tools. (booth 2301)&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Carbon's Model Studio&lt;/strong&gt; does Verilog-RTL-to-C conversion for simulation, to get early models for architectural work(booth 2467)&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Synfora Pico Extreme&lt;/strong&gt; C synthesis tool (booth 329)&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Bluespec&lt;/strong&gt; : "general purpose high-level synthesis &amp;amp; simulationfor modeling, verification and implementation". (booth 2367)&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Imperas :&lt;/strong&gt; yet-another-ISS tool, OVPsim, for embedded SW. (booth 467)&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Mirabilis VisualSim&lt;/strong&gt; does "graphical SystemC TLM 2.0 import without any code development; and power estimation of the full system." (booth 778)&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Steve Golson's "Four Principles of Flow Engineering"&lt;/strong&gt; DAC Tuesday at 10:30 AM, Room 206AB&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Dassault Synchronicity DesignSync&lt;/strong&gt; Cadence data management tools. (booth 620)&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;EVE ZeBu&lt;/strong&gt; is showcasing PCIe and AXI synthesizable transactors and its System Verilog support for custom transactors.(booth 301)&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Mentor Veloce&lt;/strong&gt; "using mixed System Verilog and SystemC based upon System Verilog DPI standard 2.0" with Nucleus embedded RTOS (booth 2301)&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Synfora Pico Extreme FPGA&lt;/strong&gt; (booth 329)&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;VeriEZ EZVerify &lt;/strong&gt;covers you design, assertions and testbench, with added full System Verilog support this year plus VMM/OVM checking (booth 1936)&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Veritools&lt;/strong&gt; usually has linters, code coverage and waveform viewers.  Supports SV dynamic objects. (booth 1334)&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Denali&lt;/strong&gt; &lt;strong&gt;PureSpec&lt;/strong&gt; System Verilog methodology support (OVM,VMM, AVM) in all IP blocks. (booth 1611)&lt;/p&gt;</summary><category term="software"></category><category term="verification"></category></entry></feed>
